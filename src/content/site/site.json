@@ -1,0 +1,23 @@
+[
+  {
+    "id": "site",
+    "brandName": "Gary Wrotka",
+    "tagline": "Rzemieślnicze fermenty — kombucha, sosy, octy",
+    "heroImages": [
+      "/images/photos/_DSC4994a.jpg",
+      "/images/photos/_DSC2791_v1.jpg",
+      "/images/photos/_DSC4577a.jpg",
+      "/images/photos/_DSC0687-2.jpg",
+      "/images/photos/_DSC4615.jpg",
+      "/images/photos/_DSC4975.jpg"
+    ],
+    "contactEmail": "kontakt@garywrotka.pl",
+    "orderEmail": "zamowienia@garywrotka.pl",
+    "phone": "+48 000 000 000",
+    "address": "Studio Wro, ul. Przykładowa 1, 50-001 Wrocław",
+    "socials": {
+      "instagram": "https://instagram.com/garywrotka",
+      "facebook": "https://facebook.com/garywrotka"
+    }
+  }
+]

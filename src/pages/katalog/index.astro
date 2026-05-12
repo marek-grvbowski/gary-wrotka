@@ -1,0 +1,93 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import ProductCard from '../../components/ProductCard.astro';
+
+const all = (await getCollection('products')).sort((a, b) => a.data.order - b.data.order);
+const categories = [
+  { id: 'all', label: 'Wszystkie' },
+  { id: 'kombucha', label: 'Kombucha' },
+  { id: 'sos', label: 'Sosy' },
+  { id: 'ocet', label: 'Octy' },
+];
+---
+<Layout
+  title="Katalog — Gary Wrotka"
+  description="Pełna lista naszych fermentów: kombucha, sosy, octy. Wszystko ręcznie, w małych partiach."
+>
+  <section class="bg-paper pt-32 pb-16">
+    <div class="mx-auto max-w-[var(--container-content)] px-6">
+      <SectionHeading
+        eyebrow="Katalog"
+        title="Wszystkie nasze fermenty"
+        intro="Kliknij w produkt, żeby zobaczyć szczegóły i dodać do zapytania ofertowego. Zamówienia obsługujemy ręcznie — odezwiemy się mailowo po wysłaniu formularza."
+      />
+    </div>
+  </section>
+
+  <section class="bg-paper pb-24">
+    <div class="mx-auto max-w-[var(--container-content)] px-6">
+      <div class="flex flex-wrap gap-2 mb-8" data-filter-bar>
+        {categories.map((c) => (
+          <button
+            type="button"
+            data-filter={c.id}
+            class={`px-4 py-2 text-sm font-medium rounded-full border transition ${c.id === 'all' ? 'bg-ink text-paper border-ink' : 'border-line hover:border-ink'}`}
+          >
+            {c.label}
+          </button>
+        ))}
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" data-product-grid>
+        {all.map((p) => (
+          <div data-category={p.data.category}>
+            <ProductCard
+              slug={p.id}
+              name={p.data.name}
+              flavor={p.data.flavor}
+              category={p.data.category}
+              volume={p.data.volume}
+              image={p.data.images[0]}
+              available={p.data.available}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const initial = params.get('cat') || 'all';
+    const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    const items = document.querySelectorAll<HTMLElement>('[data-category]');
+
+    const apply = (cat: string) => {
+      buttons.forEach((b) => {
+        const active = b.dataset.filter === cat;
+        b.classList.toggle('bg-ink', active);
+        b.classList.toggle('text-paper', active);
+        b.classList.toggle('border-ink', active);
+        b.classList.toggle('border-line', !active);
+      });
+      items.forEach((it) => {
+        const show = cat === 'all' || it.dataset.category === cat;
+        it.style.display = show ? '' : 'none';
+      });
+    };
+
+    buttons.forEach((b) =>
+      b.addEventListener('click', () => {
+        const cat = b.dataset.filter!;
+        const url = new URL(window.location.href);
+        if (cat === 'all') url.searchParams.delete('cat');
+        else url.searchParams.set('cat', cat);
+        history.replaceState({}, '', url.toString());
+        apply(cat);
+      })
+    );
+
+    apply(initial);
+  </script>
+</Layout>

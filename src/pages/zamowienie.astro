@@ -1,0 +1,217 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import { getEntry } from 'astro:content';
+
+const site = await getEntry('site', 'site');
+const orderEmail = site?.data.orderEmail ?? 'kontakt@garywrotka.pl';
+const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
+const isOk = Astro.url.searchParams.get('ok') === '1';
+---
+<Layout
+  title="Zapytanie ofertowe — Gary Wrotka"
+  description="Wyślij zapytanie z listą produktów. Odezwiemy się mailowo i ustalimy szczegóły."
+>
+  <section class="bg-paper pt-32 pb-16">
+    <div class="mx-auto max-w-[var(--container-content)] px-6">
+      {isOk ? (
+        <div class="max-w-2xl mx-auto text-center py-20">
+          <div class="text-5xl mb-6">✓</div>
+          <h1 class="font-display font-bold text-4xl tracking-tight">Dziękujemy!</h1>
+          <p class="mt-4 text-lg text-muted">
+            Twoje zapytanie zostało wysłane na <strong>{orderEmail}</strong>.
+            Odezwiemy się w ciągu 24h roboczych.
+          </p>
+          <a href="/katalog" class="mt-8 inline-flex rounded-full bg-ink text-paper px-6 py-3 font-semibold hover:bg-accent transition">
+            Wróć do katalogu
+          </a>
+        </div>
+      ) : (
+        <>
+          <SectionHeading
+            eyebrow="Zapytanie ofertowe"
+            title="Złóż zapytanie"
+            intro="Nie kupujesz online — zamiast tego wysyłasz nam listę produktów, którymi się interesujesz. Odezwiemy się mailowo, ustalimy dostępność, sposób odbioru i wszystko inne."
+          />
+
+          <div class="mt-12 grid md:grid-cols-12 gap-12">
+            <div class="md:col-span-7">
+              <div class="bg-paper-warm rounded-xl p-6 border border-line">
+                <h2 class="font-display font-semibold text-xl">Twój koszyk</h2>
+                <div data-cart-list class="mt-4 space-y-3"></div>
+                <div data-cart-empty class="hidden text-muted py-8 text-center">
+                  Koszyk jest pusty.<br/>
+                  <a href="/katalog" class="text-accent underline underline-offset-4 mt-3 inline-block">Przejdź do katalogu →</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="md:col-span-5">
+              <form
+                action="https://api.web3forms.com/submit"
+                method="POST"
+                class="bg-paper-warm rounded-xl p-6 border border-line space-y-4"
+                data-inquiry-form
+              >
+                <input type="hidden" name="access_key" value={web3formsKey} />
+                <input type="hidden" name="subject" value="[Gary Wrotka] Nowe zapytanie ofertowe" />
+                <input type="hidden" name="from_name" value="Gary Wrotka — formularz zamówień" />
+                <input type="hidden" name="cart_json" data-cart-json value="" />
+                <input type="hidden" name="cart_summary" data-cart-summary value="" />
+                <input type="text" name="botcheck" tabindex="-1" autocomplete="off" class="hidden" />
+
+                <h2 class="font-display font-semibold text-xl">Twoje dane</h2>
+
+                <label class="block">
+                  <span class="text-sm font-medium">Imię i nazwisko *</span>
+                  <input
+                    type="text"
+                    name="name"
+                    required
+                    class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent"
+                  />
+                </label>
+
+                <label class="block">
+                  <span class="text-sm font-medium">E-mail *</span>
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent"
+                  />
+                </label>
+
+                <label class="block">
+                  <span class="text-sm font-medium">Telefon</span>
+                  <input
+                    type="tel"
+                    name="phone"
+                    class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent"
+                  />
+                </label>
+
+                <fieldset class="space-y-2">
+                  <legend class="text-sm font-medium">Sposób odbioru</legend>
+                  <label class="flex items-center gap-2">
+                    <input type="radio" name="delivery" value="odbior_osobisty" checked /> Odbiór osobisty (Wrocław)
+                  </label>
+                  <label class="flex items-center gap-2">
+                    <input type="radio" name="delivery" value="wysylka" /> Wysyłka kurierska
+                  </label>
+                </fieldset>
+
+                <label class="block">
+                  <span class="text-sm font-medium">Adres (jeśli wysyłka)</span>
+                  <textarea
+                    name="address"
+                    rows="2"
+                    class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent"
+                  ></textarea>
+                </label>
+
+                <label class="block">
+                  <span class="text-sm font-medium">Uwagi</span>
+                  <textarea
+                    name="notes"
+                    rows="3"
+                    placeholder="Termin odbioru, preferencje, pytania..."
+                    class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent"
+                  ></textarea>
+                </label>
+
+                <input type="hidden" name="redirect" value={new URL('/zamowienie?ok=1', Astro.url).toString()} />
+
+                <button
+                  type="submit"
+                  data-submit-btn
+                  class="w-full rounded-full bg-ink text-paper px-6 py-3 font-semibold hover:bg-accent transition disabled:opacity-40 disabled:cursor-not-allowed"
+                  disabled
+                >
+                  Wyślij zapytanie
+                </button>
+
+                <p class="text-xs text-muted leading-relaxed">
+                  Wysyłając formularz zgadzasz się na kontakt mailowy w sprawie zamówienia.
+                  Dane nie są używane do innych celów.
+                </p>
+              </form>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  </section>
+
+  <script>
+    import { getCart, updateQty, removeItem, clearCart } from '../scripts/inquiry-cart';
+    if (new URLSearchParams(window.location.search).get('ok') === '1') {
+      clearCart();
+    }
+    const list = document.querySelector<HTMLElement>('[data-cart-list]');
+    const empty = document.querySelector<HTMLElement>('[data-cart-empty]');
+    const jsonInput = document.querySelector<HTMLInputElement>('[data-cart-json]');
+    const summaryInput = document.querySelector<HTMLInputElement>('[data-cart-summary]');
+    const submitBtn = document.querySelector<HTMLButtonElement>('[data-submit-btn]');
+
+    function el(tag: string, opts: { class?: string; text?: string; attrs?: Record<string, string> } = {}) {
+      const n = document.createElement(tag);
+      if (opts.class) n.className = opts.class;
+      if (opts.text) n.textContent = opts.text;
+      if (opts.attrs) for (const [k, v] of Object.entries(opts.attrs)) n.setAttribute(k, v);
+      return n;
+    }
+
+    const render = () => {
+      if (!list) return;
+      const items = getCart();
+      list.replaceChildren();
+      if (items.length === 0) {
+        empty?.classList.remove('hidden');
+        if (submitBtn) submitBtn.disabled = true;
+        if (jsonInput) jsonInput.value = '';
+        if (summaryInput) summaryInput.value = '';
+        return;
+      }
+      empty?.classList.add('hidden');
+      if (submitBtn) submitBtn.disabled = false;
+
+      items.forEach((it) => {
+        const row = el('div', { class: 'flex gap-4 items-center bg-paper rounded-lg p-3 border border-line' });
+
+        const img = el('img', { class: 'w-16 h-20 object-cover rounded shrink-0 bg-line', attrs: { src: it.image, alt: '', loading: 'lazy' } });
+        row.appendChild(img);
+
+        const body = el('div', { class: 'flex-1 min-w-0' });
+        body.appendChild(el('div', { class: 'font-semibold', text: it.name }));
+        body.appendChild(el('div', { class: 'text-xs text-muted', text: `${it.flavor} · ${it.volume}` }));
+
+        const ctrl = el('div', { class: 'mt-2 inline-flex items-center border border-line rounded-full overflow-hidden text-sm' });
+        const dec = el('button', { class: 'w-7 h-7 hover:bg-paper-warm', text: '−', attrs: { type: 'button', 'aria-label': 'Mniej' } });
+        const qty = el('span', { class: 'w-8 text-center', text: String(it.qty) });
+        const inc = el('button', { class: 'w-7 h-7 hover:bg-paper-warm', text: '+', attrs: { type: 'button', 'aria-label': 'Więcej' } });
+        dec.addEventListener('click', () => updateQty(it.slug, it.qty - 1));
+        inc.addEventListener('click', () => updateQty(it.slug, it.qty + 1));
+        ctrl.append(dec, qty, inc);
+        body.appendChild(ctrl);
+        row.appendChild(body);
+
+        const rm = el('button', { class: 'text-xs text-muted hover:text-accent', text: 'usuń', attrs: { type: 'button' } });
+        rm.addEventListener('click', () => removeItem(it.slug));
+        row.appendChild(rm);
+
+        list.appendChild(row);
+      });
+
+      if (jsonInput) jsonInput.value = JSON.stringify(items, null, 2);
+      if (summaryInput) {
+        summaryInput.value = items
+          .map((it) => `${it.qty}× ${it.name} (${it.flavor}, ${it.volume})`)
+          .join('\n');
+      }
+    };
+
+    render();
+    window.addEventListener('cart:change', render);
+  </script>
+</Layout>

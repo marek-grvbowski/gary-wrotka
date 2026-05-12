@@ -1,0 +1,108 @@
+---
+import { getEntry } from 'astro:content';
+
+type Props = {
+  initialMode?: 'dark' | 'light';
+};
+
+const { initialMode = 'light' } = Astro.props;
+const { pathname } = Astro.url;
+
+const site = await getEntry('site', 'site');
+const brand = site?.data.brandName ?? 'Gary Wrotka';
+
+const links = [
+  { href: '/', label: 'Start' },
+  { href: '/katalog', label: 'Katalog' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/o-nas', label: 'O nas' },
+  { href: '/b2b', label: 'Hurt' },
+  { href: '/kontakt', label: 'Kontakt' },
+];
+const isActive = (href: string) =>
+  href === '/' ? pathname === '/' : pathname.startsWith(href);
+---
+<header
+  class="gw-header fixed top-0 inset-x-0 z-30 border-b"
+  data-mode={initialMode}
+  data-initial-mode={initialMode}
+>
+  <div class="mx-auto max-w-[var(--container-content)] px-6 h-16 flex items-center justify-between gap-4">
+    <a href="/" class="flex items-center gap-2 font-display font-bold tracking-tight text-lg">
+      <span>{brand.split(' ')[0]}</span>
+      <span class="text-accent">·</span>
+      <span>{brand.split(' ').slice(1).join(' ')}</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-7">
+      {links.map((l) => (
+        <a
+          href={l.href}
+          class={`text-sm font-medium hover:text-accent transition ${isActive(l.href) ? 'underline underline-offset-8 decoration-2 decoration-accent' : ''}`}
+        >
+          {l.label}
+        </a>
+      ))}
+    </nav>
+    <div class="flex items-center gap-3">
+      <button
+        type="button"
+        data-open-drawer
+        class="text-sm font-medium border border-current rounded-full px-3 py-1.5 hover:bg-current hover:text-paper transition group"
+        aria-label="Otwórz zapytanie"
+      >
+        Zapytanie
+        <span
+          data-cart-count
+          class="ml-1 inline-block min-w-5 text-center text-xs font-bold align-middle"
+          data-empty="1"
+        >0</span>
+      </button>
+      <button
+        type="button"
+        class="md:hidden inline-flex items-center justify-center w-10 h-10 -mr-2"
+        aria-label="Menu"
+        data-mobile-toggle
+      >
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M2 5h16v2H2zm0 4h16v2H2zm0 4h16v2H2z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="md:hidden hidden border-t border-current/10" data-mobile-menu>
+    <nav class="px-6 py-4 flex flex-col gap-3">
+      {links.map((l) => (
+        <a href={l.href} class={`text-base ${isActive(l.href) ? 'text-accent' : ''}`}>{l.label}</a>
+      ))}
+    </nav>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('header.gw-header');
+  if (header) {
+    const initial = header.dataset.initialMode as 'dark' | 'light';
+    const sentinel = document.querySelector<HTMLElement>('[data-hero-sentinel]');
+
+    const setMode = (mode: 'dark' | 'light') => {
+      header.dataset.mode = mode;
+    };
+
+    if (sentinel && initial === 'dark') {
+      const io = new IntersectionObserver(
+        ([entry]) => {
+          setMode(entry.isIntersecting ? 'dark' : 'light');
+        },
+        { threshold: 0, rootMargin: '-64px 0px 0px 0px' }
+      );
+      io.observe(sentinel);
+    } else {
+      setMode(initial);
+    }
+
+    const toggle = header.querySelector<HTMLButtonElement>('[data-mobile-toggle]');
+    const menu = header.querySelector<HTMLElement>('[data-mobile-menu]');
+    if (toggle && menu) {
+      toggle.addEventListener('click', () => menu.classList.toggle('hidden'));
+    }
+  }
+</script>

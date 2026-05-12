@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import BlogCard from '../../components/BlogCard.astro';
+
+const posts = (await getCollection('blog', (p) => !p.data.draft))
+  .sort((a, b) => +b.data.pubDate - +a.data.pubDate);
+---
+<Layout
+  title="Blog — Gary Wrotka"
+  description="Notatki o fermentacji, rzemiośle, fotografii i wszystkim co wokół naszych butelek."
+>
+  <section class="bg-paper pt-32 pb-16">
+    <div class="mx-auto max-w-[var(--container-content)] px-6">
+      <SectionHeading
+        eyebrow="Blog"
+        title="Z naszego warsztatu"
+        intro="Krótko, konkretnie, najczęściej ze zdjęciem. Piszemy o fermentacji, ale też o tym, jak fotografować jedzenie i czemu warto czekać."
+      />
+    </div>
+  </section>
+
+  <section class="bg-paper pb-24">
+    <div class="mx-auto max-w-[var(--container-content)] px-6">
+      {posts.length === 0 ? (
+        <p class="text-muted">Wkrótce pierwsze wpisy.</p>
+      ) : (
+        <div class="grid md:grid-cols-2 gap-12">
+          {posts.map((p) => (
+            <BlogCard
+              slug={p.id}
+              title={p.data.title}
+              description={p.data.description}
+              cover={p.data.cover}
+              pubDate={p.data.pubDate}
+              tags={p.data.tags}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+</Layout>

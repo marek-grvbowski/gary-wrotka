@@ -1,0 +1,19 @@
+---
+type Props = {
+  eyebrow?: string;
+  title: string;
+  intro?: string;
+  align?: 'left' | 'center';
+  dark?: boolean;
+};
+const { eyebrow, title, intro, align = 'left', dark = false } = Astro.props;
+const alignClass = align === 'center' ? 'text-center mx-auto' : '';
+const titleColor = dark ? 'text-paper' : 'text-ink';
+const introColor = dark ? 'text-paper/70' : 'text-muted';
+const eyebrowColor = dark ? 'text-paper/50' : '';
+---
+<header class={`max-w-2xl ${alignClass}`}>
+  {eyebrow && <div class={`eyebrow ${eyebrowColor}`}>{eyebrow}</div>}
+  <h2 class={`font-display font-bold tracking-tight ${titleColor} mt-3 text-3xl md:text-4xl`}>{title}</h2>
+  {intro && <p class={`mt-4 ${introColor} text-base md:text-lg leading-relaxed`}>{intro}</p>}
+</header>

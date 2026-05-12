@@ -1,0 +1,61 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import InquiryDrawer from '../components/InquiryDrawer.astro';
+
+type Props = {
+  title?: string;
+  description?: string;
+  headerMode?: 'dark' | 'light';
+  ogImage?: string;
+};
+
+const {
+  title = 'Gary Wrotka — rzemieślnicze fermenty',
+  description = 'Rzemieślnicza kombucha, sosy i octy fermentowane z Wrocławia. Naturalne, lokalne, bez kompromisów.',
+  headerMode = 'light',
+  ogImage = '/images/brand/logo-dark.svg',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://gary-wrotka.pages.dev').toString();
+---
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <Header initialMode={headerMode} />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <InquiryDrawer />
+    <div id="gw-toast" class="gw-toast" role="status" aria-live="polite"></div>
+
+    <script>
+      import { initInquiryCart } from '../scripts/inquiry-cart';
+      initInquiryCart();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+---
+type Props = {
+  slug: string;
+  name: string;
+  flavor: string;
+  category: 'kombucha' | 'sos' | 'ocet';
+  volume: string;
+  image: string;
+  available?: boolean;
+};
+const { slug, name, flavor, category, volume, image, available = true } = Astro.props;
+const catLabel = { kombucha: 'Kombucha', sos: 'Sos fermentowany', ocet: 'Ocet' }[category];
+---
+<a
+  href={`/katalog/${slug}`}
+  class="group block bg-paper-warm rounded-xl overflow-hidden hover:shadow-xl transition-shadow"
+>
+  <div class="aspect-[4/5] overflow-hidden bg-line relative">
+    <img
+      src={image}
+      alt={name}
+      loading="lazy"
+      decoding="async"
+      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+    />
+    {!available && (
+      <div class="absolute top-3 left-3 bg-ink text-paper text-xs font-medium uppercase tracking-wider px-2 py-1 rounded">
+        wkrótce
+      </div>
+    )}
+  </div>
+  <div class="p-5">
+    <div class="eyebrow">{catLabel} · {volume}</div>
+    <div class="mt-2 flex items-baseline justify-between gap-3">
+      <h3 class="font-display font-semibold text-xl tracking-tight">{name}</h3>
+    </div>
+    <div class="mt-1 text-sm text-muted">{flavor}</div>
+    <div class="mt-4 text-sm font-medium text-accent group-hover:text-accent-deep transition">
+      Zobacz produkt →
+    </div>
+  </div>
+</a>

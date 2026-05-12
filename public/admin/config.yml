@@ -1,0 +1,96 @@
+backend:
+  name: github
+  repo: YOUR_GITHUB_USER/gary-wrotka
+  branch: main
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
+
+local_backend: true
+
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+site_url: https://gary-wrotka.pages.dev
+display_url: https://gary-wrotka.pages.dev
+logo_url: /images/brand/logo-dark.svg
+
+locale: "pl"
+
+collections:
+  - name: "products"
+    label: "Produkty"
+    label_singular: "Produkt"
+    folder: "src/content/products"
+    create: true
+    extension: "md"
+    format: "frontmatter"
+    slug: "{{slug}}"
+    summary: "{{name}} — {{category}} ({{volume}})"
+    sortable_fields: ["order", "name", "category"]
+    fields:
+      - { name: "name", label: "Nazwa produktu", widget: "string" }
+      - { name: "category", label: "Kategoria", widget: "select", options: ["kombucha", "sos", "ocet"] }
+      - { name: "flavor", label: "Smak (krótki opis)", widget: "string" }
+      - { name: "volume", label: "Pojemność / waga", widget: "string", hint: "np. 330 ml, 500 g" }
+      - { name: "shortDescription", label: "Krótki opis (do karty)", widget: "text" }
+      - name: "ingredients"
+        label: "Skład"
+        widget: "list"
+        field: { name: "item", label: "Składnik", widget: "string" }
+      - name: "images"
+        label: "Zdjęcia produktu"
+        widget: "list"
+        hint: "Drag-and-drop, aby zmienić kolejność. Pierwsze zdjęcie jest główne."
+        field: { name: "src", label: "Zdjęcie", widget: "image" }
+      - { name: "available", label: "Dostępny", widget: "boolean", default: true }
+      - { name: "featured", label: "Wyróżniony (pokazany na home)", widget: "boolean", default: false }
+      - { name: "order", label: "Kolejność (mniejsza = wcześniej)", widget: "number", default: 100, value_type: "int" }
+      - { name: "body", label: "Pełny opis (markdown)", widget: "markdown", required: false }
+
+  - name: "blog"
+    label: "Blog"
+    label_singular: "Wpis"
+    folder: "src/content/blog"
+    create: true
+    extension: "mdx"
+    format: "frontmatter"
+    slug: "{{slug}}"
+    summary: "{{title}} — {{pubDate}}"
+    sortable_fields: ["pubDate", "title"]
+    fields:
+      - { name: "title", label: "Tytuł", widget: "string" }
+      - { name: "description", label: "Krótki opis", widget: "text" }
+      - { name: "pubDate", label: "Data publikacji", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
+      - { name: "author", label: "Autor", widget: "string", default: "Studio Wro" }
+      - { name: "cover", label: "Zdjęcie tytułowe", widget: "image", required: false }
+      - name: "tags"
+        label: "Tagi"
+        widget: "list"
+        field: { name: "tag", label: "Tag", widget: "string" }
+      - { name: "draft", label: "Szkic (niewidoczny)", widget: "boolean", default: false }
+      - { name: "body", label: "Treść", widget: "markdown" }
+
+  - name: "site"
+    label: "Ustawienia globalne"
+    files:
+      - name: "global"
+        label: "Strona — dane podstawowe"
+        file: "src/content/site/site.json"
+        fields:
+          - { name: "id", label: "ID (nie zmieniać)", widget: "hidden", default: "site" }
+          - { name: "brandName", label: "Nazwa marki", widget: "string" }
+          - { name: "tagline", label: "Tagline (hasło na hero)", widget: "string" }
+          - name: "heroImages"
+            label: "Zdjęcia hero (carousel — drag-and-drop kolejności)"
+            widget: "list"
+            field: { name: "src", label: "Zdjęcie", widget: "image" }
+          - { name: "contactEmail", label: "E-mail kontaktowy", widget: "string" }
+          - { name: "orderEmail", label: "E-mail zamówień", widget: "string" }
+          - { name: "phone", label: "Telefon", widget: "string", required: false }
+          - { name: "address", label: "Adres", widget: "string", required: false }
+          - name: "socials"
+            label: "Social media"
+            widget: "object"
+            fields:
+              - { name: "instagram", label: "Instagram URL", widget: "string", required: false }
+              - { name: "facebook", label: "Facebook URL", widget: "string", required: false }

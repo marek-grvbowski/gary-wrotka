@@ -1,0 +1,89 @@
+---
+type Props = {
+  images: string[];
+  tagline: string;
+  brand: string;
+};
+const { images, tagline, brand } = Astro.props;
+---
+<section class="relative min-h-screen md:min-h-[100vh] flex items-end bg-ink text-paper overflow-hidden">
+  <div class="absolute inset-0">
+    {images.map((src, i) => (
+      <img
+        src={src}
+        alt=""
+        loading={i === 0 ? 'eager' : 'lazy'}
+        decoding="async"
+        class={`hero-slide absolute inset-0 w-full h-full object-cover ${i === 0 ? 'active' : ''}`}
+        data-slide-index={i}
+      />
+    ))}
+    <div class="absolute inset-0 bg-gradient-to-b from-ink/40 via-ink/20 to-ink/85"></div>
+  </div>
+
+  <div class="relative z-10 mx-auto max-w-[var(--container-content)] px-6 py-32 md:py-40 w-full">
+    <div class="max-w-3xl">
+      <div class="eyebrow text-paper/70">Wrocław · od 2024</div>
+      <h1 class="font-display font-bold text-4xl md:text-6xl lg:text-7xl tracking-tight mt-4 leading-[1.05]">
+        {brand}
+      </h1>
+      <p class="mt-5 text-lg md:text-2xl text-paper/85 max-w-2xl">
+        {tagline}
+      </p>
+      <div class="mt-10 flex flex-wrap items-center gap-4">
+        <a
+          href="/katalog"
+          class="inline-flex items-center gap-2 rounded-full bg-paper text-ink px-6 py-3 text-sm font-semibold hover:bg-accent hover:text-paper transition"
+        >
+          Zobacz katalog
+          <span aria-hidden="true">→</span>
+        </a>
+        <a
+          href="/o-nas"
+          class="inline-flex items-center gap-2 rounded-full border border-paper/30 px-6 py-3 text-sm font-medium hover:border-paper transition"
+        >
+          Poznaj historię
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-2" data-hero-dots>
+    {images.map((_, i) => (
+      <button
+        type="button"
+        aria-label={`Slajd ${i + 1}`}
+        data-dot-index={i}
+        class={`w-2 h-2 rounded-full transition ${i === 0 ? 'bg-paper' : 'bg-paper/30'}`}
+      ></button>
+    ))}
+  </div>
+
+  <div data-hero-sentinel aria-hidden="true" class="absolute bottom-0 h-px w-full"></div>
+</section>
+
+<script>
+  const slides = document.querySelectorAll<HTMLElement>('.hero-slide');
+  const dots = document.querySelectorAll<HTMLButtonElement>('[data-dot-index]');
+  if (slides.length > 1) {
+    let idx = 0;
+    const total = slides.length;
+    const show = (n: number) => {
+      slides.forEach((s, i) => s.classList.toggle('active', i === n));
+      dots.forEach((d, i) => {
+        d.classList.toggle('bg-paper', i === n);
+        d.classList.toggle('bg-paper/30', i !== n);
+      });
+      idx = n;
+    };
+    const advance = () => show((idx + 1) % total);
+    let timer = window.setInterval(advance, 6000);
+    dots.forEach((d) => {
+      d.addEventListener('click', () => {
+        window.clearInterval(timer);
+        show(Number(d.dataset.dotIndex));
+        timer = window.setInterval(advance, 6000);
+      });
+    });
+  }
+</script>

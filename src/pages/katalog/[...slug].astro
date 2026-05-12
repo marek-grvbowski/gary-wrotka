@@ -1,0 +1,94 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import PhotoGallery from '../../components/PhotoGallery.astro';
+import AddToInquiryButton from '../../components/AddToInquiryButton.astro';
+
+export async function getStaticPaths() {
+  const products = await getCollection('products');
+  return products.map((p) => ({ params: { slug: p.id }, props: { product: p } }));
+}
+
+const { product } = Astro.props;
+const { Content } = await render(product);
+
+const related = (await getCollection('products', (p) =>
+  p.data.category === product.data.category && p.id !== product.id
+)).slice(0, 3);
+
+const catLabel = { kombucha: 'Kombucha', sos: 'Sos fermentowany', ocet: 'Ocet' }[product.data.category];
+---
+<Layout
+  title={`${product.data.name} — ${catLabel} · Gary Wrotka`}
+  description={product.data.shortDescription}
+>
+  <article class="bg-paper pt-32 pb-24">
+    <div class="mx-auto max-w-[var(--container-content)] px-6 grid md:grid-cols-12 gap-12">
+      <div class="md:col-span-7">
+        <PhotoGallery images={product.data.images} alt={product.data.name} />
+      </div>
+
+      <div class="md:col-span-5">
+        <div class="eyebrow">
+          <a href={`/katalog?cat=${product.data.category}`} class="hover:text-accent">{catLabel}</a>
+          {' · '}{product.data.volume}
+        </div>
+        <h1 class="font-display font-bold text-4xl md:text-5xl tracking-tight mt-4">{product.data.name}</h1>
+        <div class="mt-3 text-lg text-muted">{product.data.flavor}</div>
+        <p class="mt-6 text-base leading-relaxed text-ink-soft">{product.data.shortDescription}</p>
+
+        <div class="mt-8">
+          {product.data.available ? (
+            <AddToInquiryButton
+              slug={product.id}
+              name={product.data.name}
+              flavor={product.data.flavor}
+              volume={product.data.volume}
+              image={product.data.images[0]}
+            />
+          ) : (
+            <div class="px-4 py-3 bg-paper-warm border border-line rounded-xl text-sm text-muted">
+              Aktualnie niedostępne. <a href="/kontakt" class="text-accent underline underline-offset-4">Zapytaj o dostępność →</a>
+            </div>
+          )}
+        </div>
+
+        {product.data.ingredients.length > 0 && (
+          <div class="mt-10 pt-8 border-t border-line">
+            <div class="eyebrow mb-3">Skład</div>
+            <ul class="space-y-1.5 text-sm text-ink-soft">
+              {product.data.ingredients.map((i) => <li>· {i}</li>)}
+            </ul>
+          </div>
+        )}
+      </div>
+    </div>
+
+    <div class="mx-auto max-w-3xl px-6 mt-16 prose-custom">
+      <Content />
+    </div>
+  </article>
+
+  {related.length > 0 && (
+    <section class="bg-paper-warm py-20 border-t border-line">
+      <div class="mx-auto max-w-[var(--container-content)] px-6">
+        <SectionHeading eyebrow="Z tej samej kategorii" title="Może spodoba Ci się też" />
+        <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {related.map((p) => (
+            <ProductCard
+              slug={p.id}
+              name={p.data.name}
+              flavor={p.data.flavor}
+              category={p.data.category}
+              volume={p.data.volume}
+              image={p.data.images[0]}
+              available={p.data.available}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</Layout>

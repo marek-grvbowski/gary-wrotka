@@ -1,0 +1,111 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import { getEntry } from 'astro:content';
+
+const site = await getEntry('site', 'site');
+const data = site?.data;
+const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
+const isOk = Astro.url.searchParams.get('ok') === '1';
+---
+<Layout
+  title="Kontakt — Gary Wrotka"
+  description="Napisz do nas — pytanie o produkt, współpracę, fermentację. Odpowiadamy zwykle w 24h."
+>
+  <section class="bg-paper pt-32 pb-16">
+    <div class="mx-auto max-w-[var(--container-content)] px-6">
+      <SectionHeading
+        eyebrow="Kontakt"
+        title="Napisz, zadzwoń, wpadnij"
+        intro="Najłatwiej mailem albo przez formularz. Telefon też działa, ale jak na rzemieślników przystało — nie zawsze go słyszymy."
+      />
+    </div>
+  </section>
+
+  <section class="bg-paper pb-24">
+    <div class="mx-auto max-w-[var(--container-content)] px-6 grid md:grid-cols-12 gap-12">
+      <div class="md:col-span-5 space-y-8">
+        <div>
+          <div class="eyebrow">Mail</div>
+          {data?.contactEmail && (
+            <a href={`mailto:${data.contactEmail}`} class="block mt-2 text-xl font-display font-semibold hover:text-accent underline underline-offset-4">
+              {data.contactEmail}
+            </a>
+          )}
+          {data?.orderEmail && data.orderEmail !== data.contactEmail && (
+            <a href={`mailto:${data.orderEmail}`} class="block mt-1 text-sm text-muted hover:text-accent underline underline-offset-4">
+              zamówienia: {data.orderEmail}
+            </a>
+          )}
+        </div>
+
+        {data?.phone && (
+          <div>
+            <div class="eyebrow">Telefon</div>
+            <a href={`tel:${data.phone.replace(/\s/g, '')}`} class="block mt-2 text-xl font-display font-semibold hover:text-accent">
+              {data.phone}
+            </a>
+          </div>
+        )}
+
+        {data?.address && (
+          <div>
+            <div class="eyebrow">Adres</div>
+            <p class="mt-2 text-base leading-relaxed">{data.address}</p>
+          </div>
+        )}
+
+        <div>
+          <div class="eyebrow">Social</div>
+          <div class="mt-2 flex flex-wrap gap-3">
+            {data?.socials?.instagram && (
+              <a href={data.socials.instagram} class="text-sm underline underline-offset-4 hover:text-accent">Instagram</a>
+            )}
+            {data?.socials?.facebook && (
+              <a href={data.socials.facebook} class="text-sm underline underline-offset-4 hover:text-accent">Facebook</a>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div class="md:col-span-7">
+        {isOk ? (
+          <div class="bg-paper-warm rounded-xl p-10 border border-line text-center">
+            <div class="text-4xl">✓</div>
+            <h2 class="mt-4 font-display font-bold text-2xl">Wiadomość wysłana</h2>
+            <p class="mt-2 text-muted">Odezwiemy się w ciągu 24h roboczych.</p>
+          </div>
+        ) : (
+          <form
+            action="https://api.web3forms.com/submit"
+            method="POST"
+            class="bg-paper-warm rounded-xl p-6 border border-line space-y-4"
+          >
+            <input type="hidden" name="access_key" value={web3formsKey} />
+            <input type="hidden" name="subject" value="[Gary Wrotka] Wiadomość z formularza kontaktowego" />
+            <input type="hidden" name="from_name" value="Gary Wrotka — kontakt" />
+            <input type="hidden" name="tag" value="kontakt" />
+            <input type="text" name="botcheck" tabindex="-1" autocomplete="off" class="hidden" />
+
+            <label class="block">
+              <span class="text-sm font-medium">Imię *</span>
+              <input type="text" name="name" required class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent" />
+            </label>
+            <label class="block">
+              <span class="text-sm font-medium">E-mail *</span>
+              <input type="email" name="email" required class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent" />
+            </label>
+            <label class="block">
+              <span class="text-sm font-medium">Wiadomość *</span>
+              <textarea name="message" rows="5" required class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent"></textarea>
+            </label>
+            <input type="hidden" name="redirect" value={new URL('/kontakt?ok=1', Astro.url).toString()} />
+            <button type="submit" class="w-full rounded-full bg-ink text-paper px-6 py-3 font-semibold hover:bg-accent transition">
+              Wyślij wiadomość
+            </button>
+          </form>
+        )}
+      </div>
+    </div>
+  </section>
+</Layout>

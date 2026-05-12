@@ -1,0 +1,207 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
+
+const usp = [
+  {
+    title: 'Rzemiosło, nie linia produkcyjna',
+    body: 'Każda partia robiona ręcznie, w małych nakładach. Produkty żyją — w sklepie wyróżniają się autentycznością.',
+  },
+  {
+    title: 'Indywidualne wyceny i terminy',
+    body: 'Bez sztywnego cennika. Po rozmowie ustalamy regularne dostawy lub jednorazowe partie pod event.',
+  },
+  {
+    title: 'Wsparcie wizerunkowe',
+    body: 'Materiały marketingowe, foto, tekst o marce, ekspozycja na social mediach — wszystko, czego potrzebujesz, żeby produkt rozmawiał z klientem końcowym.',
+  },
+];
+
+const partners = ['Restauracja Przykład 1', 'Cafe Przykład 2', 'Delikatesy Przykład 3', 'Bistro Przykład 4', 'Hotel Przykład 5', 'Wino & Spiżarnia 6'];
+---
+<Layout
+  title="B2B — Gary Wrotka dla lokali i sklepów"
+  description="Hurtowa oferta naszych fermentów dla restauracji, sklepów, delikatesów i hoteli."
+>
+  <!-- Hero B2B dark -->
+  <section class="bg-ink text-paper pt-32 pb-24 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-30">
+      <img src="/images/hero/hero-3.svg" alt="" class="w-full h-full object-cover"/>
+    </div>
+    <div class="relative mx-auto max-w-[var(--container-content)] px-6 grid md:grid-cols-12 gap-8">
+      <div class="md:col-span-8">
+        <div class="eyebrow text-paper/60">Hurt · HoReCa · Sklepy specjalistyczne</div>
+        <h1 class="font-display font-bold text-4xl md:text-6xl tracking-tight mt-4 leading-tight">
+          Gary Wrotka dla profesjonalistów
+        </h1>
+        <p class="mt-6 text-lg md:text-xl text-paper/80 max-w-2xl">
+          Robimy fermenty, których nie znajdziesz w hurtowniach.
+          Wyselekcjonowani partnerzy w Polsce dostają od nas regularne dostawy,
+          materiały promocyjne i wsparcie sprzedażowe.
+        </p>
+        <div class="mt-10 flex flex-wrap gap-4">
+          <a href="#kontakt-b2b" class="inline-flex items-center gap-2 rounded-full bg-paper text-ink px-6 py-3 font-semibold hover:bg-accent hover:text-paper transition">
+            Wyślij zapytanie hurtowe →
+          </a>
+          <a href="#cennik" class="inline-flex items-center gap-2 rounded-full border border-paper/30 px-6 py-3 font-medium hover:border-paper transition">
+            Pobierz cennik
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- USP -->
+  <section class="bg-paper py-24">
+    <div class="mx-auto max-w-[var(--container-content)] px-6">
+      <SectionHeading
+        eyebrow="Co zyskujesz"
+        title="Trzy powody, dla których warto"
+      />
+      <div class="mt-12 grid md:grid-cols-3 gap-8">
+        {usp.map((u, i) => (
+          <div class="border-t border-ink pt-6">
+            <div class="font-display font-bold text-3xl text-accent">{String(i + 1).padStart(2, '0')}</div>
+            <h3 class="mt-3 font-display font-semibold text-xl">{u.title}</h3>
+            <p class="mt-2 text-muted leading-relaxed">{u.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Partners -->
+  <section class="bg-paper-warm py-20 border-y border-line">
+    <div class="mx-auto max-w-[var(--container-content)] px-6">
+      <SectionHeading
+        eyebrow="Z kim współpracujemy"
+        title="Nasze produkty znajdziesz między innymi tu"
+        intro="Lista jest fragmentaryczna — pełną mapę punktów wysyłamy na życzenie."
+      />
+      <div class="mt-10 grid grid-cols-2 md:grid-cols-3 gap-px bg-line border border-line rounded-lg overflow-hidden">
+        {partners.map((p) => (
+          <div class="bg-paper-warm aspect-[3/2] flex items-center justify-center text-center p-4 text-sm font-display font-medium text-muted">
+            {p}
+          </div>
+        ))}
+      </div>
+      <p class="mt-6 text-xs text-muted">Placeholdery — podmień nazwy/logotypy w CMS.</p>
+    </div>
+  </section>
+
+  <!-- Cennik -->
+  <section id="cennik" class="bg-paper py-24">
+    <div class="mx-auto max-w-3xl px-6">
+      <SectionHeading
+        eyebrow="Cennik B2B"
+        title="Wyślij prośbę o cennik"
+        intro="Cennik wysyłamy mailowo po krótkiej weryfikacji. Podaj firmowy adres e-mail i nazwę działalności."
+        align="center"
+      />
+      <form
+        action="https://api.web3forms.com/submit"
+        method="POST"
+        class="mt-10 grid gap-4 max-w-md mx-auto"
+      >
+        <input type="hidden" name="access_key" value={web3formsKey} />
+        <input type="hidden" name="subject" value="[Gary Wrotka B2B] Prośba o cennik" />
+        <input type="hidden" name="from_name" value="Gary Wrotka — B2B" />
+        <input type="hidden" name="tag" value="b2b_cennik" />
+        <input type="text" name="botcheck" tabindex="-1" autocomplete="off" class="hidden" />
+
+        <label class="block">
+          <span class="text-sm font-medium">E-mail firmowy *</span>
+          <input type="email" name="email" required class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent" />
+        </label>
+        <label class="block">
+          <span class="text-sm font-medium">Nazwa firmy *</span>
+          <input type="text" name="company" required class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent" />
+        </label>
+        <input type="hidden" name="redirect" value={new URL('/b2b?cennik=ok', Astro.url).toString()} />
+        <button type="submit" class="rounded-full bg-ink text-paper px-6 py-3 font-semibold hover:bg-accent transition">Wyślij prośbę</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Full B2B form -->
+  <section id="kontakt-b2b" class="bg-ink text-paper py-24">
+    <div class="mx-auto max-w-3xl px-6">
+      <SectionHeading
+        eyebrow="Współpraca"
+        title="Porozmawiajmy o stałej współpracy"
+        intro="Zostaw dane, odpowiemy w ciągu doby z propozycją współpracy dopasowaną do Twojego lokalu."
+        align="center"
+        dark
+      />
+      <form
+        action="https://api.web3forms.com/submit"
+        method="POST"
+        class="mt-10 grid gap-4"
+      >
+        <input type="hidden" name="access_key" value={web3formsKey} />
+        <input type="hidden" name="subject" value="[Gary Wrotka B2B] Zapytanie o współpracę" />
+        <input type="hidden" name="from_name" value="Gary Wrotka — B2B" />
+        <input type="hidden" name="tag" value="b2b_kontakt" />
+        <input type="text" name="botcheck" tabindex="-1" autocomplete="off" class="hidden" />
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          <label class="block">
+            <span class="text-sm font-medium">Imię i nazwisko *</span>
+            <input type="text" name="name" required class="mt-1 w-full rounded-lg border border-paper/20 bg-ink-soft text-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent" />
+          </label>
+          <label class="block">
+            <span class="text-sm font-medium">Stanowisko</span>
+            <input type="text" name="role" class="mt-1 w-full rounded-lg border border-paper/20 bg-ink-soft text-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent" />
+          </label>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          <label class="block">
+            <span class="text-sm font-medium">Nazwa firmy *</span>
+            <input type="text" name="company" required class="mt-1 w-full rounded-lg border border-paper/20 bg-ink-soft text-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent" />
+          </label>
+          <label class="block">
+            <span class="text-sm font-medium">NIP</span>
+            <input type="text" name="nip" class="mt-1 w-full rounded-lg border border-paper/20 bg-ink-soft text-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent" />
+          </label>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          <label class="block">
+            <span class="text-sm font-medium">Miasto *</span>
+            <input type="text" name="city" required class="mt-1 w-full rounded-lg border border-paper/20 bg-ink-soft text-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent" />
+          </label>
+          <label class="block">
+            <span class="text-sm font-medium">E-mail *</span>
+            <input type="email" name="email" required class="mt-1 w-full rounded-lg border border-paper/20 bg-ink-soft text-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent" />
+          </label>
+        </div>
+
+        <label class="block">
+          <span class="text-sm font-medium">Szacowany wolumen miesięczny</span>
+          <select name="volume" class="mt-1 w-full rounded-lg border border-paper/20 bg-ink-soft text-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent">
+            <option>do 50 butelek / mies</option>
+            <option>50–200 butelek / mies</option>
+            <option>200–500 butelek / mies</option>
+            <option>500+ / event jednorazowy</option>
+          </select>
+        </label>
+
+        <label class="block">
+          <span class="text-sm font-medium">O czym chcesz porozmawiać</span>
+          <textarea name="message" rows="4" class="mt-1 w-full rounded-lg border border-paper/20 bg-ink-soft text-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent"></textarea>
+        </label>
+
+        <input type="hidden" name="redirect" value={new URL('/b2b?wspolpraca=ok', Astro.url).toString()} />
+
+        <button type="submit" class="rounded-full bg-paper text-ink px-6 py-3 font-semibold hover:bg-accent hover:text-paper transition">
+          Wyślij zapytanie hurtowe →
+        </button>
+        <p class="text-xs text-paper/50 leading-relaxed">
+          Dane nie są używane do innych celów niż obsługa zapytania.
+        </p>
+      </form>
+    </div>
+  </section>
+</Layout>

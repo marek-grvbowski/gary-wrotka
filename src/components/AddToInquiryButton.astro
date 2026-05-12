@@ -1,0 +1,56 @@
+---
+type Props = {
+  slug: string;
+  name: string;
+  flavor: string;
+  volume: string;
+  image: string;
+};
+const { slug, name, flavor, volume, image } = Astro.props;
+const itemPayload = JSON.stringify({ slug, name, flavor, volume, image });
+---
+<div class="flex items-center gap-3" data-add-to-inquiry data-item={itemPayload}>
+  <div class="inline-flex items-center border border-line rounded-full overflow-hidden">
+    <button
+      type="button"
+      data-qty-dec
+      class="w-9 h-10 text-lg hover:bg-paper-warm transition"
+      aria-label="Mniej"
+    >−</button>
+    <span data-qty class="w-10 text-center font-medium" aria-live="polite">1</span>
+    <button
+      type="button"
+      data-qty-inc
+      class="w-9 h-10 text-lg hover:bg-paper-warm transition"
+      aria-label="Więcej"
+    >+</button>
+  </div>
+  <button
+    type="button"
+    data-add-btn
+    class="flex-1 md:flex-none inline-flex items-center justify-center gap-2 rounded-full bg-ink text-paper px-6 py-3 text-sm font-semibold hover:bg-accent transition"
+  >
+    Dodaj do zapytania
+    <span aria-hidden="true">→</span>
+  </button>
+</div>
+
+<script>
+  import { addItem } from '../scripts/inquiry-cart';
+  document.querySelectorAll<HTMLElement>('[data-add-to-inquiry]').forEach((wrap) => {
+    const item = JSON.parse(wrap.dataset.item || '{}');
+    const qtyEl = wrap.querySelector<HTMLElement>('[data-qty]');
+    const dec = wrap.querySelector<HTMLButtonElement>('[data-qty-dec]');
+    const inc = wrap.querySelector<HTMLButtonElement>('[data-qty-inc]');
+    const btn = wrap.querySelector<HTMLButtonElement>('[data-add-btn]');
+    let qty = 1;
+    const render = () => { if (qtyEl) qtyEl.textContent = String(qty); };
+    dec?.addEventListener('click', () => { qty = Math.max(1, qty - 1); render(); });
+    inc?.addEventListener('click', () => { qty = Math.min(99, qty + 1); render(); });
+    btn?.addEventListener('click', () => {
+      addItem(item, qty);
+      qty = 1;
+      render();
+    });
+  });
+</script>

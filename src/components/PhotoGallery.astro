@@ -1,0 +1,18 @@
+---
+type Props = {
+  images: string[];
+  alt?: string;
+};
+const { images, alt = '' } = Astro.props;
+---
+<div class="masonry">
+  {images.map((src, i) => (
+    <img
+      src={src}
+      alt={alt || `Zdjęcie ${i + 1}`}
+      loading={i < 3 ? 'eager' : 'lazy'}
+      decoding="async"
+      class="rounded-lg w-full h-auto"
+    />
+  ))}
+</div>

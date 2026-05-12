@@ -1,0 +1,74 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import PhotoGallery from '../components/PhotoGallery.astro';
+
+const galleryImages = [
+  '/images/photos/_DSC4577a.jpg',
+  '/images/photos/_DSC4975.jpg',
+  '/images/photos/_DSC0561.jpg',
+  '/images/photos/_DSC4994a.jpg',
+  '/images/photos/_DSC4615.jpg',
+  '/images/photos/_DSC2791_v1.jpg',
+  '/images/photos/_DSC2626.jpg',
+  '/images/photos/_DSC4653.jpg',
+  '/images/photos/_DSC0687-2.jpg',
+];
+---
+<Layout
+  title="O nas — Studio Wro i Gary Wrotka"
+  description="Historia marki: od fotografii rzemiosła do fermentów. Jak fotograf zaczął robić kombuchę."
+>
+  <section class="bg-paper pt-32 pb-16">
+    <div class="mx-auto max-w-3xl px-6 text-center">
+      <div class="eyebrow">Historia</div>
+      <h1 class="font-display font-bold text-4xl md:text-6xl tracking-tight mt-4 leading-tight">
+        Od fotografii rzemiosła<br/>do fermentów.
+      </h1>
+      <p class="mt-6 text-lg md:text-xl text-muted leading-relaxed">
+        Gary Wrotka to kontynuacja Studio Wro — fotograficznej pracowni, która od lat dokumentuje
+        rzemiosło. Najpierw fotografowaliśmy fermentację u innych. Teraz robimy ją sami.
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-paper pb-24">
+    <div class="mx-auto max-w-[var(--container-content)] px-6">
+      <div class="grid md:grid-cols-12 gap-12 items-start">
+        <div class="md:col-span-5 space-y-5 text-ink-soft leading-relaxed">
+          <p>
+            Studio Wro od 2018 roku robi zdjęcia jedzeniu, ludziom, miejscom.
+            Najczęściej tym, którzy z pasją robią coś własnymi rękami — piekarniom, browarom, manufakturom.
+          </p>
+          <p>
+            Z czasem zaczęliśmy fermentować w domu — najpierw kapustę, potem kombuchę,
+            potem coraz dziwniejsze rzeczy. Z amatorskiego eksperymentu wyszła pierwsza partia
+            butelek z naklejką, kuratorską edycja smaków, kilka skrzynek dla znajomych restauracji.
+          </p>
+          <p>
+            <strong>Gary Wrotka</strong> to ta sama dbałość o detal, ten sam szacunek do procesu,
+            ale w innym medium. Zamiast aparatu — butelka. Zamiast światła — czas.
+          </p>
+        </div>
+        <div class="md:col-span-7">
+          <PhotoGallery images={galleryImages} alt="Z naszego warsztatu" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-paper-warm py-20 border-t border-line">
+    <div class="mx-auto max-w-3xl px-6 text-center">
+      <SectionHeading
+        eyebrow="Co dalej"
+        title="Cieszę się że tu jesteś"
+        intro="Wpadnij na blog, zajrzyj do katalogu — albo po prostu napisz. Zawsze chętnie pogadamy o fermentacji."
+        align="center"
+      />
+      <div class="mt-8 flex flex-wrap justify-center gap-4">
+        <a href="/katalog" class="rounded-full bg-ink text-paper px-6 py-3 font-semibold hover:bg-accent transition">Zobacz katalog →</a>
+        <a href="/kontakt" class="rounded-full border border-ink px-6 py-3 font-medium hover:bg-ink hover:text-paper transition">Napisz do nas</a>
+      </div>
+    </div>
+  </section>
+</Layout>
