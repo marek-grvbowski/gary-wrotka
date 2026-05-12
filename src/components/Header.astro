@@ -36,7 +36,7 @@ const isActive = (href: string) =>
         height="44"
         class="w-11 h-11 rounded-xl transition-transform duration-500 group-hover:rotate-[30deg]"
       />
-      <span class="hidden sm:inline font-display font-bold tracking-tight text-base uppercase letter-spaced-tight">
+      <span class="hidden sm:inline font-display font-bold tracking-[0.04em] text-base uppercase">
         {brand}
       </span>
     </a>
@@ -44,7 +44,8 @@ const isActive = (href: string) =>
       {links.map((l) => (
         <a
           href={l.href}
-          class={`text-sm font-medium hover:text-accent transition ${isActive(l.href) ? 'underline underline-offset-8 decoration-2 decoration-accent' : ''}`}
+          aria-current={isActive(l.href) ? 'page' : undefined}
+          class="nav-link text-sm font-medium transition-colors hover:text-accent"
         >
           {l.label}
         </a>
