@@ -55,7 +55,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://gary-wrotka
 
     <script>
       import { initInquiryCart } from '../scripts/inquiry-cart';
+      import { initAnimations } from '../scripts/animations';
       initInquiryCart();
+      initAnimations();
     </script>
   </body>
 </html>

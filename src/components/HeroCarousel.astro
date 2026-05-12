@@ -14,7 +14,7 @@ const { images, tagline, brand } = Astro.props;
         alt=""
         loading={i === 0 ? 'eager' : 'lazy'}
         decoding="async"
-        class={`hero-slide absolute inset-0 w-full h-full object-cover ${i === 0 ? 'active' : ''}`}
+        class={`hero-slide fade-img absolute inset-0 w-full h-full object-cover ${i === 0 ? 'active' : ''}`}
         data-slide-index={i}
       />
     ))}

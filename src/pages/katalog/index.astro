@@ -39,7 +39,7 @@ const categories = [
           </button>
         ))}
       </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" data-product-grid>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 reveal-stagger" data-product-grid>
         {all.map((p) => (
           <div data-category={p.data.category}>
             <ProductCard

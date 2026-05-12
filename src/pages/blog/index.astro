@@ -26,7 +26,7 @@ const posts = (await getCollection('blog', (p) => !p.data.draft))
       {posts.length === 0 ? (
         <p class="text-muted">Wkrótce pierwsze wpisy.</p>
       ) : (
-        <div class="grid md:grid-cols-2 gap-12">
+        <div class="grid md:grid-cols-2 gap-12 reveal-stagger">
           {posts.map((p) => (
             <BlogCard
               slug={p.id}

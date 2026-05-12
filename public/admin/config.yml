@@ -1,18 +1,18 @@
 backend:
   name: github
-  repo: YOUR_GITHUB_USER/gary-wrotka
+  repo: marek-grvbowski/gary-wrotka
   branch: main
-  base_url: https://api.netlify.com
-  auth_endpoint: auth
+  base_url: https://gary-wrotka.vercel.app
+  auth_endpoint: api/auth
 
 local_backend: true
 
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
 
-site_url: https://gary-wrotka.pages.dev
-display_url: https://gary-wrotka.pages.dev
-logo_url: /images/brand/logo-dark.svg
+site_url: https://gary-wrotka.vercel.app
+display_url: https://gary-wrotka.vercel.app
+logo_url: /images/brand/logo.svg
 
 locale: "pl"
 

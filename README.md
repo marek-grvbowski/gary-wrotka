@@ -75,16 +75,26 @@ npm run dev
 
 Otwórz **`http://localhost:4321/admin/index.html`** (w devie potrzebny pełny `index.html`, w produkcji wystarczy `/admin/`). Edycja produktów, bloga, ustawień globalnych przez UI. Zmiany lądują w plikach `src/content/*` lokalnie — żeby wyszły na produkcję, trzeba je commitować i pushować do GitHuba.
 
-### Tryb produkcyjny (GitHub OAuth — bez gita po stronie właściciela)
+### Tryb produkcyjny (GitHub OAuth, własny proxy na Vercelu)
 
-1. **Założyć GitHub OAuth app:** Settings → Developer settings → OAuth Apps → New.
-   - Homepage URL: `https://gary-wrotka.pages.dev/admin`
-   - Authorization callback URL: `https://api.netlify.com/auth/done`
-2. **Skonfigurować Netlify OAuth jako proxy** (Netlify daje to za darmo, nawet jeśli hostujemy na CF Pages): w Netlify dashboard → Site settings → Identity → Git Gateway → Edit OAuth provider settings → wkleić Client ID i Client Secret z GitHuba.
-3. W `public/admin/config.yml` zmienić `repo:` na poprawny `USER/REPO`.
-4. Właściciel wchodzi na `https://gary-wrotka.pages.dev/admin`, loguje się przez GitHub, edytuje, klika "Publish". Sveltia commituje do repo, CF Pages buduje automatycznie.
+Mamy własny OAuth proxy w `api/auth.js` + `api/callback.js` (Vercel Serverless Functions). Żeby zadziałało:
 
-> Alternatywa: jeśli nie chcesz konta Netlify, postaw własny OAuth proxy (kilka linii kodu w Cloudflare Workers). Instrukcja: https://github.com/sveltia/sveltia-cms-auth
+1. **Założyć GitHub OAuth app**
+   - GitHub → Settings → Developer settings → OAuth Apps → **New OAuth App**
+   - Application name: `Gary Wrotka CMS` (cokolwiek)
+   - Homepage URL: `https://gary-wrotka.vercel.app`
+   - **Authorization callback URL**: `https://gary-wrotka.vercel.app/api/callback`
+   - **Register application** → przepisać `Client ID`, wygenerować i przepisać `Client Secret`
+
+2. **Wkleić do Vercel Environment Variables** (Project Settings → Environment Variables):
+   - `GITHUB_OAUTH_CLIENT_ID` = Client ID z GitHuba
+   - `GITHUB_OAUTH_CLIENT_SECRET` = Client Secret z GitHuba
+   - Plus już ustawiony `PUBLIC_WEB3FORMS_KEY`
+   - **Redeploy** projektu (Deployments → … → Redeploy)
+
+3. **Sprawdź**: właściciel wchodzi na `https://gary-wrotka.vercel.app/admin/`, klika *Login with GitHub*, autoryzuje aplikację, edytuje treści, klika *Publish*. Sveltia commituje do `main`, Vercel buduje automatycznie.
+
+> Cały kod proxy jest w repo (`api/auth.js`, `api/callback.js`) — nic płatnego ani trzeciego konta nie potrzeba.
 
 ## Jak dodać produkt ręcznie
 
@@ -145,14 +155,19 @@ import PhotoGallery from '../../components/PhotoGallery.astro';
    ```
 4. W panelu Web3Forms ustaw e-mail docelowy — tam będą lądować zamówienia, kontakty, B2B.
 
-## Deploy na Cloudflare Pages
+## Deploy na Vercel
 
-1. Wrzuć repo na GitHuba.
-2. Cloudflare Dashboard → Pages → Create application → Connect to Git.
-3. Build command: `npm run build`
-4. Build output: `dist`
-5. Environment variables: `PUBLIC_WEB3FORMS_KEY` = `twój-klucz`
-6. Custom domain → podepnij domenę.
+1. Wrzuć repo na GitHuba (już zrobione: `marek-grvbowski/gary-wrotka`).
+2. https://vercel.com/new → Import Git Repository → wybierz `gary-wrotka`.
+3. Framework preset: Astro (wykryje sam). Build command `npm run build`, output `dist`.
+4. Environment Variables:
+   - `PUBLIC_WEB3FORMS_KEY` — klucz Web3Forms
+   - `GITHUB_OAUTH_CLIENT_ID` — z OAuth App (dla CMS w produkcji)
+   - `GITHUB_OAUTH_CLIENT_SECRET` — z OAuth App
+5. Deploy. Każdy `git push` na `main` → automatyczny redeploy.
+
+### Alternatywnie: Cloudflare Pages
+Build/output identyczne (`npm run build` / `dist`). Proxy CMS-a (`api/auth.js`, `api/callback.js`) jest specyficzny dla Vercela — na CF Pages trzeba portować do CF Workers albo użyć Netlify Identity jako proxy.
 
 ## Wymagania
 - Node.js >= 22.12

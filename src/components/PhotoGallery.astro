@@ -12,7 +12,7 @@ const { images, alt = '' } = Astro.props;
       alt={alt || `Zdjęcie ${i + 1}`}
       loading={i < 3 ? 'eager' : 'lazy'}
       decoding="async"
-      class="rounded-lg w-full h-auto"
+      class="fade-img rounded-lg w-full h-auto transition-transform duration-[900ms] ease-out hover:scale-[1.02]"
     />
   ))}
 </div>

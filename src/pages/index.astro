@@ -37,7 +37,7 @@ const process = [
   />
 
   <section class="bg-paper py-24 md:py-32">
-    <div class="mx-auto max-w-[var(--container-content)] px-6 grid md:grid-cols-12 gap-12 items-start">
+    <div class="mx-auto max-w-[var(--container-content)] px-6 grid md:grid-cols-12 gap-12 items-start reveal">
       <div class="md:col-span-4">
         <SectionHeading
           eyebrow="Manifest"
@@ -64,17 +64,17 @@ const process = [
 
   <section class="bg-paper py-20 border-t border-line">
     <div class="mx-auto max-w-[var(--container-content)] px-6">
-      <div class="flex items-end justify-between gap-6 flex-wrap mb-12">
+      <div class="flex items-end justify-between gap-6 flex-wrap mb-12 reveal">
         <SectionHeading
           eyebrow="Smaki"
           title="Wybrane z katalogu"
-          intro="Trzy fermenty, które polecamy na start — od delikatnego jaśminu do mocnego buraka."
+          intro="Trzy fermenty, które polecamy na start — od delikatnego jaśminu do mocnego, kawowego Fermento Nero."
         />
         <a href="/katalog" class="text-sm font-medium text-accent hover:text-accent-deep underline underline-offset-4">
           Cały katalog →
         </a>
       </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 reveal-stagger">
         {products.map((p) => (
           <ProductCard
             slug={p.id}
@@ -92,12 +92,14 @@ const process = [
 
   <section class="bg-paper-warm py-24">
     <div class="mx-auto max-w-[var(--container-content)] px-6">
+      <div class="reveal">
       <SectionHeading
         eyebrow="Proces"
         title="Pięć kroków do żywego napoju"
         intro="Nic nie jest przypadkowe. Każdy krok dyktuje smak końcowy."
       />
-      <ol class="mt-12 grid md:grid-cols-5 gap-6">
+      </div>
+      <ol class="mt-12 grid md:grid-cols-5 gap-6 reveal-stagger">
         {process.map((step, i) => (
           <li class="bg-paper rounded-xl p-6 border border-line">
             <div class="font-display font-bold text-3xl text-accent">{String(i + 1).padStart(2, '0')}</div>
@@ -111,7 +113,7 @@ const process = [
 
   <section class="bg-paper py-24">
     <div class="mx-auto max-w-[var(--container-content)] px-6">
-      <div class="flex items-end justify-between gap-6 flex-wrap mb-12">
+      <div class="flex items-end justify-between gap-6 flex-wrap mb-12 reveal">
         <SectionHeading
           eyebrow="Z bloga"
           title="O fermentacji i nie tylko"
@@ -120,7 +122,7 @@ const process = [
           Wszystkie wpisy →
         </a>
       </div>
-      <div class="grid md:grid-cols-2 gap-12">
+      <div class="grid md:grid-cols-2 gap-12 reveal-stagger">
         {blogPosts.map((p) => (
           <BlogCard
             slug={p.id}
@@ -136,7 +138,7 @@ const process = [
   </section>
 
   <section class="bg-ink text-paper py-16">
-    <div class="mx-auto max-w-[var(--container-content)] px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+    <div class="mx-auto max-w-[var(--container-content)] px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 reveal">
       <div>
         <div class="eyebrow text-paper/50">Hurt / HoReCa</div>
         <h2 class="font-display font-bold text-3xl md:text-4xl mt-3 max-w-2xl">
