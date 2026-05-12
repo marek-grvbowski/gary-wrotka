@@ -5,8 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Gary Wrotka — Panel zarządzania treścią</title>
     <link rel="icon" href="/favicon.svg" />
+    <style>
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; }
+      #boot-fallback {
+        position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+        background: #fafaf7; color: #1a1a1a; z-index: -1; text-align: center; padding: 2rem;
+      }
+      #boot-fallback h1 { font-size: 1.25rem; margin: 0 0 0.5rem; font-weight: 700; }
+      #boot-fallback p { color: #6b6b6b; max-width: 32rem; line-height: 1.6; }
+      #boot-fallback code { background: #efeee9; padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.85em; }
+    </style>
   </head>
   <body>
+    <div id="boot-fallback" aria-hidden="true">
+      <div>
+        <img src="/images/brand/logo-mark.svg" alt="" width="60" style="margin-bottom: 1rem"/>
+        <h1>Ładowanie panelu zarządzania…</h1>
+        <p>
+          Jeśli ta wiadomość się nie zmienia po 10 sekundach, sprawdź:<br/>
+          1. Czy w Vercelu są ustawione <code>GITHUB_OAUTH_CLIENT_ID</code> i <code>GITHUB_OAUTH_CLIENT_SECRET</code>?<br/>
+          2. Czy w GitHub OAuth App callback URL to <code>/api/callback</code> tej domeny?<br/>
+          3. Czy plik <code>/admin/config.yml</code> zwraca 200?
+        </p>
+      </div>
+    </div>
     <script type="module" src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
   </body>
 </html>

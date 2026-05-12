@@ -2,17 +2,16 @@ backend:
   name: github
   repo: marek-grvbowski/gary-wrotka
   branch: main
-  base_url: https://gary-wrotka.vercel.app
   auth_endpoint: api/auth
 
-local_backend: true
+# Aby edytować lokalnie bez logowania do GitHuba — odkomentuj poniższą linię
+# i uruchom `npx @sveltia/proxy-server` w drugim terminalu.
+# local_backend: true
 
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
 
-site_url: https://gary-wrotka.vercel.app
-display_url: https://gary-wrotka.vercel.app
-logo_url: /images/brand/logo.svg
+logo_url: /images/brand/logo-mark.svg
 
 locale: "pl"
 

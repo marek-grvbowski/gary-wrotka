@@ -24,6 +24,10 @@ const process = [
   { title: 'Karbonizacja', body: 'Druga fermentacja w butelce — naturalny gaz, bez dosypywania.' },
   { title: 'Magazyn', body: 'Chłodno, ciemno, krótko. Trafia do Ciebie świeże.' },
 ];
+
+// editorial photo (recykling z hero galery)
+const editorialPhoto = '/images/photos/_DSC4577a.jpg'; // słój fermentacyjny w plenerze
+const editorial2 = '/images/photos/_DSC4975.jpg'; // ognisko outdoor
 ---
 <Layout
   title="Gary Wrotka — rzemieślnicze fermenty z Wrocławia"
@@ -36,15 +40,16 @@ const process = [
     tagline={data?.tagline ?? ''}
   />
 
-  <section class="bg-paper py-24 md:py-32">
-    <div class="mx-auto max-w-[var(--container-content)] px-6 grid md:grid-cols-12 gap-12 items-start reveal">
-      <div class="md:col-span-4">
-        <SectionHeading
-          eyebrow="Manifest"
-          title="Fermentacja jako forma cierpliwości"
-        />
+  <!-- INTRO / MANIFEST — split z dużym pull-quote -->
+  <section class="snap-section bg-paper py-24 md:py-36 relative">
+    <div class="mx-auto max-w-[var(--container-content)] px-6 grid md:grid-cols-12 gap-12 md:gap-16 items-start">
+      <div class="md:col-span-5 reveal-left">
+        <div class="eyebrow">Manifest</div>
+        <h2 class="font-display font-bold tracking-tight text-3xl md:text-5xl mt-4 leading-[1.1]">
+          Fermentacja<br/>jako forma<br/><em class="text-accent not-italic font-display">cierpliwości.</em>
+        </h2>
       </div>
-      <div class="md:col-span-7 md:col-start-6 space-y-5 text-lg leading-relaxed text-ink-soft">
+      <div class="md:col-span-6 md:col-start-7 space-y-6 text-lg md:text-xl leading-relaxed text-ink-soft reveal-right">
         <p>
           Robimy to, czego brakowało nam w sklepach: napoje, które naprawdę żyją.
           Nie pasteryzujemy, nie cukrzymy do smaku, nie dosypujemy gazu.
@@ -54,24 +59,43 @@ const process = [
           Wrocław, lokalne owoce, starannie wybrane herbaty, ręczne butelkowanie.
           Każda partia jest trochę inna — bo ma być.
         </p>
-        <p>
-          Marka powstała z pasji do dokumentowania rzemiosła. Stąd jej druga noga —
-          fotografia, którą mówimy o procesie. Zobaczysz ją w katalogu, na blogu, w opakowaniach.
-        </p>
       </div>
     </div>
   </section>
 
-  <section class="bg-paper py-20 border-t border-line">
+  <!-- EDITORIAL BREAK — pełnoekranowe zdjęcie z parallax -->
+  <section class="relative h-[60vh] md:h-[80vh] overflow-hidden bg-ink reveal-blur">
+    <img
+      src={editorialPhoto}
+      alt=""
+      class="fade-img absolute inset-0 w-full h-full object-cover"
+      loading="lazy"
+    />
+    <div class="absolute inset-0 bg-gradient-to-b from-ink/30 via-transparent to-ink/70"></div>
+    <div class="absolute inset-0 flex items-end">
+      <div class="mx-auto max-w-[var(--container-content)] px-6 pb-16 md:pb-20 w-full">
+        <div class="max-w-2xl text-paper">
+          <div class="eyebrow text-paper/60">Tam, gdzie się zaczyna</div>
+          <p class="mt-4 font-display text-2xl md:text-4xl leading-tight font-medium">
+            „Robimy butelkę tak, jak robimy zdjęcie — z troską o światło, czas i kadr."
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED PRODUCTS -->
+  <section class="bg-paper py-24 md:py-32">
     <div class="mx-auto max-w-[var(--container-content)] px-6">
-      <div class="flex items-end justify-between gap-6 flex-wrap mb-12 reveal">
+      <div class="flex items-end justify-between gap-6 flex-wrap mb-14 reveal">
         <SectionHeading
           eyebrow="Smaki"
           title="Wybrane z katalogu"
           intro="Trzy fermenty, które polecamy na start — od delikatnego jaśminu do mocnego, kawowego Fermento Nero."
         />
-        <a href="/katalog" class="text-sm font-medium text-accent hover:text-accent-deep underline underline-offset-4">
-          Cały katalog →
+        <a href="/katalog" class="text-sm font-medium text-accent hover:text-accent-deep underline underline-offset-4 inline-flex items-center gap-1">
+          <span>Cały katalog</span>
+          <span aria-hidden="true">→</span>
         </a>
       </div>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 reveal-stagger">
@@ -90,20 +114,36 @@ const process = [
     </div>
   </section>
 
-  <section class="bg-paper-warm py-24">
+  <!-- QUOTE / STATEMENT — ciemne tło -->
+  <section class="bg-ink text-paper py-28 md:py-36 relative overflow-hidden">
+    <div class="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-accent/10 blur-3xl"></div>
+    <div class="absolute -bottom-20 -left-20 w-96 h-96 rounded-full bg-accent-deep/10 blur-3xl"></div>
+    <div class="relative mx-auto max-w-4xl px-6 text-center reveal-blur">
+      <div class="eyebrow text-paper/50">Family-run business</div>
+      <blockquote class="mt-6 font-display text-3xl md:text-5xl lg:text-6xl font-medium leading-[1.15] tracking-tight">
+        „Każda partia ma inny dzień, inną pogodę,<br class="hidden md:block"/>
+        innego SCOBY — i z każdej wyjdzie coś<br class="hidden md:block"/>
+        <span class="text-accent">tylko trochę inaczej.</span>"
+      </blockquote>
+      <div class="mt-8 text-paper/60 text-sm uppercase tracking-[0.2em]">Krzysztof Wroński · fundator</div>
+    </div>
+  </section>
+
+  <!-- PROCESS — asymetryczna siatka -->
+  <section class="bg-paper-warm py-24 md:py-32">
     <div class="mx-auto max-w-[var(--container-content)] px-6">
-      <div class="reveal">
-      <SectionHeading
-        eyebrow="Proces"
-        title="Pięć kroków do żywego napoju"
-        intro="Nic nie jest przypadkowe. Każdy krok dyktuje smak końcowy."
-      />
+      <div class="reveal-left">
+        <SectionHeading
+          eyebrow="Proces"
+          title="Pięć kroków do żywego napoju"
+          intro="Nic nie jest przypadkowe. Każdy krok dyktuje smak końcowy."
+        />
       </div>
-      <ol class="mt-12 grid md:grid-cols-5 gap-6 reveal-stagger">
+      <ol class="mt-14 grid md:grid-cols-5 gap-4 reveal-stagger">
         {process.map((step, i) => (
-          <li class="bg-paper rounded-xl p-6 border border-line">
-            <div class="font-display font-bold text-3xl text-accent">{String(i + 1).padStart(2, '0')}</div>
-            <div class="mt-3 font-display font-semibold text-lg">{step.title}</div>
+          <li class={`group bg-paper rounded-xl p-6 border border-line transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:border-accent/40 ${i % 2 === 1 ? 'md:mt-8' : ''}`}>
+            <div class="font-mark text-4xl text-accent transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3 origin-left">{String(i + 1).padStart(2, '0')}</div>
+            <div class="mt-4 font-display font-semibold text-lg">{step.title}</div>
             <p class="mt-2 text-sm text-muted leading-relaxed">{step.body}</p>
           </li>
         ))}
@@ -111,18 +151,39 @@ const process = [
     </div>
   </section>
 
-  <section class="bg-paper py-24">
+  <!-- EDITORIAL BREAK 2 — full bleed -->
+  <section class="relative h-[50vh] md:h-[70vh] overflow-hidden bg-ink reveal-blur">
+    <img
+      src={editorial2}
+      alt=""
+      class="fade-img absolute inset-0 w-full h-full object-cover"
+      loading="lazy"
+    />
+    <div class="absolute inset-0 bg-ink/40"></div>
+    <div class="absolute inset-0 flex items-center">
+      <div class="mx-auto max-w-[var(--container-content)] px-6 w-full text-paper text-center">
+        <div class="eyebrow text-paper/60">Fermentujemy też na zewnątrz</div>
+        <p class="mt-4 font-display text-2xl md:text-4xl font-medium tracking-tight">
+          Najlepsze partie powstają tam,<br/>gdzie kuchnia spotyka las.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOG -->
+  <section class="bg-paper py-24 md:py-32">
     <div class="mx-auto max-w-[var(--container-content)] px-6">
-      <div class="flex items-end justify-between gap-6 flex-wrap mb-12 reveal">
+      <div class="flex items-end justify-between gap-6 flex-wrap mb-14 reveal">
         <SectionHeading
           eyebrow="Z bloga"
           title="O fermentacji i nie tylko"
         />
-        <a href="/blog" class="text-sm font-medium text-accent hover:text-accent-deep underline underline-offset-4">
-          Wszystkie wpisy →
+        <a href="/blog" class="text-sm font-medium text-accent hover:text-accent-deep underline underline-offset-4 inline-flex items-center gap-1">
+          <span>Wszystkie wpisy</span>
+          <span aria-hidden="true">→</span>
         </a>
       </div>
-      <div class="grid md:grid-cols-2 gap-12 reveal-stagger">
+      <div class="grid md:grid-cols-2 gap-12 md:gap-16 reveal-stagger">
         {blogPosts.map((p) => (
           <BlogCard
             slug={p.id}
@@ -137,14 +198,15 @@ const process = [
     </div>
   </section>
 
-  <section class="bg-ink text-paper py-16">
-    <div class="mx-auto max-w-[var(--container-content)] px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 reveal">
+  <!-- B2B CTA -->
+  <section class="bg-ink text-paper py-20 md:py-24 relative overflow-hidden">
+    <div class="mx-auto max-w-[var(--container-content)] px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 reveal">
       <div>
         <div class="eyebrow text-paper/50">Hurt / HoReCa</div>
-        <h2 class="font-display font-bold text-3xl md:text-4xl mt-3 max-w-2xl">
-          Prowadzisz lokal, sklep, delikatesy?
+        <h2 class="font-display font-bold text-3xl md:text-5xl mt-3 max-w-2xl tracking-tight leading-tight">
+          Prowadzisz lokal,<br class="hidden md:block"/>sklep, delikatesy?
         </h2>
-        <p class="mt-3 text-paper/75 max-w-2xl">
+        <p class="mt-4 text-paper/75 max-w-2xl text-lg">
           Mamy osobny landing dla partnerów hurtowych. Indywidualne wyceny, regularne dostawy, wsparcie marketingowe.
         </p>
       </div>

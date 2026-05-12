@@ -5,7 +5,7 @@ export function initAnimations() {
 
   // 1. Reveal on scroll (all variants)
   const targets = document.querySelectorAll<HTMLElement>(
-    '.reveal, .reveal-stagger, .reveal-zoom, .reveal-clip'
+    '.reveal, .reveal-stagger, .reveal-zoom, .reveal-clip, .reveal-left, .reveal-right, .reveal-rotate, .reveal-blur'
   );
   if (targets.length > 0 && 'IntersectionObserver' in window && !reduceMotion) {
     const io = new IntersectionObserver(

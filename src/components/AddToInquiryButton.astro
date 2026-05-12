@@ -28,10 +28,10 @@ const itemPayload = JSON.stringify({ slug, name, flavor, volume, image });
   <button
     type="button"
     data-add-btn
-    class="flex-1 md:flex-none inline-flex items-center justify-center gap-2 rounded-full bg-ink text-paper px-6 py-3 text-sm font-semibold hover:bg-accent transition"
+    class="flex-1 md:flex-none magnetic inline-flex items-center justify-center gap-2 rounded-full bg-ink text-paper px-6 py-3 text-sm font-semibold hover:bg-accent transition-colors"
   >
-    Dodaj do zapytania
-    <span aria-hidden="true">→</span>
+    <span>Dodaj do koszyka</span>
+    <span class="arrow inline-block transition-transform" aria-hidden="true">→</span>
   </button>
 </div>
 

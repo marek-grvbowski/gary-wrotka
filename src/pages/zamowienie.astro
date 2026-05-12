@@ -29,9 +29,9 @@ const isOk = Astro.url.searchParams.get('ok') === '1';
       ) : (
         <>
           <SectionHeading
-            eyebrow="Zapytanie ofertowe"
-            title="Złóż zapytanie"
-            intro="Nie kupujesz online — zamiast tego wysyłasz nam listę produktów, którymi się interesujesz. Odezwiemy się mailowo, ustalimy dostępność, sposób odbioru i wszystko inne."
+            eyebrow="Koszyk"
+            title="Złóż zamówienie"
+            intro="Nie kupujesz online — zamiast tego wysyłasz nam listę produktów z koszyka. Odezwiemy się mailowo, ustalimy dostępność, sposób odbioru i wszystko inne."
           />
 
           <div class="mt-12 grid md:grid-cols-12 gap-12">
@@ -128,7 +128,7 @@ const isOk = Astro.url.searchParams.get('ok') === '1';
                   class="w-full rounded-full bg-ink text-paper px-6 py-3 font-semibold hover:bg-accent transition disabled:opacity-40 disabled:cursor-not-allowed"
                   disabled
                 >
-                  Wyślij zapytanie
+                  Wyślij zamówienie
                 </button>
 
                 <p class="text-xs text-muted leading-relaxed">

@@ -7,7 +7,7 @@ type Props = {
 const { images, tagline, brand } = Astro.props;
 const slideDuration = 5500;
 ---
-<section class="hero relative min-h-screen md:min-h-[100vh] flex items-end bg-ink text-paper overflow-hidden" data-slide-duration={slideDuration}>
+<section class="hero snap-strong relative min-h-screen md:min-h-[100vh] flex items-end bg-ink text-paper overflow-hidden" data-slide-duration={slideDuration}>
   <div class="hero-stage absolute inset-0">
     {images.map((src, i) => (
       <div
