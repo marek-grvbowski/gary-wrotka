@@ -30,7 +30,7 @@ manifest:
 
     Nie skalujemy się. Robimy edycje 50–300 butelek i, kiedy się skończą, robimy następne. Lub nie. Niektóre wariacje były zbyt dobre, żeby je powtarzać.
   image: /images/photos/fermento-nero-2.jpg
-  caption: Studio · Wrocław · ul. Przykładowa 1
+  caption: Studio · Nowy Sącz · ul. Przykładowa 1
   ctaLabel: Czytaj cały manifest
   ctaHref: /o-nas
 featured:
@@ -59,7 +59,7 @@ b2b:
   eyebrow: Dla restauracji, sklepów i barów
   title: Postaw nas w swoim menu.
   accent: Powiedz nam, w jakiej skali — odpiszemy w 24h.
-  body: Dystrybucja własnym samochodem na Wrocław i Dolny Śląsk. Reszta Polski — kurier paletowy.
+  body: Dystrybucja własnym samochodem na Nowy Sącz i Małopolskę. Reszta Polski — kurier paletowy.
   mail: b2b@garywrotka.pl
   buttonLabel: Formularz B2B
   buttonHref: /b2b

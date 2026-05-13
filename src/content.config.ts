@@ -98,7 +98,7 @@ const home = defineCollection({
   }),
 });
 
-// Globalne ustawienia — marka, kolor, kontakt, social
+// Globalne ustawienia — marka, kolor, kontakt, social, stopka
 const global = defineCollection({
   loader: glob({ pattern: 'global.md', base: './src/content/site' }),
   schema: z.object({
@@ -114,6 +114,20 @@ const global = defineCollection({
       instagram: z.string().optional(),
       facebook: z.string().optional(),
     }).default({}),
+    footer: z.object({
+      description: z.string().default(''),
+      copyright: z.string().default('© Gary Wrotka'),
+      taxId: z.string().optional(),
+      shopHeading: z.string().default('Sklep'),
+      aboutHeading: z.string().default('O nas'),
+      contactHeading: z.string().default('Kontakt'),
+    }).default({
+      description: '',
+      copyright: '© Gary Wrotka',
+      shopHeading: 'Sklep',
+      aboutHeading: 'O nas',
+      contactHeading: 'Kontakt',
+    }),
   }),
 });
 

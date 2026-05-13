@@ -15,7 +15,7 @@ const blogPosts = (await getCollection('blog', (p) => !p.data.draft))
 
 const heroImages = data?.heroImages ?? [];
 
-const heroTitle = data?.homeHero?.title ?? 'Rzemieślnicze fermenty z Wrocławia.';
+const heroTitle = data?.homeHero?.title ?? 'Rzemieślnicze fermenty z Nowego Sącza.';
 const heroSub = data?.homeHero?.subtitle ?? '';
 const heroEyebrow = data?.homeHero?.eyebrow ?? '';
 const heroPrimary = data?.homeHero?.primaryCta ?? { label: 'Zobacz katalog', href: '/katalog' };
@@ -39,7 +39,7 @@ const filters = [
 ];
 ---
 <Layout
-  title="Gary Wrotka — rzemieślnicze fermenty z Wrocławia"
+  title="Gary Wrotka — rzemieślnicze fermenty z Nowego Sącza"
   description={data?.tagline}
   headerMode="dark"
   bodyClass="home-page"

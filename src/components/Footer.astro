@@ -2,17 +2,21 @@
 import { getEntry } from 'astro:content';
 const site = await getEntry('global', 'global');
 const data = site?.data;
+const f = data?.footer;
 const year = new Date().getFullYear();
 ---
 <footer class="foot" data-nav-theme="dark">
+  <div class="foot-watermark" aria-hidden="true">
+    <img src="/images/brand/logo-mark.svg" alt=""/>
+  </div>
   <div class="container">
     <div class="foot-grid">
       <div class="foot-brand">
         <div class="mark">{data?.brandName ?? 'Gary Wrotka'}</div>
-        <p>{data?.tagline ?? 'Rzemieślnicze fermenty z Wrocławia. Kombucha, sosy, octy — ręcznie, w małych partiach.'}</p>
+        {f?.description && <p>{f.description}</p>}
       </div>
       <div>
-        <h4>Sklep</h4>
+        <h4>{f?.shopHeading ?? 'Sklep'}</h4>
         <ul>
           <li><a href="/katalog">Katalog</a></li>
           <li><a href="/katalog?cat=kombucha">Kombucha</a></li>
@@ -21,7 +25,7 @@ const year = new Date().getFullYear();
         </ul>
       </div>
       <div>
-        <h4>O nas</h4>
+        <h4>{f?.aboutHeading ?? 'O nas'}</h4>
         <ul>
           <li><a href="/o-nas">Manifest</a></li>
           <li><a href="/blog">Blog / Dziennik</a></li>
@@ -29,17 +33,19 @@ const year = new Date().getFullYear();
         </ul>
       </div>
       <div>
-        <h4>Kontakt</h4>
+        <h4>{f?.contactHeading ?? 'Kontakt'}</h4>
         <ul>
           {data?.contactEmail && <li><a href={`mailto:${data.contactEmail}`}>{data.contactEmail}</a></li>}
+          {data?.phone && <li><a href={`tel:${data.phone.replace(/\s/g, '')}`}>{data.phone}</a></li>}
+          {data?.address && <li>{data.address}</li>}
           {data?.socials?.instagram && <li><a href={data.socials.instagram}>Instagram</a></li>}
           {data?.socials?.facebook && <li><a href={data.socials.facebook}>Facebook</a></li>}
         </ul>
       </div>
     </div>
     <div class="foot-bottom">
-      <span>© {year} {data?.brandName ?? 'Gary Wrotka'} · Studio Wrocław</span>
-      <span>Krzysztof Wroński · Nowy Sącz</span>
+      <span>{f?.copyright ?? `© ${year} Gary Wrotka`}</span>
+      {f?.taxId && <span>{f.taxId}</span>}
     </div>
   </div>
 </footer>

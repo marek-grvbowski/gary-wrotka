@@ -64,7 +64,7 @@ story:
     - "Zaczęło się od pomysłu na napój łączący nasze dwie obsesje — powolną fermentację SCOBY i palone ziarno. Espresso parzymy na zimno, długo, żeby wyciągnąć karmel i kakao bez goryczki."
     - "Korzenny profil zbudował się stopniowo — anyż, cynamon, kardamon i imbir macerujemy 72h w chłodnym naparze. Druga gazyfikacja w butelce, dwa tygodnie. To dziewiąta partia. Limit: 240 sztuk."
   image: "/images/photos/fermento-nero-2.jpg"
-  caption: "Studio · Wrocław · 2025"
+  caption: "Studio · Nowy Sącz · 2025"
 ---
 
 > „Pachnie jak neapolitańska piekarnia po burzy w Delhi."

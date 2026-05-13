@@ -343,3 +343,32 @@ collections:
             fields:
               - { name: "instagram", label: "Instagram URL", widget: "string", required: false }
               - { name: "facebook", label: "Facebook URL", widget: "string", required: false }
+
+          # ─── STOPKA ───────────────────────────────────────────
+          - name: "footer"
+            label: "🦶 Stopka strony"
+            widget: "object"
+            collapsed: false
+            hint: "Zawartość stopki na dole każdej strony — nagłówki kolumn, copyright, NIP."
+            fields:
+              - {
+                  name: "description",
+                  label: "Opis pod nazwą marki",
+                  widget: "text",
+                  hint: "Krótki tekst w pierwszej kolumnie stopki."
+                }
+              - {
+                  name: "copyright",
+                  label: "Linia copyright",
+                  widget: "string",
+                  hint: "np. '© 2026 Gary Wrotka · Studio Nowy Sącz'"
+                }
+              - {
+                  name: "taxId",
+                  label: "NIP / VAT (opcjonalnie)",
+                  widget: "string",
+                  required: false
+                }
+              - { name: "shopHeading", label: "Nagłówek kolumny: Sklep", widget: "string", default: "Sklep" }
+              - { name: "aboutHeading", label: "Nagłówek kolumny: O nas", widget: "string", default: "O nas" }
+              - { name: "contactHeading", label: "Nagłówek kolumny: Kontakt", widget: "string", default: "Kontakt" }
