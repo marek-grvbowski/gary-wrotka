@@ -27,27 +27,140 @@ collections:
     summary: "{{name}} — {{category}} ({{volume}})"
     sortable_fields: ["order", "name", "category"]
     fields:
+      # ── Podstawowe ───────────────────────────────────────
       - { name: "name", label: "Nazwa produktu", widget: "string" }
-      - { name: "category", label: "Kategoria", widget: "select", options: ["kombucha", "sos", "ocet"] }
-      - { name: "flavor", label: "Smak (krótki opis)", widget: "string" }
+      - {
+          name: "category",
+          label: "Kategoria",
+          widget: "select",
+          options: ["kombucha", "sos", "ocet"]
+        }
+      - {
+          name: "categoryLabel",
+          label: "Etykieta kategorii (pełna, na karcie produktu)",
+          widget: "string",
+          hint: "np. 'Kombucha · 330 ml', 'Sos fermentowany · 200 ml'",
+          required: false
+        }
+      - {
+          name: "edition",
+          label: "Edycja / wariant (opcjonalnie)",
+          widget: "string",
+          hint: "np. 'Edycja eksperymentalna 001' — pokazuje się jako pill na hero",
+          required: false
+        }
+      - {
+          name: "tag",
+          label: "Tag na karcie w katalogu (opcjonalnie)",
+          widget: "string",
+          hint: "np. 'Edycja 001', 'Bestseller', 'Nowość'",
+          required: false
+        }
+      - { name: "flavor", label: "Smak (krótki opis, jedna linia)", widget: "string" }
       - { name: "volume", label: "Pojemność / waga", widget: "string", hint: "np. 330 ml, 500 g" }
       - { name: "shortDescription", label: "Krótki opis (do karty)", widget: "text" }
-      - name: "ingredients"
-        label: "Skład"
-        widget: "list"
-        field: { name: "item", label: "Składnik", widget: "string" }
-      - name: "images"
-        label: "Zdjęcia produktu"
-        widget: "list"
-        hint: "Drag-and-drop, aby zmienić kolejność. Pierwsze zdjęcie jest główne."
-        field: { name: "src", label: "Zdjęcie", widget: "image" }
+
+      # ── Status ────────────────────────────────────────────
       - { name: "available", label: "Dostępny", widget: "boolean", default: true }
       - { name: "featured", label: "Wyróżniony (pokazany na home)", widget: "boolean", default: false }
       - { name: "order", label: "Kolejność (mniejsza = wcześniej)", widget: "number", default: 100, value_type: "int" }
-      - { name: "body", label: "Pełny opis (markdown)", widget: "markdown", required: false }
+
+      # ── Zdjęcia ──────────────────────────────────────────
+      - name: "images"
+        label: "Zdjęcia produktu"
+        widget: "list"
+        hint: "Drag-and-drop dla zmiany kolejności. Pierwsze zdjęcie jest główne, kolejne to thumbnails w galerii."
+        field: { name: "src", label: "Zdjęcie", widget: "image" }
+
+      # ── Skład prosty (na karcie produktu) ────────────────
+      - name: "ingredients"
+        label: "Skład (prosta lista)"
+        widget: "list"
+        hint: "Krótka lista składników. Pojawia się jako bullet-lista pod opisem produktu."
+        field: { name: "item", label: "Składnik", widget: "string" }
+        required: false
+
+      # ── Plakietki / badges ───────────────────────────────
+      - name: "badges"
+        label: "Plakietki (Vegan, BIO, Limited 240 szt itp.)"
+        widget: "list"
+        field: { name: "label", label: "Tekst plakietki", widget: "string" }
+        required: false
+
+      # ── Specyfikacja (tabela klucz/wartość) ──────────────
+      - name: "specs"
+        label: "Specyfikacja (tabela klucz → wartość)"
+        widget: "list"
+        hint: "Renderowane jako grid 2-kolumnowy w hero. np. Pojemność: 330 ml, Karton: 6/12/24 szt, Trwałość: 6 miesięcy 4–10°C"
+        fields:
+          - { name: "k", label: "Klucz", widget: "string" }
+          - { name: "v", label: "Wartość", widget: "string" }
+        required: false
+
+      # ── Profil sensoryczny (animowane paski 0–10) ────────
+      - name: "flavorProfile"
+        label: "Profil smaku (paski 0–10)"
+        widget: "list"
+        hint: "6 wymiarów — animowane paski na karcie produktu. Każdy ma wartość 0–10."
+        fields:
+          - { name: "label", label: "Cecha (np. Kwasowość, Musowanie)", widget: "string" }
+          - {
+              name: "value",
+              label: "Wartość 0–10",
+              widget: "number",
+              value_type: "int",
+              min: 0,
+              max: 10
+            }
+        required: false
+
+      # ── Składniki ze szczegółowymi notami ─────────────────
+      - name: "detailedIngredients"
+        label: "Skład — z notami pochodzenia (siatka 4-kolumn)"
+        widget: "list"
+        hint: "Bogatsza wersja składu, renderuje jako siatkę kart z notami. Pojawia się jako sekcja 'Skład — N rzeczy, nic więcej'."
+        fields:
+          - { name: "name", label: "Nazwa składnika", widget: "string" }
+          - { name: "note", label: "Nota / pochodzenie", widget: "string" }
+        required: false
+
+      # ── Proces produkcji (timeline 4 kroków) ─────────────
+      - name: "process"
+        label: "Proces produkcji (oś czasu)"
+        widget: "list"
+        hint: "4 kroki — timeline z markerami numerowanymi. Renderowane jako 'Jak powstaje'."
+        fields:
+          - { name: "label", label: "Tytuł kroku (np. Cold brew espresso)", widget: "string" }
+          - { name: "duration", label: "Czas trwania (np. 14 dni · 22°C)", widget: "string" }
+          - { name: "desc", label: "Opis", widget: "text" }
+        required: false
+
+      # ── Historia butelki (sekcja split z foto) ───────────
+      - name: "story"
+        label: "Historia produktu (sekcja split z fotem)"
+        widget: "object"
+        collapsed: true
+        required: false
+        fields:
+          - { name: "eyebrow", label: "Eyebrow (mały tekst nad tytułem)", widget: "string", default: "Historia tej butelki" }
+          - { name: "title", label: "Tytuł sekcji", widget: "string" }
+          - name: "paragraphs"
+            label: "Akapity opisu"
+            widget: "list"
+            field: { name: "text", label: "Akapit", widget: "text" }
+          - { name: "image", label: "Zdjęcie do sekcji story", widget: "image" }
+          - { name: "caption", label: "Podpis pod zdjęciem (opcjonalnie)", widget: "string", required: false }
+
+      # ── Pełny opis (markdown body) ───────────────────────
+      - {
+          name: "body",
+          label: "Pełny opis (markdown — wyświetlany pod sekcjami)",
+          widget: "markdown",
+          required: false
+        }
 
   - name: "blog"
-    label: "Blog"
+    label: "Blog / Dziennik"
     label_singular: "Wpis"
     folder: "src/content/blog"
     create: true
@@ -58,7 +171,7 @@ collections:
     sortable_fields: ["pubDate", "title"]
     fields:
       - { name: "title", label: "Tytuł", widget: "string" }
-      - { name: "description", label: "Krótki opis", widget: "text" }
+      - { name: "description", label: "Krótki opis (do karty i SEO)", widget: "text" }
       - { name: "pubDate", label: "Data publikacji", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
       - { name: "author", label: "Autor", widget: "string", default: "Studio Wro" }
       - { name: "cover", label: "Zdjęcie tytułowe", widget: "image", required: false }
@@ -66,7 +179,7 @@ collections:
         label: "Tagi"
         widget: "list"
         field: { name: "tag", label: "Tag", widget: "string" }
-      - { name: "draft", label: "Szkic (niewidoczny)", widget: "boolean", default: false }
+      - { name: "draft", label: "Szkic (niewidoczny publicznie)", widget: "boolean", default: false }
       - { name: "body", label: "Treść", widget: "markdown" }
 
   - name: "site"
