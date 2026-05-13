@@ -515,8 +515,8 @@ body[data-theme="dark"] .manifest-media .caption {
   font-weight: 800;
   margin: 0 0 12px;
   color: var(--color-ink);
-  overflow-wrap: anywhere; word-break: break-word; hyphens: auto;
   max-width: 100%;
+  text-wrap: balance;
 }
 .hero-flavor {
   font-family: var(--font-body);
@@ -845,8 +845,8 @@ footer.foot .container { position: relative; z-index: 1; }
   font-size: clamp(36px, 9vw, 124px);
   line-height: 1; letter-spacing: -0.025em;
   margin: 0 0 28px; color: #fafaf7;
-  overflow-wrap: anywhere; word-break: break-word; hyphens: auto;
   max-width: 100%;
+  text-wrap: balance;
 }
 .hh-sub {
   font-size: clamp(16px, 1.4vw, 19px);
@@ -924,7 +924,7 @@ footer.foot .container { position: relative; z-index: 1; }
   font-size: clamp(28px, 5.5vw, 60px);
   letter-spacing: -0.02em; line-height: 1.08;
   margin: 0 0 32px;
-  overflow-wrap: anywhere;
+  text-wrap: balance;
 }
 .manifest-p { font-size: 16px; line-height: 1.75; color: var(--color-ink-soft); margin: 0 0 18px; }
 .manifest-media { position: relative; aspect-ratio: 5/4; overflow: hidden; border-radius: 4px; }
@@ -1013,7 +1013,7 @@ body[data-theme="dark"] .b2b-section { background: #060503; }
   letter-spacing: -0.025em; line-height: 1.08;
   margin: 0 0 28px;
   color: #fafaf7;
-  overflow-wrap: anywhere;
+  text-wrap: balance;
 }
 .b2b-accent { color: rgba(244,241,234,0.45); font-style: italic; font-weight: 500; }
 .b2b-p { font-size: 17px; line-height: 1.6; color: rgba(244,241,234,0.75); max-width: 580px; margin: 0 0 40px; }
@@ -1074,6 +1074,10 @@ body[data-theme="dark"] .b2b-section { background: #060503; }
 
 @media (max-width: 600px) {
   :root { --pad-x: 18px; }
+  /* Awaryjnie pozwól długim słowom się łamać NA MOBILE tylko (bez hyphens — bez myślnika) */
+  .hh-title, .hero-title, .manifest-h, .b2b-h {
+    overflow-wrap: anywhere;
+  }
   .actions { width: 100%; }
   .actions > * { flex: 1 1 auto; }
   .hh-cta { flex-direction: column; align-items: stretch; width: 100%; }
