@@ -12,28 +12,23 @@ const blogPosts = (await getCollection('blog', (p) => !p.data.draft))
   .sort((a, b) => +b.data.pubDate - +a.data.pubDate)
   .slice(0, 2);
 
-const heroImages = [
-  '/images/photos/fermento-nero-1.jpg',
-  '/images/photos/related-jasmin.jpg',
-  '/images/photos/related-ostry.jpg',
-  '/images/photos/process.jpg',
-  '/images/photos/related-porter.jpg',
-  '/images/photos/fermento-nero-3.jpg',
-];
+const heroImages = data?.heroImages ?? [];
 
 const heroTitle = data?.homeHero?.title ?? 'Rzemieślnicze fermenty z Wrocławia.';
-const heroSub = data?.homeHero?.subtitle ?? 'Ręcznie, w małych partiach. Bez kompromisów.';
-const heroEyebrow = data?.homeHero?.eyebrow ?? 'Kombucha · Sosy · Octy';
+const heroSub = data?.homeHero?.subtitle ?? '';
+const heroEyebrow = data?.homeHero?.eyebrow ?? '';
+const heroPrimary = data?.homeHero?.primaryCta ?? { label: 'Zobacz katalog', href: '/katalog' };
+const heroSecondary = data?.homeHero?.secondaryCta ?? { label: 'Manifest', href: '#manifest' };
+
 const sections = data?.homeSections ?? { manifest: true, featured: true, process: true, blog: true, b2b: true };
 
-const manifestParagraphs = (data?.manifestText ?? '').split('\n\n').filter(Boolean);
+const manifest = data?.manifest;
+const manifestParagraphs = (manifest?.body ?? '').split('\n\n').filter(Boolean);
 
-const processSteps = [
-  { n: '01', label: 'Surowiec', desc: 'Polska palarnia, lokalne warzywa, indyjskie przyprawy. Wybieramy świadomie.' },
-  { n: '02', label: 'Fermentacja', desc: 'Powolna, 14–60 dni. Nasze SCOBY i matki octu od 2019 r.' },
-  { n: '03', label: 'Smak', desc: 'Macerat ziół, leżakowanie, panel sensoryczny. Brak skrótów.' },
-  { n: '04', label: 'Butelka', desc: 'Ręcznie. Numerowana. Datowana. Czasem podpisana.' },
-];
+const featured = data?.featured;
+const processSection = data?.processSection;
+const blogSection = data?.blogSection;
+const b2b = data?.b2b;
 
 const filters = [
   { id: 'all', label: 'Wszystkie' },
@@ -69,11 +64,11 @@ const filters = [
         </h1>
         <p class="hh-sub page-in" style="animation-delay: 0.9s">{heroSub}</p>
         <div class="hh-cta page-in" style="animation-delay: 1.1s">
-          <a href="/katalog" class="magnetic btn-primary">
-            <span>Zobacz katalog</span>
+          <a href={heroPrimary.href} class="magnetic btn-primary">
+            <span>{heroPrimary.label}</span>
             <span class="arrow">→</span>
           </a>
-          <a href="#manifest" class="btn-ghost btn-ghost-light">Manifest</a>
+          <a href={heroSecondary.href} class="btn-ghost btn-ghost-light">{heroSecondary.label}</a>
         </div>
       </div>
 
@@ -99,16 +94,18 @@ const filters = [
   <section class="container manifest-section" id="manifest">
     <div class="manifest-grid">
       <div class="manifest-text reveal-left">
-        <div class="eyebrow" style="margin-bottom: 24px">Manifest</div>
-        <h2 class="manifest-h display">Fermentacja to powolna sztuka.</h2>
+        <div class="eyebrow" style="margin-bottom: 24px">{manifest?.eyebrow}</div>
+        <h2 class="manifest-h display">{manifest?.title}</h2>
         {manifestParagraphs.map((p) => <p class="manifest-p">{p}</p>)}
-        <a href="/o-nas" class="btn-ghost" style="margin-top: 24px">
-          Czytaj cały manifest <span>→</span>
-        </a>
+        {manifest?.ctaLabel && (
+          <a href={manifest.ctaHref} class="btn-ghost" style="margin-top: 24px">
+            {manifest.ctaLabel} <span>→</span>
+          </a>
+        )}
       </div>
       <div class="manifest-media reveal-clip">
-        <img src="/images/photos/fermento-nero-2.jpg" alt="Studio Wrocław" loading="lazy" class="fade-img"/>
-        <div class="caption">Studio · Wrocław · ul. Przykładowa 1</div>
+        <img src={manifest?.image} alt="" loading="lazy" class="fade-img"/>
+        {manifest?.caption && <div class="caption">{manifest.caption}</div>}
       </div>
     </div>
   </section>
@@ -119,8 +116,8 @@ const filters = [
   <section class="container featured-section">
     <div class="featured-head reveal">
       <div>
-        <div class="eyebrow" style="margin-bottom: 18px">Katalog</div>
-        <h2 class="profile-h" style="margin: 0">Wybrane fermenty.</h2>
+        <div class="eyebrow" style="margin-bottom: 18px">{featured?.eyebrow}</div>
+        <h2 class="profile-h" style="margin: 0">{featured?.title}</h2>
       </div>
       <div class="filter-row" data-filter-row>
         {filters.map((f) => (
@@ -157,11 +154,11 @@ const filters = [
   <section class="process-teaser">
     <div class="container">
       <div class="pt-head reveal-left">
-        <div class="eyebrow" style="margin-bottom: 18px">Jak powstają</div>
-        <h2 class="profile-h" style="margin: 0">Cztery kroki, sześć tygodni, jedna ręka.</h2>
+        <div class="eyebrow" style="margin-bottom: 18px">{processSection?.eyebrow}</div>
+        <h2 class="profile-h" style="margin: 0">{processSection?.title}</h2>
       </div>
       <div class="pt-grid reveal-stagger">
-        {processSteps.map((s) => (
+        {processSection?.steps.map((s) => (
           <div class="pt-step">
             <div class="pt-n mono">{s.n}</div>
             <h3 class="pt-l display">{s.label}</h3>
@@ -178,8 +175,8 @@ const filters = [
   <section class="container blog-section">
     <div class="blog-head reveal">
       <div>
-        <div class="eyebrow" style="margin-bottom: 18px">Dziennik</div>
-        <h2 class="profile-h" style="margin: 0">Co właśnie czytamy.</h2>
+        <div class="eyebrow" style="margin-bottom: 18px">{blogSection?.eyebrow}</div>
+        <h2 class="profile-h" style="margin: 0">{blogSection?.title}</h2>
       </div>
       <a href="/blog" class="btn-ghost">Cały dziennik <span>→</span></a>
     </div>
@@ -214,18 +211,18 @@ const filters = [
   <!-- B2B CTA ───────────────────────────────────────────── -->
   <section class="b2b-section" data-nav-theme="dark">
     <div class="container b2b-inner reveal">
-      <div class="eyebrow b2b-eyebrow">Dla restauracji, sklepów i barów</div>
+      <div class="eyebrow b2b-eyebrow">{b2b?.eyebrow}</div>
       <h2 class="b2b-h display">
-        Postaw nas w swoim menu.<br/>
-        <span class="b2b-accent">Powiedz nam, w jakiej skali — odpiszemy w 24h.</span>
+        {b2b?.title}<br/>
+        <span class="b2b-accent">{b2b?.accent}</span>
       </h2>
-      <p class="b2b-p">Dystrybucja własnym samochodem na Wrocław i Dolny Śląsk. Reszta Polski — kurier paletowy.</p>
+      {b2b?.body && <p class="b2b-p">{b2b.body}</p>}
       <div class="b2b-cta">
-        <a href="/b2b" class="magnetic btn-primary btn-primary-light">
-          <span>Formularz B2B</span>
+        <a href={b2b?.buttonHref ?? '/b2b'} class="magnetic btn-primary btn-primary-light">
+          <span>{b2b?.buttonLabel}</span>
           <span class="arrow">→</span>
         </a>
-        <a href="mailto:b2b@garywrotka.pl" class="b2b-mail mono">b2b@garywrotka.pl</a>
+        {b2b?.mail && <a href={`mailto:${b2b.mail}`} class="b2b-mail mono">{b2b.mail}</a>}
       </div>
     </div>
   </section>

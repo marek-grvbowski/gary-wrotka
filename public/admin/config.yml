@@ -183,63 +183,60 @@ collections:
       - { name: "body", label: "Treść", widget: "markdown" }
 
   - name: "site"
-    label: "Ustawienia globalne"
+    label: "🛠 Ustawienia strony"
     files:
-      - name: "global"
-        label: "Strona — dane, motyw, układ"
+      # ════════════════════════════════════════════════════════════════
+      # STRONA GŁÓWNA — wszystkie teksty home w jednym miejscu
+      # ════════════════════════════════════════════════════════════════
+      - name: "home"
+        label: "🏠 Strona główna"
         file: "src/content/site/site.json"
+        description: "Tu edytujesz wszystkie teksty, obrazki i sekcje strony głównej. Hero, manifest, proces, blog, B2B."
         fields:
           - { name: "id", label: "ID (nie zmieniać)", widget: "hidden", default: "site" }
+          # Zachowujemy te pola (muszą być w site.json, ale ich nie edytujemy tu — są w "Ustawienia globalne")
+          - { name: "brandName", label: "(ukryte)", widget: "hidden" }
+          - { name: "tagline", label: "(ukryte)", widget: "hidden" }
+          - { name: "contactEmail", label: "(ukryte)", widget: "hidden" }
+          - { name: "orderEmail", label: "(ukryte)", widget: "hidden" }
+          - { name: "phone", label: "(ukryte)", widget: "hidden", required: false }
+          - { name: "address", label: "(ukryte)", widget: "hidden", required: false }
+          - { name: "socials", label: "(ukryte)", widget: "hidden", required: false }
+          - { name: "accentColor", label: "(ukryte)", widget: "hidden" }
+          - { name: "accentDeepColor", label: "(ukryte)", widget: "hidden" }
 
-          # ── Marka ─────────────────────────────────────────────
-          - { name: "brandName", label: "Nazwa marki", widget: "string" }
-          - { name: "tagline", label: "Tagline (hasło na hero)", widget: "string" }
-
-          # ── Kolory marki ──────────────────────────────────────
-          - {
-              name: "accentColor",
-              label: "Kolor akcentu (hex, np. #c33366)",
-              widget: "color",
-              hint: "Główny kolor akcentu używany w nawigacji, linkach, plakietkach. Zmiana = przebudowa strony.",
-              enableAlpha: false,
-              default: "#c33366"
-            }
-          - {
-              name: "accentDeepColor",
-              label: "Akcent głęboki (hex, hover)",
-              widget: "color",
-              hint: "Wariant ciemniejszy akcentu — używany przy hover.",
-              enableAlpha: false,
-              default: "#663366"
-            }
-
-          # ── Hero strony głównej ───────────────────────────────
+          # ─── HERO ─────────────────────────────────────────────
           - name: "homeHero"
-            label: "Hero strony głównej"
+            label: "🎬 Hero (wielki ekran na górze)"
             widget: "object"
-            collapsed: true
+            collapsed: false
+            hint: "Tytuł, podtytuł i przyciski w głównym banerze strony."
             fields:
               - { name: "eyebrow", label: "Eyebrow (mały tekst nad tytułem)", widget: "string" }
-              - { name: "title", label: "Tytuł hero", widget: "string" }
+              - { name: "title", label: "Tytuł hero (duży, główny)", widget: "string" }
               - { name: "subtitle", label: "Podtytuł", widget: "text" }
+              - name: "primaryCta"
+                label: "Przycisk główny"
+                widget: "object"
+                fields:
+                  - { name: "label", label: "Tekst przycisku", widget: "string", default: "Zobacz katalog" }
+                  - { name: "href", label: "Link / kotwica", widget: "string", default: "/katalog" }
+              - name: "secondaryCta"
+                label: "Przycisk drugi (ghost)"
+                widget: "object"
+                fields:
+                  - { name: "label", label: "Tekst przycisku", widget: "string", default: "Manifest" }
+                  - { name: "href", label: "Link / kotwica", widget: "string", default: "#manifest" }
 
           - name: "heroImages"
-            label: "Zdjęcia hero (carousel — drag-and-drop kolejności)"
+            label: "🖼 Zdjęcia hero (carousel — drag-and-drop kolejności)"
             widget: "list"
-            hint: "Pierwsze zdjęcie pojawia się jako pierwsze. Automatyczne crossfade co 6.5s."
+            hint: "Crossfade co 6.5s. Pierwsze zdjęcie pokazuje się jako pierwsze."
             field: { name: "src", label: "Zdjęcie", widget: "image" }
 
-          # ── Treści ────────────────────────────────────────────
-          - {
-              name: "manifestText",
-              label: "Treść manifestu (na home)",
-              widget: "text",
-              hint: "Akapity rozdziel pustą linią."
-            }
-
-          # ── Widoczność sekcji home ────────────────────────────
+          # ─── WIDOCZNOŚĆ SEKCJI ────────────────────────────────
           - name: "homeSections"
-            label: "Widoczność sekcji strony głównej"
+            label: "👁 Które sekcje pokazać na stronie głównej?"
             widget: "object"
             collapsed: false
             hint: "Wyłącz dowolną sekcję — zniknie ze strony. Hero zawsze widoczne."
@@ -250,7 +247,113 @@ collections:
               - { name: "blog", label: "Sekcja: Dziennik (ostatnie wpisy)", widget: "boolean", default: true }
               - { name: "b2b", label: "Sekcja: B2B (CTA)", widget: "boolean", default: true }
 
-          # ── Kontakt ───────────────────────────────────────────
+          # ─── MANIFEST ────────────────────────────────────────
+          - name: "manifest"
+            label: "✍️ Sekcja Manifest"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { name: "eyebrow", label: "Eyebrow", widget: "string", default: "Manifest" }
+              - { name: "title", label: "Tytuł sekcji", widget: "string" }
+              - {
+                  name: "body",
+                  label: "Treść (akapity oddziel pustą linią)",
+                  widget: "text",
+                  hint: "Dwie pustą linia = nowy akapit."
+                }
+              - { name: "image", label: "Zdjęcie obok tekstu", widget: "image" }
+              - { name: "caption", label: "Podpis pod zdjęciem", widget: "string" }
+              - { name: "ctaLabel", label: "Etykieta przycisku", widget: "string", default: "Czytaj cały manifest" }
+              - { name: "ctaHref", label: "Link przycisku", widget: "string", default: "/o-nas" }
+
+          # ─── FEATURED ────────────────────────────────────────
+          - name: "featured"
+            label: "🍶 Sekcja Katalog (nagłówek)"
+            widget: "object"
+            collapsed: true
+            hint: "Same produkty wyświetlają się z tych, które oznaczysz jako 'Wyróżniony' w kolekcji Produkty."
+            fields:
+              - { name: "eyebrow", label: "Eyebrow", widget: "string", default: "Katalog" }
+              - { name: "title", label: "Tytuł sekcji", widget: "string", default: "Wybrane fermenty." }
+
+          # ─── PROCESS ─────────────────────────────────────────
+          - name: "processSection"
+            label: "⚙️ Sekcja Proces (4 kroki)"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { name: "eyebrow", label: "Eyebrow", widget: "string", default: "Jak powstają" }
+              - { name: "title", label: "Tytuł sekcji", widget: "string" }
+              - name: "steps"
+                label: "Kroki (4)"
+                widget: "list"
+                hint: "Drag-and-drop dla zmiany kolejności."
+                fields:
+                  - { name: "n", label: "Numer (np. 01)", widget: "string" }
+                  - { name: "label", label: "Tytuł kroku", widget: "string" }
+                  - { name: "desc", label: "Opis", widget: "text" }
+
+          # ─── BLOG ────────────────────────────────────────────
+          - name: "blogSection"
+            label: "📝 Sekcja Dziennik (nagłówek)"
+            widget: "object"
+            collapsed: true
+            hint: "Same wpisy wyświetlają się automatycznie — 2 najnowsze z kolekcji Blog."
+            fields:
+              - { name: "eyebrow", label: "Eyebrow", widget: "string", default: "Dziennik" }
+              - { name: "title", label: "Tytuł sekcji", widget: "string", default: "Co właśnie czytamy." }
+
+          # ─── B2B CTA ─────────────────────────────────────────
+          - name: "b2b"
+            label: "💼 Sekcja B2B (ciemna na dole)"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { name: "eyebrow", label: "Eyebrow", widget: "string" }
+              - { name: "title", label: "Tytuł", widget: "string" }
+              - { name: "accent", label: "Tytuł — drugi wiersz (kursywą)", widget: "string" }
+              - { name: "body", label: "Opis pod tytułem", widget: "text" }
+              - { name: "mail", label: "Mail B2B widoczny obok przycisku", widget: "string" }
+              - { name: "buttonLabel", label: "Etykieta przycisku", widget: "string", default: "Formularz B2B" }
+              - { name: "buttonHref", label: "Link przycisku", widget: "string", default: "/b2b" }
+
+      # ════════════════════════════════════════════════════════════════
+      # USTAWIENIA GLOBALNE — marka, kontakt, kolor akcentu
+      # ════════════════════════════════════════════════════════════════
+      - name: "global"
+        label: "⚙️ Ustawienia globalne (marka, kolor, kontakt)"
+        file: "src/content/site/site.json"
+        description: "Dane firmy widoczne wszędzie (stopka, kontakt), kolor akcentu marki, social media."
+        fields:
+          - { name: "id", label: "(ukryte)", widget: "hidden", default: "site" }
+          # ukryte pola home (zarządzane w '🏠 Strona główna')
+          - { name: "heroImages", label: "(zarządzasz w Strona główna)", widget: "hidden" }
+          - { name: "homeSections", label: "(zarządzasz w Strona główna)", widget: "hidden" }
+          - { name: "homeHero", label: "(zarządzasz w Strona główna)", widget: "hidden" }
+          - { name: "manifest", label: "(zarządzasz w Strona główna)", widget: "hidden" }
+          - { name: "featured", label: "(zarządzasz w Strona główna)", widget: "hidden" }
+          - { name: "processSection", label: "(zarządzasz w Strona główna)", widget: "hidden" }
+          - { name: "blogSection", label: "(zarządzasz w Strona główna)", widget: "hidden" }
+          - { name: "b2b", label: "(zarządzasz w Strona główna)", widget: "hidden" }
+
+          - { name: "brandName", label: "Nazwa marki", widget: "string" }
+          - { name: "tagline", label: "Tagline (slogan widoczny w SEO i stopce)", widget: "string" }
+          - {
+              name: "accentColor",
+              label: "🎨 Kolor akcentu marki",
+              widget: "color",
+              hint: "Używany na całej stronie: linki, plakietki, podkreślenia.",
+              enableAlpha: false,
+              default: "#c33366"
+            }
+          - {
+              name: "accentDeepColor",
+              label: "🎨 Akcent ciemniejszy (hover)",
+              widget: "color",
+              hint: "Ciemniejszy wariant — pojawia się przy najechaniu.",
+              enableAlpha: false,
+              default: "#663366"
+            }
           - { name: "contactEmail", label: "E-mail kontaktowy", widget: "string" }
           - { name: "orderEmail", label: "E-mail zamówień", widget: "string" }
           - { name: "phone", label: "Telefon", widget: "string", required: false }

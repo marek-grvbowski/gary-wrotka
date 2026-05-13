@@ -73,12 +73,81 @@ const site = defineCollection({
       eyebrow: z.string().default('Kombucha · Sosy · Octy'),
       title: z.string().default('Rzemieślnicze fermenty z Wrocławia.'),
       subtitle: z.string().default('Ręcznie, w małych partiach. Bez kompromisów.'),
+      primaryCta: z.object({
+        label: z.string().default('Zobacz katalog'),
+        href: z.string().default('/katalog'),
+      }).default({ label: 'Zobacz katalog', href: '/katalog' }),
+      secondaryCta: z.object({
+        label: z.string().default('Manifest'),
+        href: z.string().default('#manifest'),
+      }).default({ label: 'Manifest', href: '#manifest' }),
     }).default({
       eyebrow: 'Kombucha · Sosy · Octy',
       title: 'Rzemieślnicze fermenty z Wrocławia.',
       subtitle: 'Ręcznie, w małych partiach. Bez kompromisów.',
+      primaryCta: { label: 'Zobacz katalog', href: '/katalog' },
+      secondaryCta: { label: 'Manifest', href: '#manifest' },
     }),
-    manifestText: z.string().default('Wszystko, co tu pijesz, powstało w naszym studio.'),
+    manifest: z.object({
+      eyebrow: z.string().default('Manifest'),
+      title: z.string().default('Fermentacja to powolna sztuka.'),
+      body: z.string().default(''),
+      image: z.string().default('/images/photos/fermento-nero-2.jpg'),
+      caption: z.string().default('Studio · Wrocław'),
+      ctaLabel: z.string().default('Czytaj cały manifest'),
+      ctaHref: z.string().default('/o-nas'),
+    }).default({
+      eyebrow: 'Manifest',
+      title: 'Fermentacja to powolna sztuka.',
+      body: '',
+      image: '/images/photos/fermento-nero-2.jpg',
+      caption: 'Studio · Wrocław',
+      ctaLabel: 'Czytaj cały manifest',
+      ctaHref: '/o-nas',
+    }),
+    featured: z.object({
+      eyebrow: z.string().default('Katalog'),
+      title: z.string().default('Wybrane fermenty.'),
+    }).default({ eyebrow: 'Katalog', title: 'Wybrane fermenty.' }),
+    processSection: z.object({
+      eyebrow: z.string().default('Jak powstają'),
+      title: z.string().default('Cztery kroki, sześć tygodni, jedna ręka.'),
+      steps: z.array(z.object({
+        n: z.string(),
+        label: z.string(),
+        desc: z.string(),
+      })),
+    }).default({
+      eyebrow: 'Jak powstają',
+      title: 'Cztery kroki, sześć tygodni, jedna ręka.',
+      steps: [
+        { n: '01', label: 'Surowiec', desc: 'Polska palarnia, lokalne warzywa, indyjskie przyprawy.' },
+        { n: '02', label: 'Fermentacja', desc: 'Powolna, 14–60 dni.' },
+        { n: '03', label: 'Smak', desc: 'Macerat ziół, leżakowanie, panel sensoryczny.' },
+        { n: '04', label: 'Butelka', desc: 'Ręcznie. Numerowana. Datowana.' },
+      ],
+    }),
+    blogSection: z.object({
+      eyebrow: z.string().default('Dziennik'),
+      title: z.string().default('Co właśnie czytamy.'),
+    }).default({ eyebrow: 'Dziennik', title: 'Co właśnie czytamy.' }),
+    b2b: z.object({
+      eyebrow: z.string().default('Dla restauracji, sklepów i barów'),
+      title: z.string().default('Postaw nas w swoim menu.'),
+      accent: z.string().default('Powiedz nam, w jakiej skali — odpiszemy w 24h.'),
+      body: z.string().default(''),
+      mail: z.string().default('b2b@garywrotka.pl'),
+      buttonLabel: z.string().default('Formularz B2B'),
+      buttonHref: z.string().default('/b2b'),
+    }).default({
+      eyebrow: 'Dla restauracji, sklepów i barów',
+      title: 'Postaw nas w swoim menu.',
+      accent: 'Powiedz nam, w jakiej skali — odpiszemy w 24h.',
+      body: '',
+      mail: 'b2b@garywrotka.pl',
+      buttonLabel: 'Formularz B2B',
+      buttonHref: '/b2b',
+    }),
   }),
 });
 
