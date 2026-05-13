@@ -1,6 +1,7 @@
 ---
 name: "Kombucha Jaśminowa"
 category: kombucha
+categoryLabel: "Kombucha · 330 ml"
 flavor: "Zielona herbata sencha, kwiat jaśminu"
 volume: "330 ml"
 shortDescription: "Klasyczna, kwiatowa kombucha na bazie japońskiej sencha."

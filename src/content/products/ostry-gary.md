@@ -1,7 +1,8 @@
 ---
-name: "Ostry Gary — sosy ostre"
+name: "Ostry Gary"
 category: sos
-flavor: "Cztery warianty na bazie kiszonych warzyw i przypraw"
+categoryLabel: "Sos fermentowany · 200 ml"
+flavor: "Kiszone warzywa, cztery moce"
 volume: "200 ml"
 shortDescription: "Sos ostry z kiszonych warzyw — fermentowany, nie tylko ostry."
 ingredients:

@@ -1,7 +1,8 @@
 ---
 name: "Octy z kombuchy — seria 3"
 category: ocet
-flavor: "Cascary · Irańsko-Buriacka · Milky Pandan"
+categoryLabel: "Ocet · 250 ml × 3"
+flavor: "Cascary · Buriacka · Milky Pandan"
 volume: "250 ml × 3"
 shortDescription: "Trzy octy fermentowane z różnych kombuch — łuski kawowe, czarna herbata, milky oolong z pandanem."
 ingredients:

@@ -4,44 +4,42 @@ const site = await getEntry('site', 'site');
 const data = site?.data;
 const year = new Date().getFullYear();
 ---
-<footer class="bg-ink text-paper mt-24">
-  <div class="mx-auto max-w-[var(--container-content)] px-6 py-16 grid gap-12 md:grid-cols-4">
-    <div class="md:col-span-2">
-      <div class="font-display font-bold text-2xl tracking-tight">{data?.brandName ?? 'Gary Wrotka'}</div>
-      <p class="mt-3 text-paper/70 max-w-md">{data?.tagline ?? 'Rzemieślnicze fermenty z Wrocławia.'}</p>
-      <div class="mt-6 text-sm text-paper/60 space-y-1">
-        {data?.address && <div>{data.address}</div>}
-        {data?.phone && <div>{data.phone}</div>}
-        {data?.contactEmail && <a href={`mailto:${data.contactEmail}`} class="underline underline-offset-4 hover:text-accent">{data.contactEmail}</a>}
+<footer class="foot">
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="mark">{data?.brandName ?? 'Gary Wrotka'}</div>
+        <p>{data?.tagline ?? 'Rzemieślnicze fermenty z Wrocławia. Kombucha, sosy, octy — ręcznie, w małych partiach.'}</p>
+      </div>
+      <div>
+        <h4>Sklep</h4>
+        <ul>
+          <li><a href="/katalog">Katalog</a></li>
+          <li><a href="/katalog?cat=kombucha">Kombucha</a></li>
+          <li><a href="/katalog?cat=sos">Sosy</a></li>
+          <li><a href="/katalog?cat=ocet">Octy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>O nas</h4>
+        <ul>
+          <li><a href="/o-nas">Manifest</a></li>
+          <li><a href="/blog">Blog / Dziennik</a></li>
+          <li><a href="/b2b">B2B</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Kontakt</h4>
+        <ul>
+          {data?.contactEmail && <li><a href={`mailto:${data.contactEmail}`}>{data.contactEmail}</a></li>}
+          {data?.socials?.instagram && <li><a href={data.socials.instagram}>Instagram</a></li>}
+          {data?.socials?.facebook && <li><a href={data.socials.facebook}>Facebook</a></li>}
+        </ul>
       </div>
     </div>
-    <div>
-      <div class="eyebrow text-paper/50">Marka</div>
-      <ul class="mt-3 space-y-2 text-sm">
-        <li><a href="/o-nas" class="hover:text-accent">O nas</a></li>
-        <li><a href="/blog" class="hover:text-accent">Blog</a></li>
-        <li><a href="/b2b" class="hover:text-accent">Hurt / HoReCa</a></li>
-        <li><a href="/kontakt" class="hover:text-accent">Kontakt</a></li>
-      </ul>
-    </div>
-    <div>
-      <div class="eyebrow text-paper/50">Produkty</div>
-      <ul class="mt-3 space-y-2 text-sm">
-        <li><a href="/katalog?cat=kombucha" class="hover:text-accent">Kombucha</a></li>
-        <li><a href="/katalog?cat=sos" class="hover:text-accent">Sosy</a></li>
-        <li><a href="/katalog?cat=ocet" class="hover:text-accent">Octy</a></li>
-        <li><a href="/zamowienie" class="hover:text-accent">Koszyk i zamówienie</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="border-t border-paper/10">
-    <div class="mx-auto max-w-[var(--container-content)] px-6 py-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-xs text-paper/50">
-      <div>© {year} {data?.brandName ?? 'Gary Wrotka'}. Wszelkie prawa zastrzeżone.</div>
-      <div class="flex items-center gap-5">
-        {data?.socials?.instagram && <a href={data.socials.instagram} class="hover:text-accent">Instagram</a>}
-        {data?.socials?.facebook && <a href={data.socials.facebook} class="hover:text-accent">Facebook</a>}
-        <span>Wsparte przez <a href="https://studiowro.com" class="hover:text-accent underline underline-offset-4">Studio Wro</a></span>
-      </div>
+    <div class="foot-bottom">
+      <span>© {year} {data?.brandName ?? 'Gary Wrotka'} · Studio Wrocław</span>
+      <span>Krzysztof Wroński · Nowy Sącz</span>
     </div>
   </div>
 </footer>

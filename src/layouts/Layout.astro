@@ -8,6 +8,7 @@ type Props = {
   title?: string;
   description?: string;
   headerMode?: 'dark' | 'light';
+  bodyClass?: string;
   ogImage?: string;
 };
 
@@ -15,7 +16,8 @@ const {
   title = 'Gary Wrotka — rzemieślnicze fermenty',
   description = 'Rzemieślnicza kombucha, sosy i octy fermentowane z Wrocławia. Naturalne, lokalne, bez kompromisów.',
   headerMode = 'light',
-  ogImage = '/images/brand/logo-dark.svg',
+  bodyClass = '',
+  ogImage = '/images/brand/logo.svg',
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://gary-wrotka.pages.dev').toString();
@@ -40,11 +42,24 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://gary-wrotka
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;600;700;800&family=Anton&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&family=Anton&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
+
+    <script is:inline>
+      // Apply theme before paint to avoid flash
+      (function() {
+        try {
+          var saved = localStorage.getItem('gw-theme');
+          if (!saved) {
+            saved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.dataset.theme = saved;
+        } catch (e) {}
+      })();
+    </script>
   </head>
-  <body>
+  <body class={bodyClass}>
     <Header initialMode={headerMode} />
     <main>
       <slot />
@@ -58,6 +73,20 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://gary-wrotka
       import { initAnimations } from '../scripts/animations';
       initInquiryCart();
       initAnimations();
+
+      // Theme toggle binding + body sync with html dataset
+      const applyTheme = (t: string) => {
+        document.documentElement.dataset.theme = t;
+        document.body.dataset.theme = t;
+        try { localStorage.setItem('gw-theme', t); } catch (e) {}
+      };
+      applyTheme(document.documentElement.dataset.theme || 'light');
+      document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const cur = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+          applyTheme(cur === 'dark' ? 'light' : 'dark');
+        });
+      });
     </script>
   </body>
 </html>

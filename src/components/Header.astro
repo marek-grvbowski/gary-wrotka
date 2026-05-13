@@ -12,106 +12,73 @@ const site = await getEntry('site', 'site');
 const brand = site?.data.brandName ?? 'Gary Wrotka';
 
 const links = [
-  { href: '/', label: 'Start' },
   { href: '/katalog', label: 'Katalog' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/o-nas', label: 'O nas' },
-  { href: '/b2b', label: 'Hurt' },
+  { href: '/o-nas', label: 'Manifest' },
+  { href: '/blog', label: 'Dziennik' },
+  { href: '/b2b', label: 'B2B' },
   { href: '/kontakt', label: 'Kontakt' },
 ];
 const isActive = (href: string) =>
   href === '/' ? pathname === '/' : pathname.startsWith(href);
 ---
-<header
-  class="gw-header fixed top-0 inset-x-0 z-30 border-b"
-  data-mode={initialMode}
-  data-initial-mode={initialMode}
->
-  <div class="mx-auto max-w-[var(--container-content)] px-6 h-16 flex items-center justify-between gap-4">
-    <a href="/" class="flex items-center gap-3 group" aria-label={brand}>
-      <img
-        src="/images/brand/logo-mark.svg"
-        alt=""
-        width="40"
-        height="35"
-        class="w-9 h-8 transition-transform duration-700 ease-out group-hover:rotate-180"
-      />
-      <span class="font-mark text-xl sm:text-[22px] leading-none whitespace-nowrap">
-        {brand}
-      </span>
+<header class="nav" data-initial-mode={initialMode}>
+  <div class="container nav-inner">
+    <a href="/" class="nav-brand" aria-label={brand}>
+      <img src="/images/brand/logo-mark.svg" alt="" width="28" height="25"/>
+      <span>{brand}</span>
     </a>
-    <nav class="hidden md:flex items-center gap-7">
+    <nav class="nav-links">
       {links.map((l) => (
         <a
           href={l.href}
-          aria-current={isActive(l.href) ? 'page' : undefined}
-          class="nav-link text-sm font-medium transition-colors hover:text-accent"
+          class="nav-link"
+          {...(isActive(l.href) ? { 'aria-current': 'page' } : {})}
         >
           {l.label}
         </a>
       ))}
     </nav>
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-2">
       <button
         type="button"
+        class="theme-toggle"
+        data-theme-toggle
+        aria-label="Przełącz motyw"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+      <a
+        href="/zamowienie"
+        class="nav-cart"
         data-open-drawer
-        class="text-sm font-medium border border-current rounded-full px-4 py-1.5 hover:bg-current hover:text-paper transition group inline-flex items-center gap-1.5"
         aria-label="Otwórz koszyk"
       >
         <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2 10h9l2-7H6"/><circle cx="8" cy="17" r="1.2"/><circle cx="15" cy="17" r="1.2"/></svg>
         <span>Koszyk</span>
-        <span
-          data-cart-count
-          class="inline-block min-w-5 text-center text-xs font-bold align-middle"
-          data-empty="1"
-        >0</span>
-      </button>
-      <button
-        type="button"
-        class="md:hidden inline-flex items-center justify-center w-10 h-10 -mr-2"
-        aria-label="Menu"
-        data-mobile-toggle
-      >
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M2 5h16v2H2zm0 4h16v2H2zm0 4h16v2H2z"/></svg>
-      </button>
+        <span class="cart-dot" data-cart-count data-empty="1">0</span>
+      </a>
     </div>
-  </div>
-
-  <div class="md:hidden hidden border-t border-current/10" data-mobile-menu>
-    <nav class="px-6 py-4 flex flex-col gap-3">
-      {links.map((l) => (
-        <a href={l.href} class={`text-base ${isActive(l.href) ? 'text-accent' : ''}`}>{l.label}</a>
-      ))}
-    </nav>
   </div>
 </header>
 
 <script>
-  const header = document.querySelector<HTMLElement>('header.gw-header');
+  const header = document.querySelector<HTMLElement>('header.nav');
   if (header) {
-    const initial = header.dataset.initialMode as 'dark' | 'light';
-    const sentinel = document.querySelector<HTMLElement>('[data-hero-sentinel]');
-
-    const setMode = (mode: 'dark' | 'light') => {
-      header.dataset.mode = mode;
+    const onScroll = () => {
+      header.classList.toggle('scrolled', window.scrollY > 40);
     };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
 
-    if (sentinel && initial === 'dark') {
-      const io = new IntersectionObserver(
-        ([entry]) => {
-          setMode(entry.isIntersecting ? 'dark' : 'light');
-        },
-        { threshold: 0, rootMargin: '-64px 0px 0px 0px' }
-      );
-      io.observe(sentinel);
-    } else {
-      setMode(initial);
-    }
-
-    const toggle = header.querySelector<HTMLButtonElement>('[data-mobile-toggle]');
-    const menu = header.querySelector<HTMLElement>('[data-mobile-menu]');
-    if (toggle && menu) {
-      toggle.addEventListener('click', () => menu.classList.toggle('hidden'));
-    }
+    // open drawer when cart link clicked (if on a page that has drawer)
+    header.querySelector('[data-open-drawer]')?.addEventListener('click', (e) => {
+      const drawer = document.querySelector('[data-drawer]');
+      if (drawer) {
+        e.preventDefault();
+        document.dispatchEvent(new CustomEvent('drawer:open'));
+      }
+    });
   }
 </script>

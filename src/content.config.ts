@@ -19,6 +19,8 @@ const products = defineCollection({
   schema: z.object({
     name: z.string(),
     category: z.enum(['kombucha', 'sos', 'ocet']),
+    categoryLabel: z.string().optional(),
+    edition: z.string().optional(),
     flavor: z.string(),
     volume: z.string(),
     shortDescription: z.string(),
@@ -27,6 +29,19 @@ const products = defineCollection({
     available: z.boolean().default(true),
     featured: z.boolean().default(false),
     order: z.number().default(100),
+    tag: z.string().optional(),
+    badges: z.array(z.string()).default([]),
+    specs: z.array(z.object({ k: z.string(), v: z.string() })).default([]),
+    flavorProfile: z.array(z.object({ label: z.string(), value: z.number().min(0).max(10) })).default([]),
+    detailedIngredients: z.array(z.object({ name: z.string(), note: z.string() })).default([]),
+    process: z.array(z.object({ label: z.string(), duration: z.string(), desc: z.string() })).default([]),
+    story: z.object({
+      eyebrow: z.string(),
+      title: z.string(),
+      paragraphs: z.array(z.string()),
+      image: z.string(),
+      caption: z.string().optional(),
+    }).optional(),
   }),
 });
 

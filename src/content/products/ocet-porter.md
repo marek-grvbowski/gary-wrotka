@@ -1,6 +1,7 @@
 ---
 name: "Ocet Porter"
 category: ocet
+categoryLabel: "Ocet · 250 ml"
 flavor: "Porter, słód, ciemna nuta karmelu"
 volume: "250 ml"
 shortDescription: "Ocet z piwa porter — głęboki, słodowy, do mięs i sosów."

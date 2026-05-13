@@ -1,7 +1,8 @@
 ---
 name: "Ketchup Habanero"
 category: sos
-flavor: "Habanero, fermentowany pomidor, słodko-ostry"
+categoryLabel: "Sos fermentowany · 210 ml"
+flavor: "Habanero, fermentowany pomidor"
 volume: "210 ml"
 shortDescription: "Fermentowany ketchup z papryką habanero — Ferment & Fresh, dla początkujących w świecie ostrego."
 ingredients:

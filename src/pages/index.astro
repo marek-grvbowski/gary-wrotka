@@ -1,222 +1,278 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import HeroCarousel from '../components/HeroCarousel.astro';
-import SectionHeading from '../components/SectionHeading.astro';
-import ProductCard from '../components/ProductCard.astro';
-import BlogCard from '../components/BlogCard.astro';
 
 const site = await getEntry('site', 'site');
 const data = site?.data;
 
-const products = (await getCollection('products', (p) => p.data.featured && p.data.available))
-  .sort((a, b) => a.data.order - b.data.order)
-  .slice(0, 3);
+const allProducts = (await getCollection('products', (p) => p.data.available))
+  .sort((a, b) => a.data.order - b.data.order);
 
 const blogPosts = (await getCollection('blog', (p) => !p.data.draft))
   .sort((a, b) => +b.data.pubDate - +a.data.pubDate)
   .slice(0, 2);
 
-const process = [
-  { title: 'Surowce', body: 'Lokalne owoce, polskie zioła, herbaty od sprawdzonych dostawców.' },
-  { title: 'SCOBY', body: 'Żywe kultury bakterii i drożdży hodowane u nas od początku.' },
-  { title: 'Fermentacja', body: '7–14 dni w temperaturze pokojowej, w bursztynowym szkle.' },
-  { title: 'Karbonizacja', body: 'Druga fermentacja w butelce — naturalny gaz, bez dosypywania.' },
-  { title: 'Magazyn', body: 'Chłodno, ciemno, krótko. Trafia do Ciebie świeże.' },
+const heroImages = [
+  '/images/photos/fermento-nero-1.jpg',
+  '/images/photos/related-jasmin.jpg',
+  '/images/photos/related-ostry.jpg',
+  '/images/photos/process.jpg',
+  '/images/photos/related-porter.jpg',
+  '/images/photos/fermento-nero-3.jpg',
 ];
 
-// editorial photo (recykling z hero galery)
-const editorialPhoto = '/images/photos/_DSC4577a.jpg'; // słój fermentacyjny w plenerze
-const editorial2 = '/images/photos/_DSC4975.jpg'; // ognisko outdoor
+const heroTitle = 'Rzemieślnicze fermenty z Wrocławia.';
+const heroSub = 'Ręcznie, w małych partiach. Bez kompromisów. Od 2019 r.';
+const heroEyebrow = 'Kombucha · Sosy · Octy · Edycje 001–009';
+
+const manifestParagraphs = [
+  'Wszystko, co tu pijesz i czym się polewasz, powstało w naszym studio przy ul. Przykładowej 1. Każda butelka jest numerowana. Każdy słoik — datowany. Nasze SCOBY mają imiona.',
+  'Nie skalujemy się. Robimy edycje 50–300 butelek i, kiedy się skończą, robimy następne. Lub nie. Niektóre wariacje były zbyt dobre, żeby je powtarzać.',
+];
+
+const processSteps = [
+  { n: '01', label: 'Surowiec', desc: 'Polska palarnia, lokalne warzywa, indyjskie przyprawy. Wybieramy świadomie.' },
+  { n: '02', label: 'Fermentacja', desc: 'Powolna, 14–60 dni. Nasze SCOBY i matki octu od 2019 r.' },
+  { n: '03', label: 'Smak', desc: 'Macerat ziół, leżakowanie, panel sensoryczny. Brak skrótów.' },
+  { n: '04', label: 'Butelka', desc: 'Ręcznie. Numerowana. Datowana. Czasem podpisana.' },
+];
+
+const filters = [
+  { id: 'all', label: 'Wszystkie' },
+  { id: 'kombucha', label: 'Kombucha' },
+  { id: 'sos', label: 'Sosy' },
+  { id: 'ocet', label: 'Octy' },
+];
 ---
 <Layout
   title="Gary Wrotka — rzemieślnicze fermenty z Wrocławia"
   description={data?.tagline}
   headerMode="dark"
+  bodyClass="home-page"
 >
-  <HeroCarousel
-    images={data?.heroImages ?? []}
-    brand={data?.brandName ?? 'Gary Wrotka'}
-    tagline={data?.tagline ?? ''}
-  />
-
-  <!-- INTRO / MANIFEST — split z dużym pull-quote -->
-  <section class="snap-section bg-paper py-24 md:py-36 relative">
-    <div class="mx-auto max-w-[var(--container-content)] px-6 grid md:grid-cols-12 gap-12 md:gap-16 items-start">
-      <div class="md:col-span-5 reveal-left">
-        <div class="eyebrow">Manifest</div>
-        <h2 class="font-display font-bold tracking-tight text-3xl md:text-5xl mt-4 leading-[1.1]">
-          Fermentacja<br/>jako forma<br/><em class="text-accent not-italic font-display">cierpliwości.</em>
-        </h2>
-      </div>
-      <div class="md:col-span-6 md:col-start-7 space-y-6 text-lg md:text-xl leading-relaxed text-ink-soft reveal-right">
-        <p>
-          Robimy to, czego brakowało nam w sklepach: napoje, które naprawdę żyją.
-          Nie pasteryzujemy, nie cukrzymy do smaku, nie dosypujemy gazu.
-          Fermentacja dzieje się powoli — i tak ma być.
-        </p>
-        <p>
-          Wrocław, lokalne owoce, starannie wybrane herbaty, ręczne butelkowanie.
-          Każda partia jest trochę inna — bo ma być.
-        </p>
-      </div>
+  <!-- HOME HERO ─────────────────────────────────────────── -->
+  <section class="home-hero" data-home-hero>
+    <div class="hh-stage">
+      {heroImages.map((src, i) => (
+        <div class={`hh-slide ${i === 0 ? 'active' : ''}`} data-hero-slide={i}>
+          <img src={src} alt="" class="hh-img fade-img" loading={i === 0 ? 'eager' : 'lazy'} decoding="async"/>
+        </div>
+      ))}
+      <div class="hh-overlay"></div>
     </div>
-  </section>
 
-  <!-- EDITORIAL BREAK — pełnoekranowe zdjęcie z parallax -->
-  <section class="relative h-[60vh] md:h-[80vh] overflow-hidden bg-ink reveal-blur">
-    <img
-      src={editorialPhoto}
-      alt=""
-      class="fade-img absolute inset-0 w-full h-full object-cover"
-      loading="lazy"
-    />
-    <div class="absolute inset-0 bg-gradient-to-b from-ink/30 via-transparent to-ink/70"></div>
-    <div class="absolute inset-0 flex items-end">
-      <div class="mx-auto max-w-[var(--container-content)] px-6 pb-16 md:pb-20 w-full">
-        <div class="max-w-2xl text-paper">
-          <div class="eyebrow text-paper/60">Tam, gdzie się zaczyna</div>
-          <p class="mt-4 font-display text-2xl md:text-4xl leading-tight font-medium">
-            „Robimy butelkę tak, jak robimy zdjęcie — z troską o światło, czas i kadr."
-          </p>
+    <div class="container hh-content">
+      <div class="hh-text">
+        <div class="hh-eyebrow page-in" style="animation-delay: 0.1s">{heroEyebrow}</div>
+        <h1 class="hh-title display" data-hero-title>
+          {heroTitle.split(' ').map((word, i) => (
+            <Fragment><span class="split-word" style={`--d: ${300 + i * 80}ms`}><span>{word}</span></span>{' '}</Fragment>
+          ))}
+        </h1>
+        <p class="hh-sub page-in" style="animation-delay: 0.9s">{heroSub}</p>
+        <div class="hh-cta page-in" style="animation-delay: 1.1s">
+          <a href="/katalog" class="magnetic btn-primary">
+            <span>Zobacz katalog</span>
+            <span class="arrow">→</span>
+          </a>
+          <a href="#manifest" class="btn-ghost btn-ghost-light">Manifest</a>
         </div>
       </div>
+
+      <div class="hh-meta">
+        <button class="hh-arrow" data-hero-prev aria-label="Poprzednie">←</button>
+        <div class="hh-counter">
+          <span class="cur" data-hero-cur>01</span>
+          <span class="sep"></span>
+          <span class="tot">{String(heroImages.length).padStart(2, '0')}</span>
+        </div>
+        <button class="hh-arrow" data-hero-next aria-label="Następne">→</button>
+      </div>
+
+      <div class="hh-scroll">
+        <span>Scroll</span>
+        <div class="hh-scroll-line"><div></div></div>
+      </div>
     </div>
   </section>
 
-  <!-- FEATURED PRODUCTS -->
-  <section class="bg-paper py-24 md:py-32">
-    <div class="mx-auto max-w-[var(--container-content)] px-6">
-      <div class="flex items-end justify-between gap-6 flex-wrap mb-14 reveal">
-        <SectionHeading
-          eyebrow="Smaki"
-          title="Wybrane z katalogu"
-          intro="Trzy fermenty, które polecamy na start — od delikatnego jaśminu do mocnego, kawowego Fermento Nero."
-        />
-        <a href="/katalog" class="text-sm font-medium text-accent hover:text-accent-deep underline underline-offset-4 inline-flex items-center gap-1">
-          <span>Cały katalog</span>
-          <span aria-hidden="true">→</span>
+  <!-- MANIFEST ──────────────────────────────────────────── -->
+  <section class="container manifest-section" id="manifest">
+    <div class="manifest-grid">
+      <div class="manifest-text reveal-left">
+        <div class="eyebrow" style="margin-bottom: 24px">Manifest</div>
+        <h2 class="manifest-h display">Fermentacja to powolna sztuka.</h2>
+        {manifestParagraphs.map((p) => <p class="manifest-p">{p}</p>)}
+        <a href="/o-nas" class="btn-ghost" style="margin-top: 24px">
+          Czytaj cały manifest <span>→</span>
         </a>
       </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 reveal-stagger">
-        {products.map((p) => (
-          <ProductCard
-            slug={p.id}
-            name={p.data.name}
-            flavor={p.data.flavor}
-            category={p.data.category}
-            volume={p.data.volume}
-            image={p.data.images[0]}
-            available={p.data.available}
-          />
-        ))}
+      <div class="manifest-media reveal-clip">
+        <img src="/images/photos/fermento-nero-2.jpg" alt="Studio Wrocław" loading="lazy" class="fade-img"/>
+        <div class="caption">Studio · Wrocław · ul. Przykładowa 1</div>
       </div>
     </div>
   </section>
 
-  <!-- QUOTE / STATEMENT — ciemne tło -->
-  <section class="bg-ink text-paper py-28 md:py-36 relative overflow-hidden">
-    <div class="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-accent/10 blur-3xl"></div>
-    <div class="absolute -bottom-20 -left-20 w-96 h-96 rounded-full bg-accent-deep/10 blur-3xl"></div>
-    <div class="relative mx-auto max-w-4xl px-6 text-center reveal-blur">
-      <div class="eyebrow text-paper/50">Family-run business</div>
-      <blockquote class="mt-6 font-display text-3xl md:text-5xl lg:text-6xl font-medium leading-[1.15] tracking-tight">
-        „Każda partia ma inny dzień, inną pogodę,<br class="hidden md:block"/>
-        innego SCOBY — i z każdej wyjdzie coś<br class="hidden md:block"/>
-        <span class="text-accent">tylko trochę inaczej.</span>"
-      </blockquote>
-      <div class="mt-8 text-paper/60 text-sm uppercase tracking-[0.2em]">Krzysztof Wroński · fundator</div>
-    </div>
-  </section>
-
-  <!-- PROCESS — asymetryczna siatka -->
-  <section class="bg-paper-warm py-24 md:py-32">
-    <div class="mx-auto max-w-[var(--container-content)] px-6">
-      <div class="reveal-left">
-        <SectionHeading
-          eyebrow="Proces"
-          title="Pięć kroków do żywego napoju"
-          intro="Nic nie jest przypadkowe. Każdy krok dyktuje smak końcowy."
-        />
-      </div>
-      <ol class="mt-14 grid md:grid-cols-5 gap-4 reveal-stagger">
-        {process.map((step, i) => (
-          <li class={`group bg-paper rounded-xl p-6 border border-line transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:border-accent/40 ${i % 2 === 1 ? 'md:mt-8' : ''}`}>
-            <div class="font-mark text-4xl text-accent transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3 origin-left">{String(i + 1).padStart(2, '0')}</div>
-            <div class="mt-4 font-display font-semibold text-lg">{step.title}</div>
-            <p class="mt-2 text-sm text-muted leading-relaxed">{step.body}</p>
-          </li>
-        ))}
-      </ol>
-    </div>
-  </section>
-
-  <!-- EDITORIAL BREAK 2 — full bleed -->
-  <section class="relative h-[50vh] md:h-[70vh] overflow-hidden bg-ink reveal-blur">
-    <img
-      src={editorial2}
-      alt=""
-      class="fade-img absolute inset-0 w-full h-full object-cover"
-      loading="lazy"
-    />
-    <div class="absolute inset-0 bg-ink/40"></div>
-    <div class="absolute inset-0 flex items-center">
-      <div class="mx-auto max-w-[var(--container-content)] px-6 w-full text-paper text-center">
-        <div class="eyebrow text-paper/60">Fermentujemy też na zewnątrz</div>
-        <p class="mt-4 font-display text-2xl md:text-4xl font-medium tracking-tight">
-          Najlepsze partie powstają tam,<br/>gdzie kuchnia spotyka las.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- BLOG -->
-  <section class="bg-paper py-24 md:py-32">
-    <div class="mx-auto max-w-[var(--container-content)] px-6">
-      <div class="flex items-end justify-between gap-6 flex-wrap mb-14 reveal">
-        <SectionHeading
-          eyebrow="Z bloga"
-          title="O fermentacji i nie tylko"
-        />
-        <a href="/blog" class="text-sm font-medium text-accent hover:text-accent-deep underline underline-offset-4 inline-flex items-center gap-1">
-          <span>Wszystkie wpisy</span>
-          <span aria-hidden="true">→</span>
-        </a>
-      </div>
-      <div class="grid md:grid-cols-2 gap-12 md:gap-16 reveal-stagger">
-        {blogPosts.map((p) => (
-          <BlogCard
-            slug={p.id}
-            title={p.data.title}
-            description={p.data.description}
-            cover={p.data.cover}
-            pubDate={p.data.pubDate}
-            tags={p.data.tags}
-          />
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- B2B CTA -->
-  <section class="bg-ink text-paper py-20 md:py-24 relative overflow-hidden">
-    <div class="mx-auto max-w-[var(--container-content)] px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 reveal">
+  <!-- FEATURED ──────────────────────────────────────────── -->
+  <section class="container featured-section">
+    <div class="featured-head reveal">
       <div>
-        <div class="eyebrow text-paper/50">Hurt / HoReCa</div>
-        <h2 class="font-display font-bold text-3xl md:text-5xl mt-3 max-w-2xl tracking-tight leading-tight">
-          Prowadzisz lokal,<br class="hidden md:block"/>sklep, delikatesy?
-        </h2>
-        <p class="mt-4 text-paper/75 max-w-2xl text-lg">
-          Mamy osobny landing dla partnerów hurtowych. Indywidualne wyceny, regularne dostawy, wsparcie marketingowe.
-        </p>
+        <div class="eyebrow" style="margin-bottom: 18px">Katalog</div>
+        <h2 class="profile-h" style="margin: 0">Wybrane fermenty.</h2>
       </div>
-      <a
-        href="/b2b"
-        class="magnetic inline-flex items-center gap-2 rounded-full bg-paper text-ink px-7 py-3.5 font-semibold hover:bg-accent hover:text-paper transition-colors shrink-0"
-      >
-        <span>Zobacz ofertę B2B</span>
-        <span class="arrow inline-block transition-transform" aria-hidden="true">→</span>
+      <div class="filter-row" data-filter-row>
+        {filters.map((f) => (
+          <button class={`filter-pill ${f.id === 'all' ? 'active' : ''}`} data-filter={f.id} type="button">{f.label}</button>
+        ))}
+      </div>
+    </div>
+    <div class="featured-grid reveal-stagger" data-product-grid>
+      {allProducts.map((p) => (
+        <a href={`/katalog/${p.id}`} class="prod-card prod-card-home" data-category={p.data.category}>
+          <div class="prod-media">
+            <img src={p.data.images[0]} alt={p.data.name} loading="lazy" class="fade-img"/>
+            {p.data.tag && <div class="prod-tag">{p.data.tag}</div>}
+          </div>
+          <div class="prod-body">
+            <div class="prod-cat">{p.data.categoryLabel ?? p.data.category}</div>
+            <h3 class="prod-name">{p.data.name}</h3>
+            <div class="prod-flavor">{p.data.flavor}</div>
+          </div>
+        </a>
+      ))}
+    </div>
+    <div class="featured-foot reveal">
+      <a href="/katalog" class="magnetic btn-primary">
+        <span>Cały katalog ({allProducts.length} produktów)</span>
+        <span class="arrow">→</span>
       </a>
     </div>
   </section>
+
+  <!-- PROCESS TEASER ────────────────────────────────────── -->
+  <section class="process-teaser">
+    <div class="container">
+      <div class="pt-head reveal-left">
+        <div class="eyebrow" style="margin-bottom: 18px">Jak powstają</div>
+        <h2 class="profile-h" style="margin: 0">Cztery kroki, sześć tygodni, jedna ręka.</h2>
+      </div>
+      <div class="pt-grid reveal-stagger">
+        {processSteps.map((s) => (
+          <div class="pt-step">
+            <div class="pt-n mono">{s.n}</div>
+            <h3 class="pt-l display">{s.label}</h3>
+            <p class="pt-d">{s.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOG TEASER ───────────────────────────────────────── -->
+  <section class="container blog-section">
+    <div class="blog-head reveal">
+      <div>
+        <div class="eyebrow" style="margin-bottom: 18px">Dziennik</div>
+        <h2 class="profile-h" style="margin: 0">Co właśnie czytamy.</h2>
+      </div>
+      <a href="/blog" class="btn-ghost">Cały dziennik <span>→</span></a>
+    </div>
+    <div class="blog-grid reveal-stagger">
+      {blogPosts.map((post) => {
+        const formatted = new Intl.DateTimeFormat('pl-PL', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(post.data.pubDate);
+        return (
+          <a href={`/blog/${post.id}`} class="blog-card">
+            {post.data.cover && (
+              <div class="blog-media">
+                <img src={post.data.cover} alt={post.data.title} loading="lazy" class="fade-img"/>
+              </div>
+            )}
+            <div class="blog-body">
+              <div class="blog-meta mono">
+                {post.data.tags[0] && <span>{post.data.tags[0]}</span>}
+                {post.data.tags[0] && <span class="bsep">·</span>}
+                <span>{formatted}</span>
+              </div>
+              <h3 class="blog-title">{post.data.title}</h3>
+              <p class="blog-excerpt">{post.data.description}</p>
+              <span class="prod-cta">Czytaj <span class="a">→</span></span>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- B2B CTA ───────────────────────────────────────────── -->
+  <section class="b2b-section">
+    <div class="container b2b-inner reveal">
+      <div class="eyebrow b2b-eyebrow">Dla restauracji, sklepów i barów</div>
+      <h2 class="b2b-h display">
+        Postaw nas w swoim menu.<br/>
+        <span class="b2b-accent">Powiedz nam, w jakiej skali — odpiszemy w 24h.</span>
+      </h2>
+      <p class="b2b-p">Dystrybucja własnym samochodem na Wrocław i Dolny Śląsk. Reszta Polski — kurier paletowy.</p>
+      <div class="b2b-cta">
+        <a href="/b2b" class="magnetic btn-primary btn-primary-light">
+          <span>Formularz B2B</span>
+          <span class="arrow">→</span>
+        </a>
+        <a href="mailto:b2b@garywrotka.pl" class="b2b-mail mono">b2b@garywrotka.pl</a>
+      </div>
+    </div>
+  </section>
+
 </Layout>
+
+<script>
+  // Hero carousel
+  const total = document.querySelectorAll<HTMLElement>('[data-hero-slide]').length;
+  let active = 0;
+  let paused = false;
+  let timer: number | undefined;
+
+  const show = (n: number) => {
+    const target = ((n % total) + total) % total;
+    document.querySelectorAll<HTMLElement>('[data-hero-slide]').forEach((el, i) => {
+      el.classList.toggle('active', i === target);
+    });
+    const cur = document.querySelector<HTMLElement>('[data-hero-cur]');
+    if (cur) cur.textContent = String(target + 1).padStart(2, '0');
+    active = target;
+  };
+  const advance = () => show(active + 1);
+  const start = () => {
+    if (paused) return;
+    window.clearInterval(timer);
+    timer = window.setInterval(advance, 6500);
+  };
+
+  document.querySelector('[data-hero-prev]')?.addEventListener('click', () => { paused = true; window.clearInterval(timer); show(active - 1); });
+  document.querySelector('[data-hero-next]')?.addEventListener('click', () => { paused = true; window.clearInterval(timer); show(active + 1); });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) window.clearInterval(timer);
+    else if (!paused) start();
+  });
+
+  if (total > 1) start();
+
+  // Hero title split-word reveal
+  requestAnimationFrame(() => {
+    document.querySelectorAll<HTMLElement>('[data-hero-title] .split-word').forEach((s) => {
+      s.classList.add('in');
+    });
+  });
+
+  // Featured filter
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const items = document.querySelectorAll<HTMLElement>('[data-product-grid] [data-category]');
+  const apply = (cat: string) => {
+    buttons.forEach((b) => b.classList.toggle('active', b.dataset.filter === cat));
+    items.forEach((it) => {
+      it.style.display = cat === 'all' || it.dataset.category === cat ? '' : 'none';
+    });
+  };
+  buttons.forEach((b) => b.addEventListener('click', () => apply(b.dataset.filter!)));
+</script>
