@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import { getEntry } from 'astro:content';
 
-const site = await getEntry('site', 'site');
+const site = await getEntry('global', 'global');
 const orderEmail = site?.data.orderEmail ?? 'kontakt@garywrotka.pl';
 const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
 const isOk = Astro.url.searchParams.get('ok') === '1';

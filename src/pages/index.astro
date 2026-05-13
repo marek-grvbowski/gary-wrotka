@@ -2,8 +2,9 @@
 import { getCollection, getEntry } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 
-const site = await getEntry('site', 'site');
-const data = site?.data;
+const homeEntry = await getEntry('home', 'home');
+const globalEntry = await getEntry('global', 'global');
+const data = { ...(homeEntry?.data ?? {}), ...(globalEntry?.data ?? {}) };
 
 const allProducts = (await getCollection('products', (p) => p.data.available))
   .sort((a, b) => a.data.order - b.data.order);

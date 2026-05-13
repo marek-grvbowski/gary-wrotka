@@ -1,6 +1,6 @@
 ---
 import { getEntry } from 'astro:content';
-const site = await getEntry('site', 'site');
+const site = await getEntry('global', 'global');
 const data = site?.data;
 const year = new Date().getFullYear();
 ---

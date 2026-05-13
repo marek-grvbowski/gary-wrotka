@@ -8,7 +8,7 @@ type Props = {
 const { initialMode = 'light' } = Astro.props;
 const { pathname } = Astro.url;
 
-const site = await getEntry('site', 'site');
+const site = await getEntry('global', 'global');
 const brand = site?.data.brandName ?? 'Gary Wrotka';
 
 const links = [

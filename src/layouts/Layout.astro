@@ -5,9 +5,9 @@ import Footer from '../components/Footer.astro';
 import InquiryDrawer from '../components/InquiryDrawer.astro';
 import { getEntry } from 'astro:content';
 
-const siteEntry = await getEntry('site', 'site');
-const accent = siteEntry?.data.accentColor ?? '#c33366';
-const accentDeep = siteEntry?.data.accentDeepColor ?? '#663366';
+const globalEntry = await getEntry('global', 'global');
+const accent = globalEntry?.data.accentColor ?? '#c33366';
+const accentDeep = globalEntry?.data.accentDeepColor ?? '#663366';
 
 type Props = {
   title?: string;

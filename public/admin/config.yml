@@ -186,25 +186,14 @@ collections:
     label: "🛠 Ustawienia strony"
     files:
       # ════════════════════════════════════════════════════════════════
-      # STRONA GŁÓWNA — wszystkie teksty home w jednym miejscu
+      # STRONA GŁÓWNA — pełny edytor home.md
       # ════════════════════════════════════════════════════════════════
       - name: "home"
         label: "🏠 Strona główna"
-        file: "src/content/site/site.json"
+        file: "src/content/site/home.md"
+        format: "frontmatter"
         description: "Tu edytujesz wszystkie teksty, obrazki i sekcje strony głównej. Hero, manifest, proces, blog, B2B."
         fields:
-          - { name: "id", label: "ID (nie zmieniać)", widget: "hidden", default: "site" }
-          # Zachowujemy te pola (muszą być w site.json, ale ich nie edytujemy tu — są w "Ustawienia globalne")
-          - { name: "brandName", label: "(ukryte)", widget: "hidden" }
-          - { name: "tagline", label: "(ukryte)", widget: "hidden" }
-          - { name: "contactEmail", label: "(ukryte)", widget: "hidden" }
-          - { name: "orderEmail", label: "(ukryte)", widget: "hidden" }
-          - { name: "phone", label: "(ukryte)", widget: "hidden", required: false }
-          - { name: "address", label: "(ukryte)", widget: "hidden", required: false }
-          - { name: "socials", label: "(ukryte)", widget: "hidden", required: false }
-          - { name: "accentColor", label: "(ukryte)", widget: "hidden" }
-          - { name: "accentDeepColor", label: "(ukryte)", widget: "hidden" }
-
           # ─── HERO ─────────────────────────────────────────────
           - name: "homeHero"
             label: "🎬 Hero (wielki ekran na górze)"
@@ -322,20 +311,10 @@ collections:
       # ════════════════════════════════════════════════════════════════
       - name: "global"
         label: "⚙️ Ustawienia globalne (marka, kolor, kontakt)"
-        file: "src/content/site/site.json"
+        file: "src/content/site/global.md"
+        format: "frontmatter"
         description: "Dane firmy widoczne wszędzie (stopka, kontakt), kolor akcentu marki, social media."
         fields:
-          - { name: "id", label: "(ukryte)", widget: "hidden", default: "site" }
-          # ukryte pola home (zarządzane w '🏠 Strona główna')
-          - { name: "heroImages", label: "(zarządzasz w Strona główna)", widget: "hidden" }
-          - { name: "homeSections", label: "(zarządzasz w Strona główna)", widget: "hidden" }
-          - { name: "homeHero", label: "(zarządzasz w Strona główna)", widget: "hidden" }
-          - { name: "manifest", label: "(zarządzasz w Strona główna)", widget: "hidden" }
-          - { name: "featured", label: "(zarządzasz w Strona główna)", widget: "hidden" }
-          - { name: "processSection", label: "(zarządzasz w Strona główna)", widget: "hidden" }
-          - { name: "blogSection", label: "(zarządzasz w Strona główna)", widget: "hidden" }
-          - { name: "b2b", label: "(zarządzasz w Strona główna)", widget: "hidden" }
-
           - { name: "brandName", label: "Nazwa marki", widget: "string" }
           - { name: "tagline", label: "Tagline (slogan widoczny w SEO i stopce)", widget: "string" }
           - {
