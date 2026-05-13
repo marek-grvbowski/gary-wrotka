@@ -59,9 +59,38 @@ const isActive = (href: string) =>
         <span>Koszyk</span>
         <span class="cart-dot" data-cart-count data-empty="1">0</span>
       </a>
+      <button
+        type="button"
+        class="nav-hamburger"
+        data-mobile-toggle
+        aria-label="Menu"
+        aria-expanded="false"
+        aria-controls="nav-mobile-menu"
+      >
+        <span class="bars" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+      </button>
     </div>
   </div>
 </header>
+
+<nav class="nav-mobile" id="nav-mobile-menu" data-mobile-menu aria-hidden="true">
+  {links.map((l) => (
+    <a
+      href={l.href}
+      {...(isActive(l.href) ? { 'aria-current': 'page' } : {})}
+    >{l.label}</a>
+  ))}
+  <div class="mobile-meta">
+    {site?.data.contactEmail && (
+      <a href={`mailto:${site.data.contactEmail}`}>{site.data.contactEmail}</a>
+    )}
+    {site?.data.phone && (
+      <a href={`tel:${site.data.phone.replace(/\s/g, '')}`}>{site.data.phone}</a>
+    )}
+  </div>
+</nav>
 
 <script>
   const header = document.querySelector<HTMLElement>('header.nav');
@@ -119,6 +148,30 @@ const isActive = (href: string) =>
         e.preventDefault();
         document.dispatchEvent(new CustomEvent('drawer:open'));
       }
+    });
+
+    // Mobile hamburger menu
+    const hamburger = header.querySelector<HTMLButtonElement>('[data-mobile-toggle]');
+    const mobileMenu = document.querySelector<HTMLElement>('[data-mobile-menu]');
+    const closeMenu = () => {
+      hamburger?.classList.remove('open');
+      hamburger?.setAttribute('aria-expanded', 'false');
+      mobileMenu?.classList.remove('open');
+      mobileMenu?.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('menu-open');
+    };
+    hamburger?.addEventListener('click', () => {
+      const isOpen = hamburger.classList.toggle('open');
+      hamburger.setAttribute('aria-expanded', String(isOpen));
+      mobileMenu?.classList.toggle('open', isOpen);
+      mobileMenu?.setAttribute('aria-hidden', String(!isOpen));
+      document.body.classList.toggle('menu-open', isOpen);
+    });
+    mobileMenu?.querySelectorAll('a').forEach((a) => {
+      a.addEventListener('click', () => closeMenu());
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileMenu?.classList.contains('open')) closeMenu();
     });
   }
 </script>
