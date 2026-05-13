@@ -8,18 +8,35 @@ export function initAnimations() {
     '.reveal, .reveal-stagger, .reveal-zoom, .reveal-clip, .reveal-left, .reveal-right, .reveal-rotate, .reveal-blur'
   );
   if (targets.length > 0 && 'IntersectionObserver' in window && !reduceMotion) {
+    const trigger = (el: Element) => {
+      el.classList.add('is-visible');
+    };
+
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
+            trigger(entry.target);
             io.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.12, rootMargin: '0px 0px -60px 0px' }
+      // threshold 0 = trigger jak tylko pierwszy pixel wejdzie na ekran
+      // rootMargin -10% bottom = trigger gdy element wjedzie ~90% w viewport (już widoczny)
+      { threshold: 0, rootMargin: '0px 0px -10% 0px' }
     );
-    targets.forEach((el) => io.observe(el));
+
+    targets.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      // Element już widoczny przy załadowaniu (np. nad fold)? Trigger od razu.
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        // Element jest aktualnie na ekranie albo nad ekranem (już za nim przewinięto)
+        // Animacja powinna się odpalić od razu — nie czekaj na IO
+        requestAnimationFrame(() => trigger(el));
+        return;
+      }
+      io.observe(el);
+    });
   } else {
     targets.forEach((el) => el.classList.add('is-visible'));
   }
