@@ -66,11 +66,51 @@ const isActive = (href: string) =>
 <script>
   const header = document.querySelector<HTMLElement>('header.nav');
   if (header) {
+    const HEADER_H = 64;
+
     const onScroll = () => {
       header.classList.toggle('scrolled', window.scrollY > 40);
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
+
+    // Adaptive nav theme — obserwuj sekcje pod headerem
+    const themedSections = document.querySelectorAll<HTMLElement>('[data-nav-theme]');
+    let visibleSections: HTMLElement[] = [];
+
+    const updateNav = () => {
+      // znajdź najbardziej z dołu widoczną sekcję pod headerem (jeśli kilka, ta która "kończy się najwyżej")
+      const topSection = visibleSections.reduce<HTMLElement | null>((acc, el) => {
+        const r = el.getBoundingClientRect();
+        if (r.top <= HEADER_H + 2 && r.bottom > HEADER_H) {
+          if (!acc || el.getBoundingClientRect().top > acc.getBoundingClientRect().top) return el;
+        }
+        return acc;
+      }, null);
+      const theme = topSection?.dataset.navTheme || 'light-bg';
+      header.classList.toggle('over-dark', theme === 'dark');
+    };
+
+    if (themedSections.length > 0 && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const el = entry.target as HTMLElement;
+            if (entry.isIntersecting) {
+              if (!visibleSections.includes(el)) visibleSections.push(el);
+            } else {
+              visibleSections = visibleSections.filter((s) => s !== el);
+            }
+          });
+          updateNav();
+        },
+        { rootMargin: `-${HEADER_H}px 0px 0px 0px`, threshold: 0 }
+      );
+      themedSections.forEach((s) => io.observe(s));
+
+      window.addEventListener('scroll', updateNav, { passive: true });
+      updateNav();
+    }
 
     // open drawer when cart link clicked (if on a page that has drawer)
     header.querySelector('[data-open-drawer]')?.addEventListener('click', (e) => {

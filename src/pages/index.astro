@@ -49,7 +49,7 @@ const filters = [
   bodyClass="home-page"
 >
   <!-- HOME HERO ─────────────────────────────────────────── -->
-  <section class="home-hero" data-home-hero>
+  <section class="home-hero" data-home-hero data-nav-theme="dark">
     <div class="hh-stage">
       {heroImages.map((src, i) => (
         <div class={`hh-slide ${i === 0 ? 'active' : ''}`} data-hero-slide={i}>
@@ -212,7 +212,7 @@ const filters = [
 
   {sections.b2b && (
   <!-- B2B CTA ───────────────────────────────────────────── -->
-  <section class="b2b-section">
+  <section class="b2b-section" data-nav-theme="dark">
     <div class="container b2b-inner reveal">
       <div class="eyebrow b2b-eyebrow">Dla restauracji, sklepów i barów</div>
       <h2 class="b2b-h display">

@@ -324,19 +324,30 @@ body[data-theme="dark"] header.nav.scrolled {
 }
 .theme-toggle:hover { border-color: var(--color-ink); color: var(--color-ink); }
 
-/* When home nav sits over dark hero — paper text */
-body.home-page header.nav:not(.scrolled) { color: var(--color-paper); }
-body.home-page header.nav:not(.scrolled) .nav-brand,
-body.home-page header.nav:not(.scrolled) .nav-link { color: rgba(255,255,255,0.85); }
-body.home-page header.nav:not(.scrolled) .nav-link:hover { color: var(--color-paper); }
-body.home-page header.nav:not(.scrolled) .nav-cart,
-body.home-page header.nav:not(.scrolled) .theme-toggle {
+/* Adaptive nav: paper text gdy header siedzi nad ciemną sekcją */
+header.nav.over-dark { color: #fafaf7; }
+header.nav.over-dark .nav-brand,
+header.nav.over-dark .nav-link { color: rgba(255,255,255,0.85); }
+header.nav.over-dark .nav-link:hover { color: #fafaf7; }
+header.nav.over-dark .nav-link::after { background: #fafaf7; }
+header.nav.over-dark .nav-cart,
+header.nav.over-dark .theme-toggle {
   border-color: rgba(255,255,255,0.3);
-  color: var(--color-paper);
+  color: #fafaf7;
 }
-body.home-page header.nav:not(.scrolled) .nav-cart:hover,
-body.home-page header.nav:not(.scrolled) .theme-toggle:hover {
-  background: rgba(255,255,255,0.08); border-color: var(--color-paper);
+header.nav.over-dark .nav-cart:hover,
+header.nav.over-dark .theme-toggle:hover {
+  background: rgba(255,255,255,0.08); border-color: #fafaf7;
+}
+header.nav.over-dark .cart-dot {
+  background: #fafaf7; color: #1a1a1a;
+}
+
+/* Gdy nav jest .scrolled (mała wysokość, glass bg) — zawsze prevailing theme z body */
+header.nav.scrolled.over-dark {
+  background: rgba(14, 13, 11, 0.78);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
 /* Breadcrumb */
