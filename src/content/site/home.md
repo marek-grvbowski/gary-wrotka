@@ -1,8 +1,8 @@
 ---
 homeHero:
   eyebrow: Kombucha · Sosy · Octy · Edycje 001–009
-  title: Rzemieślnicze fermenty z Nowego Sącza
-  subtitle: Ręcznie, w małych partiach. Bez kompromisów. Od 2019 r.
+  title: Rzemieślnicze fermenty
+  subtitle: Nowy Sącz, od 2019r.
   primaryCta:
     label: Zobacz katalog
     href: /katalog
