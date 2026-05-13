@@ -1,8 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import SectionHeading from '../../components/SectionHeading.astro';
-import ProductCard from '../../components/ProductCard.astro';
 
 const all = (await getCollection('products')).sort((a, b) => a.data.order - b.data.order);
 const categories = [
@@ -11,66 +9,62 @@ const categories = [
   { id: 'sos', label: 'Sosy' },
   { id: 'ocet', label: 'Octy' },
 ];
+const initialFilter = Astro.url.searchParams.get('cat') || 'all';
 ---
 <Layout
   title="Katalog — Gary Wrotka"
   description="Pełna lista naszych fermentów: kombucha, sosy, octy. Wszystko ręcznie, w małych partiach."
 >
-  <section class="bg-paper pt-32 pb-16">
-    <div class="mx-auto max-w-[var(--container-content)] px-6">
-      <SectionHeading
-        eyebrow="Katalog"
-        title="Wszystkie nasze fermenty"
-        intro="Kliknij w produkt, żeby zobaczyć szczegóły i dodać do zapytania ofertowego. Zamówienia obsługujemy ręcznie — odezwiemy się mailowo po wysłaniu formularza."
-      />
+  <section class="container">
+    <div class="breadcrumb">
+      <a href="/">Start</a>
+      <span class="sep">/</span>
+      <span style="color: var(--color-ink)">Katalog</span>
     </div>
-  </section>
 
-  <section class="bg-paper pb-24">
-    <div class="mx-auto max-w-[var(--container-content)] px-6">
-      <div class="flex flex-wrap gap-2 mb-8" data-filter-bar>
-        {categories.map((c) => (
-          <button
-            type="button"
-            data-filter={c.id}
-            class={`px-4 py-2 text-sm font-medium rounded-full border transition ${c.id === 'all' ? 'bg-ink text-paper border-ink' : 'border-line hover:border-ink'}`}
-          >
-            {c.label}
-          </button>
-        ))}
-      </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 reveal-stagger" data-product-grid>
-        {all.map((p) => (
-          <div data-category={p.data.category}>
-            <ProductCard
-              slug={p.id}
-              name={p.data.name}
-              flavor={p.data.flavor}
-              category={p.data.category}
-              volume={p.data.volume}
-              image={p.data.images[0]}
-              available={p.data.available}
-            />
+    <header class="reveal" style="padding-bottom: clamp(56px, 7vw, 96px); max-width: 720px">
+      <div class="eyebrow" style="margin-bottom: 18px">Katalog</div>
+      <h1 class="display" style="font-size: clamp(40px, 5vw, 72px); margin: 0 0 20px">Wszystkie nasze fermenty.</h1>
+      <p style="font-size: 18px; line-height: 1.7; color: var(--color-ink-soft); margin: 0">
+        Kliknij w produkt, żeby zobaczyć szczegóły, dodać do koszyka i wysłać zapytanie ofertowe.
+        Każdy produkt robiony ręcznie, w małych partiach.
+      </p>
+    </header>
+
+    <div class="filter-row" style="margin-bottom: 32px" data-filter-row>
+      {categories.map((c) => (
+        <button
+          class={`filter-pill ${c.id === initialFilter ? 'active' : ''}`}
+          data-filter={c.id}
+          type="button"
+        >{c.label}</button>
+      ))}
+    </div>
+
+    <div class="featured-grid reveal-stagger" data-product-grid style="padding-bottom: var(--gap-section)">
+      {all.map((p) => (
+        <a href={`/katalog/${p.id}`} class="prod-card prod-card-home" data-category={p.data.category}>
+          <div class="prod-media">
+            <img src={p.data.images[0]} alt={p.data.name} loading="lazy" class="fade-img"/>
+            {p.data.tag && <div class="prod-tag">{p.data.tag}</div>}
+            {!p.data.available && <div class="prod-tag" style="left: auto; right: 14px; background: var(--color-ink); color: #fafaf7">wkrótce</div>}
           </div>
-        ))}
-      </div>
+          <div class="prod-body">
+            <div class="prod-cat">{p.data.categoryLabel ?? p.data.category}</div>
+            <h3 class="prod-name">{p.data.name}</h3>
+            <div class="prod-flavor">{p.data.flavor}</div>
+          </div>
+        </a>
+      ))}
     </div>
   </section>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const initial = params.get('cat') || 'all';
     const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
-    const items = document.querySelectorAll<HTMLElement>('[data-category]');
+    const items = document.querySelectorAll<HTMLElement>('[data-product-grid] [data-category]');
 
     const apply = (cat: string) => {
-      buttons.forEach((b) => {
-        const active = b.dataset.filter === cat;
-        b.classList.toggle('bg-ink', active);
-        b.classList.toggle('text-paper', active);
-        b.classList.toggle('border-ink', active);
-        b.classList.toggle('border-line', !active);
-      });
+      buttons.forEach((b) => b.classList.toggle('active', b.dataset.filter === cat));
       items.forEach((it) => {
         const show = cat === 'all' || it.dataset.category === cat;
         it.style.display = show ? '' : 'none';
@@ -88,6 +82,6 @@ const categories = [
       })
     );
 
-    apply(initial);
+    apply((new URLSearchParams(window.location.search).get('cat')) || 'all');
   </script>
 </Layout>

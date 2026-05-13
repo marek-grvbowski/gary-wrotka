@@ -1,73 +1,99 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import SectionHeading from '../components/SectionHeading.astro';
-import PhotoGallery from '../components/PhotoGallery.astro';
 
 const galleryImages = [
   '/images/photos/_DSC4577a.jpg',
   '/images/photos/_DSC4975.jpg',
-  '/images/photos/_DSC0561.jpg',
-  '/images/photos/_DSC4994a.jpg',
-  '/images/photos/_DSC4615.jpg',
-  '/images/photos/_DSC2791_v1.jpg',
-  '/images/photos/_DSC2626.jpg',
-  '/images/photos/_DSC4653.jpg',
-  '/images/photos/_DSC0687-2.jpg',
+  '/images/photos/fermento-nero-2.jpg',
+  '/images/photos/process.jpg',
 ];
 ---
 <Layout
-  title="O nas — Studio Wro i Gary Wrotka"
+  title="Manifest — Gary Wrotka"
   description="Historia marki: od fotografii rzemiosła do fermentów. Jak fotograf zaczął robić kombuchę."
 >
-  <section class="bg-paper pt-32 pb-16">
-    <div class="mx-auto max-w-3xl px-6 text-center">
-      <div class="eyebrow">Historia</div>
-      <h1 class="font-display font-bold text-4xl md:text-6xl tracking-tight mt-4 leading-tight">
-        Od fotografii rzemiosła<br/>do fermentów.
+  <section class="container">
+    <div class="breadcrumb">
+      <a href="/">Start</a>
+      <span class="sep">/</span>
+      <span style="color: var(--color-ink)">Manifest</span>
+    </div>
+
+    <header class="reveal" style="padding-bottom: clamp(56px, 7vw, 96px); max-width: 880px">
+      <div class="eyebrow" style="margin-bottom: 18px">Manifest</div>
+      <h1 class="display" style="font-size: clamp(48px, 6vw, 88px); margin: 0 0 24px; line-height: 1">
+        Od fotografii<br/>rzemiosła<br/>do fermentów.
       </h1>
-      <p class="mt-6 text-lg md:text-xl text-muted leading-relaxed">
-        Gary Wrotka to kontynuacja Studio Wro — fotograficznej pracowni, która od lat dokumentuje
-        rzemiosło. Najpierw fotografowaliśmy fermentację u innych. Teraz robimy ją sami.
+      <p style="font-size: 19px; line-height: 1.6; color: var(--color-ink-soft); max-width: 620px; margin: 0">
+        Studio Wro od 2018 roku robi zdjęcia jedzeniu, ludziom, miejscom.
+        Najczęściej tym, którzy z pasją robią coś własnymi rękami — piekarniom, browarom, manufakturom.
       </p>
+    </header>
+  </section>
+
+  <section class="container story" style="padding-top: 0">
+    <div class="story-text reveal-left">
+      <div class="eyebrow story-eyebrow">Jak to się zaczęło</div>
+      <h2 class="story-h">Z amatorskiego eksperymentu wyszły pierwsze butelki.</h2>
+      <p class="story-p">
+        Z czasem zaczęliśmy fermentować w domu — najpierw kapustę, potem kombuchę,
+        potem coraz dziwniejsze rzeczy. Z amatorskiego eksperymentu wyszła pierwsza partia
+        butelek z naklejką, kuratorską edycja smaków, kilka skrzynek dla znajomych restauracji.
+      </p>
+      <p class="story-p">
+        <strong>Gary Wrotka</strong> to ta sama dbałość o detal, ten sam szacunek do procesu,
+        ale w innym medium. Zamiast aparatu — butelka. Zamiast światła — czas.
+      </p>
+    </div>
+    <div class="story-media reveal-clip">
+      <img src={galleryImages[0]} alt="Słój fermentacyjny" loading="lazy" class="fade-img"/>
+      <div class="caption">Studio · Wrocław · 2025</div>
     </div>
   </section>
 
-  <section class="bg-paper pb-24">
-    <div class="mx-auto max-w-[var(--container-content)] px-6">
-      <div class="grid md:grid-cols-12 gap-12 items-start reveal">
-        <div class="md:col-span-5 space-y-5 text-ink-soft leading-relaxed">
-          <p>
-            Studio Wro od 2018 roku robi zdjęcia jedzeniu, ludziom, miejscom.
-            Najczęściej tym, którzy z pasją robią coś własnymi rękami — piekarniom, browarom, manufakturom.
-          </p>
-          <p>
-            Z czasem zaczęliśmy fermentować w domu — najpierw kapustę, potem kombuchę,
-            potem coraz dziwniejsze rzeczy. Z amatorskiego eksperymentu wyszła pierwsza partia
-            butelek z naklejką, kuratorską edycja smaków, kilka skrzynek dla znajomych restauracji.
-          </p>
-          <p>
-            <strong>Gary Wrotka</strong> to ta sama dbałość o detal, ten sam szacunek do procesu,
-            ale w innym medium. Zamiast aparatu — butelka. Zamiast światła — czas.
-          </p>
-        </div>
-        <div class="md:col-span-7 reveal-zoom">
-          <PhotoGallery images={galleryImages} alt="Z naszego warsztatu" />
-        </div>
+  <section class="profile" style="border-top: 1px solid var(--color-line); border-bottom: 0">
+    <div class="container">
+      <div class="reveal-left" style="max-width: 720px; margin: 0 auto; text-align: center">
+        <div class="eyebrow" style="margin-bottom: 18px">Filozofia</div>
+        <h2 class="profile-h" style="font-size: clamp(36px, 4.4vw, 60px)">
+          Nie skalujemy się.<br/>
+          <span style="font-style: italic; font-weight: 500; color: var(--color-accent)">Robimy edycje 50–300 butelek.</span>
+        </h2>
+        <p style="margin-top: 24px; color: var(--color-ink-soft); font-size: 17px; line-height: 1.7">
+          Każda butelka jest numerowana. Każdy słoik — datowany. Nasze SCOBY mają imiona.
+          Kiedy się skończy partia, robimy następną. Lub nie.
+          Niektóre wariacje były zbyt dobre, żeby je powtarzać.
+        </p>
       </div>
     </div>
   </section>
 
-  <section class="bg-paper-warm py-20 border-t border-line">
-    <div class="mx-auto max-w-3xl px-6 text-center">
-      <SectionHeading
-        eyebrow="Co dalej"
-        title="Cieszę się że tu jesteś"
-        intro="Wpadnij na blog, zajrzyj do katalogu — albo po prostu napisz. Zawsze chętnie pogadamy o fermentacji."
-        align="center"
-      />
-      <div class="mt-8 flex flex-wrap justify-center gap-4">
-        <a href="/katalog" class="rounded-full bg-ink text-paper px-6 py-3 font-semibold hover:bg-accent transition">Zobacz katalog →</a>
-        <a href="/kontakt" class="rounded-full border border-ink px-6 py-3 font-medium hover:bg-ink hover:text-paper transition">Napisz do nas</a>
+  <section class="container ingredients" style="padding-bottom: var(--gap-section)">
+    <div class="ingredients-head reveal">
+      <h2 class="ing-h">Z warsztatu <span class="accent">— okiem fotografa</span></h2>
+    </div>
+    <div class="ingredients-grid" style="grid-template-columns: repeat(2, 1fr); border: 0">
+      {galleryImages.map((src) => (
+        <div style="border: 0; padding: 0; aspect-ratio: 4/5; overflow: hidden; border-radius: 4px">
+          <img src={src} alt="" loading="lazy" class="fade-img" style="width: 100%; height: 100%; object-fit: cover; transition: transform 1s ease;"/>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="b2b-section" style="padding: clamp(60px, 8vw, 100px) 0">
+    <div class="container b2b-inner reveal" style="max-width: 780px; text-align: center; margin: 0 auto">
+      <div class="eyebrow b2b-eyebrow" style="margin-bottom: 20px">Co dalej</div>
+      <h2 class="b2b-h display" style="font-size: clamp(32px, 4vw, 52px); margin: 0 0 24px">
+        Cieszymy się, że tu jesteś.<br/>
+        <span class="b2b-accent">Zajrzyj do katalogu albo napisz.</span>
+      </h2>
+      <div class="b2b-cta" style="justify-content: center">
+        <a href="/katalog" class="magnetic btn-primary btn-primary-light">
+          <span>Zobacz katalog</span>
+          <span class="arrow">→</span>
+        </a>
+        <a href="/kontakt" class="btn-ghost btn-ghost-light">Napisz do nas</a>
       </div>
     </div>
   </section>

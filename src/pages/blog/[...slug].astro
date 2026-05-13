@@ -9,37 +9,42 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const formatted = new Intl.DateTimeFormat('pl-PL', {
-  year: 'numeric', month: 'long', day: 'numeric',
-}).format(post.data.pubDate);
+const formatted = new Intl.DateTimeFormat('pl-PL', { year: 'numeric', month: 'long', day: 'numeric' }).format(post.data.pubDate);
 ---
 <Layout
-  title={`${post.data.title} — Blog · Gary Wrotka`}
+  title={`${post.data.title} — Dziennik · Gary Wrotka`}
   description={post.data.description}
   ogImage={post.data.cover}
 >
-  <article class="bg-paper">
+  <article>
     {post.data.cover && (
-      <div class="pt-16 md:pt-20">
-        <div class="aspect-[16/9] md:aspect-[21/9] overflow-hidden bg-line">
-          <img src={post.data.cover} alt="" class="w-full h-full object-cover" />
+      <div class="reveal-blur" style="padding-top: 96px; overflow: hidden">
+        <div style="aspect-ratio: 21/9; overflow: hidden; background: var(--color-paper-warm)">
+          <img src={post.data.cover} alt="" class="ken-burns fade-img" style="width: 100%; height: 100%; object-fit: cover" loading="eager"/>
         </div>
       </div>
     )}
-    <div class="mx-auto max-w-3xl px-6 py-16">
-      <a href="/blog" class="text-sm text-muted hover:text-accent">← wróć do bloga</a>
-      <div class="eyebrow mt-8">{formatted} · {post.data.author}</div>
-      <h1 class="font-display font-bold text-4xl md:text-5xl tracking-tight mt-4 leading-tight">{post.data.title}</h1>
-      <p class="mt-5 text-lg text-muted leading-relaxed">{post.data.description}</p>
 
-      <div class="prose-custom mt-10">
+    <div class="container" style="padding-top: 56px; padding-bottom: var(--gap-section)">
+      <a href="/blog" class="prod-cta" style="margin-bottom: 32px; display: inline-flex">
+        <span class="a" style="display: inline-block; transform: rotate(180deg); margin-right: 6px">→</span>
+        <span>Wszystkie wpisy</span>
+      </a>
+
+      <header class="reveal" style="max-width: 760px; margin: 32px auto 48px; text-align: center">
+        <div class="eyebrow" style="margin-bottom: 18px">{formatted} · {post.data.author}</div>
+        <h1 class="display" style="font-size: clamp(36px, 5vw, 72px); margin: 0 0 24px; line-height: 1.05">{post.data.title}</h1>
+        <p style="font-size: clamp(18px, 1.5vw, 22px); line-height: 1.55; color: var(--color-ink-soft); margin: 0">{post.data.description}</p>
+      </header>
+
+      <div class="prose-custom" style="max-width: 680px; margin: 0 auto">
         <Content />
       </div>
 
       {post.data.tags.length > 0 && (
-        <div class="mt-12 pt-8 border-t border-line flex flex-wrap gap-2">
+        <div style="max-width: 680px; margin: 48px auto 0; padding-top: 32px; border-top: 1px solid var(--color-line); display: flex; flex-wrap: wrap; gap: 8px">
           {post.data.tags.map((t) => (
-            <span class="text-xs uppercase tracking-wider text-muted bg-paper-warm px-3 py-1 rounded-full">#{t}</span>
+            <span class="badge">#{t}</span>
           ))}
         </div>
       )}

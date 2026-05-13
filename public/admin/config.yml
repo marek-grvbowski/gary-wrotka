@@ -186,16 +186,71 @@ collections:
     label: "Ustawienia globalne"
     files:
       - name: "global"
-        label: "Strona — dane podstawowe"
+        label: "Strona — dane, motyw, układ"
         file: "src/content/site/site.json"
         fields:
           - { name: "id", label: "ID (nie zmieniać)", widget: "hidden", default: "site" }
+
+          # ── Marka ─────────────────────────────────────────────
           - { name: "brandName", label: "Nazwa marki", widget: "string" }
           - { name: "tagline", label: "Tagline (hasło na hero)", widget: "string" }
+
+          # ── Kolory marki ──────────────────────────────────────
+          - {
+              name: "accentColor",
+              label: "Kolor akcentu (hex, np. #c33366)",
+              widget: "color",
+              hint: "Główny kolor akcentu używany w nawigacji, linkach, plakietkach. Zmiana = przebudowa strony.",
+              enableAlpha: false,
+              default: "#c33366"
+            }
+          - {
+              name: "accentDeepColor",
+              label: "Akcent głęboki (hex, hover)",
+              widget: "color",
+              hint: "Wariant ciemniejszy akcentu — używany przy hover.",
+              enableAlpha: false,
+              default: "#663366"
+            }
+
+          # ── Hero strony głównej ───────────────────────────────
+          - name: "homeHero"
+            label: "Hero strony głównej"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { name: "eyebrow", label: "Eyebrow (mały tekst nad tytułem)", widget: "string" }
+              - { name: "title", label: "Tytuł hero", widget: "string" }
+              - { name: "subtitle", label: "Podtytuł", widget: "text" }
+
           - name: "heroImages"
             label: "Zdjęcia hero (carousel — drag-and-drop kolejności)"
             widget: "list"
+            hint: "Pierwsze zdjęcie pojawia się jako pierwsze. Automatyczne crossfade co 6.5s."
             field: { name: "src", label: "Zdjęcie", widget: "image" }
+
+          # ── Treści ────────────────────────────────────────────
+          - {
+              name: "manifestText",
+              label: "Treść manifestu (na home)",
+              widget: "text",
+              hint: "Akapity rozdziel pustą linią."
+            }
+
+          # ── Widoczność sekcji home ────────────────────────────
+          - name: "homeSections"
+            label: "Widoczność sekcji strony głównej"
+            widget: "object"
+            collapsed: false
+            hint: "Wyłącz dowolną sekcję — zniknie ze strony. Hero zawsze widoczne."
+            fields:
+              - { name: "manifest", label: "Sekcja: Manifest", widget: "boolean", default: true }
+              - { name: "featured", label: "Sekcja: Katalog (wybrane fermenty)", widget: "boolean", default: true }
+              - { name: "process", label: "Sekcja: Proces (4 kroki)", widget: "boolean", default: true }
+              - { name: "blog", label: "Sekcja: Dziennik (ostatnie wpisy)", widget: "boolean", default: true }
+              - { name: "b2b", label: "Sekcja: B2B (CTA)", widget: "boolean", default: true }
+
+          # ── Kontakt ───────────────────────────────────────────
           - { name: "contactEmail", label: "E-mail kontaktowy", widget: "string" }
           - { name: "orderEmail", label: "E-mail zamówień", widget: "string" }
           - { name: "phone", label: "Telefon", widget: "string", required: false }

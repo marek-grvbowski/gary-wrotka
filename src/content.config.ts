@@ -60,6 +60,25 @@ const site = defineCollection({
       instagram: z.string().optional(),
       facebook: z.string().optional(),
     }).default({}),
+    accentColor: z.string().regex(/^#[0-9a-fA-F]{6}$/).default('#c33366'),
+    accentDeepColor: z.string().regex(/^#[0-9a-fA-F]{6}$/).default('#663366'),
+    homeSections: z.object({
+      manifest: z.boolean().default(true),
+      featured: z.boolean().default(true),
+      process: z.boolean().default(true),
+      blog: z.boolean().default(true),
+      b2b: z.boolean().default(true),
+    }).default({ manifest: true, featured: true, process: true, blog: true, b2b: true }),
+    homeHero: z.object({
+      eyebrow: z.string().default('Kombucha · Sosy · Octy'),
+      title: z.string().default('Rzemieślnicze fermenty z Wrocławia.'),
+      subtitle: z.string().default('Ręcznie, w małych partiach. Bez kompromisów.'),
+    }).default({
+      eyebrow: 'Kombucha · Sosy · Octy',
+      title: 'Rzemieślnicze fermenty z Wrocławia.',
+      subtitle: 'Ręcznie, w małych partiach. Bez kompromisów.',
+    }),
+    manifestText: z.string().default('Wszystko, co tu pijesz, powstało w naszym studio.'),
   }),
 });
 

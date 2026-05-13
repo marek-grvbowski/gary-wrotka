@@ -1,6 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import SectionHeading from '../components/SectionHeading.astro';
 import { getEntry } from 'astro:content';
 
 const site = await getEntry('site', 'site');
@@ -9,138 +8,108 @@ const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
 const isOk = Astro.url.searchParams.get('ok') === '1';
 ---
 <Layout
-  title="Zapytanie ofertowe — Gary Wrotka"
+  title="Koszyk — Gary Wrotka"
   description="Wyślij zapytanie z listą produktów. Odezwiemy się mailowo i ustalimy szczegóły."
 >
-  <section class="bg-paper pt-32 pb-16">
-    <div class="mx-auto max-w-[var(--container-content)] px-6">
-      {isOk ? (
-        <div class="max-w-2xl mx-auto text-center py-20">
-          <div class="text-5xl mb-6">✓</div>
-          <h1 class="font-display font-bold text-4xl tracking-tight">Dziękujemy!</h1>
-          <p class="mt-4 text-lg text-muted">
-            Twoje zapytanie zostało wysłane na <strong>{orderEmail}</strong>.
-            Odezwiemy się w ciągu 24h roboczych.
+  <section class="container">
+    <div class="breadcrumb">
+      <a href="/">Start</a>
+      <span class="sep">/</span>
+      <span style="color: var(--color-ink)">Koszyk i zamówienie</span>
+    </div>
+
+    {isOk ? (
+      <div class="reveal" style="max-width: 560px; margin: 64px auto 120px; text-align: center">
+        <div style="font-size: 48px; color: var(--color-accent)">✓</div>
+        <h1 class="display" style="font-size: clamp(36px, 4vw, 56px); margin: 24px 0 16px">Dziękujemy!</h1>
+        <p style="font-size: 17px; color: var(--color-ink-soft); line-height: 1.7; margin: 0 0 32px">
+          Twoje zamówienie zostało wysłane na <strong>{orderEmail}</strong>.
+          Odezwiemy się w ciągu 24h roboczych.
+        </p>
+        <a href="/katalog" class="magnetic btn-primary">
+          <span>Wróć do katalogu</span>
+          <span class="arrow">→</span>
+        </a>
+      </div>
+    ) : (
+      <>
+        <header class="reveal" style="padding-bottom: 56px; max-width: 880px">
+          <div class="eyebrow" style="margin-bottom: 18px">Koszyk</div>
+          <h1 class="display" style="font-size: clamp(40px, 5vw, 72px); margin: 0 0 24px; line-height: 1">
+            Złóż zamówienie.
+          </h1>
+          <p style="font-size: 18px; line-height: 1.7; color: var(--color-ink-soft); margin: 0; max-width: 620px">
+            Nie kupujesz online. Wysyłasz listę produktów z koszyka i swoje dane — odpowiemy mailowo, ustalimy dostępność, sposób odbioru i wszystko inne.
           </p>
-          <a href="/katalog" class="mt-8 inline-flex rounded-full bg-ink text-paper px-6 py-3 font-semibold hover:bg-accent transition">
-            Wróć do katalogu
-          </a>
-        </div>
-      ) : (
-        <>
-          <SectionHeading
-            eyebrow="Koszyk"
-            title="Złóż zamówienie"
-            intro="Nie kupujesz online — zamiast tego wysyłasz nam listę produktów z koszyka. Odezwiemy się mailowo, ustalimy dostępność, sposób odbioru i wszystko inne."
-          />
+        </header>
 
-          <div class="mt-12 grid md:grid-cols-12 gap-12">
-            <div class="md:col-span-7">
-              <div class="bg-paper-warm rounded-xl p-6 border border-line">
-                <h2 class="font-display font-semibold text-xl">Twój koszyk</h2>
-                <div data-cart-list class="mt-4 space-y-3"></div>
-                <div data-cart-empty class="hidden text-muted py-8 text-center">
-                  Koszyk jest pusty.<br/>
-                  <a href="/katalog" class="text-accent underline underline-offset-4 mt-3 inline-block">Przejdź do katalogu →</a>
-                </div>
-              </div>
-            </div>
-
-            <div class="md:col-span-5">
-              <form
-                action="https://api.web3forms.com/submit"
-                method="POST"
-                class="bg-paper-warm rounded-xl p-6 border border-line space-y-4"
-                data-inquiry-form
-              >
-                <input type="hidden" name="access_key" value={web3formsKey} />
-                <input type="hidden" name="subject" value="[Gary Wrotka] Nowe zapytanie ofertowe" />
-                <input type="hidden" name="from_name" value="Gary Wrotka — formularz zamówień" />
-                <input type="hidden" name="cart_json" data-cart-json value="" />
-                <input type="hidden" name="cart_summary" data-cart-summary value="" />
-                <input type="text" name="botcheck" tabindex="-1" autocomplete="off" class="hidden" />
-
-                <h2 class="font-display font-semibold text-xl">Twoje dane</h2>
-
-                <label class="block">
-                  <span class="text-sm font-medium">Imię i nazwisko *</span>
-                  <input
-                    type="text"
-                    name="name"
-                    required
-                    class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent"
-                  />
-                </label>
-
-                <label class="block">
-                  <span class="text-sm font-medium">E-mail *</span>
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent"
-                  />
-                </label>
-
-                <label class="block">
-                  <span class="text-sm font-medium">Telefon</span>
-                  <input
-                    type="tel"
-                    name="phone"
-                    class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent"
-                  />
-                </label>
-
-                <fieldset class="space-y-2">
-                  <legend class="text-sm font-medium">Sposób odbioru</legend>
-                  <label class="flex items-center gap-2">
-                    <input type="radio" name="delivery" value="odbior_osobisty" checked /> Odbiór osobisty (Wrocław)
-                  </label>
-                  <label class="flex items-center gap-2">
-                    <input type="radio" name="delivery" value="wysylka" /> Wysyłka kurierska
-                  </label>
-                </fieldset>
-
-                <label class="block">
-                  <span class="text-sm font-medium">Adres (jeśli wysyłka)</span>
-                  <textarea
-                    name="address"
-                    rows="2"
-                    class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent"
-                  ></textarea>
-                </label>
-
-                <label class="block">
-                  <span class="text-sm font-medium">Uwagi</span>
-                  <textarea
-                    name="notes"
-                    rows="3"
-                    placeholder="Termin odbioru, preferencje, pytania..."
-                    class="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-accent"
-                  ></textarea>
-                </label>
-
-                <input type="hidden" name="redirect" value={new URL('/zamowienie?ok=1', Astro.url).toString()} />
-
-                <button
-                  type="submit"
-                  data-submit-btn
-                  class="w-full rounded-full bg-ink text-paper px-6 py-3 font-semibold hover:bg-accent transition disabled:opacity-40 disabled:cursor-not-allowed"
-                  disabled
-                >
-                  Wyślij zamówienie
-                </button>
-
-                <p class="text-xs text-muted leading-relaxed">
-                  Wysyłając formularz zgadzasz się na kontakt mailowy w sprawie zamówienia.
-                  Dane nie są używane do innych celów.
-                </p>
-              </form>
+        <div class="story" style="padding-top: 0; padding-bottom: var(--gap-section); grid-template-columns: 1.05fr 1fr; align-items: start">
+          <div class="reveal-left">
+            <div class="eyebrow" style="margin-bottom: 18px">Twój koszyk</div>
+            <div data-cart-list style="display: flex; flex-direction: column; gap: 12px"></div>
+            <div data-cart-empty class="hidden" style="padding: 48px 0; text-align: center; color: var(--color-muted)">
+              Koszyk jest pusty.<br/>
+              <a href="/katalog" style="color: var(--color-accent); text-decoration: underline; text-underline-offset: 4px; margin-top: 12px; display: inline-block">Przejdź do katalogu →</a>
             </div>
           </div>
-        </>
-      )}
-    </div>
+
+          <form
+            action="https://api.web3forms.com/submit"
+            method="POST"
+            class="reveal-right"
+            style="display: flex; flex-direction: column; gap: 14px"
+            data-inquiry-form
+          >
+            <div class="eyebrow" style="margin-bottom: 4px">Twoje dane</div>
+            <input type="hidden" name="access_key" value={web3formsKey} />
+            <input type="hidden" name="subject" value="[Gary Wrotka] Nowe zamówienie" />
+            <input type="hidden" name="from_name" value="Gary Wrotka — koszyk" />
+            <input type="hidden" name="cart_summary" data-cart-summary value="" />
+            <input type="text" name="botcheck" tabindex="-1" autocomplete="off" style="display: none" />
+
+            <label style="display: flex; flex-direction: column; gap: 6px">
+              <span class="eyebrow">Imię i nazwisko *</span>
+              <input type="text" name="name" required style="padding: 14px 16px; background: var(--color-paper-warm); border: 1px solid var(--color-line); border-radius: 4px; font: inherit"/>
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 6px">
+              <span class="eyebrow">E-mail *</span>
+              <input type="email" name="email" required style="padding: 14px 16px; background: var(--color-paper-warm); border: 1px solid var(--color-line); border-radius: 4px; font: inherit"/>
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 6px">
+              <span class="eyebrow">Telefon</span>
+              <input type="tel" name="phone" style="padding: 14px 16px; background: var(--color-paper-warm); border: 1px solid var(--color-line); border-radius: 4px; font: inherit"/>
+            </label>
+
+            <fieldset style="border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px">
+              <legend class="eyebrow" style="margin-bottom: 4px">Sposób odbioru</legend>
+              <label style="display: flex; align-items: center; gap: 8px"><input type="radio" name="delivery" value="odbior_osobisty" checked/> Odbiór osobisty (Wrocław)</label>
+              <label style="display: flex; align-items: center; gap: 8px"><input type="radio" name="delivery" value="wysylka"/> Wysyłka kurierska</label>
+            </fieldset>
+
+            <label style="display: flex; flex-direction: column; gap: 6px">
+              <span class="eyebrow">Uwagi</span>
+              <textarea name="notes" rows="3" style="padding: 14px 16px; background: var(--color-paper-warm); border: 1px solid var(--color-line); border-radius: 4px; font: inherit; resize: vertical"></textarea>
+            </label>
+
+            <input type="hidden" name="redirect" value={new URL('/zamowienie?ok=1', Astro.url).toString()} />
+
+            <button
+              type="submit"
+              data-submit-btn
+              class="magnetic btn-primary"
+              style="margin-top: 12px; align-self: start"
+              disabled
+            >
+              <span>Wyślij zamówienie</span>
+              <span class="arrow">→</span>
+            </button>
+            <p style="font-size: 12px; color: var(--color-muted); line-height: 1.5; margin: 0">
+              Wysyłając formularz zgadzasz się na kontakt mailowy w sprawie zamówienia.
+            </p>
+          </form>
+        </div>
+      </>
+    )}
   </section>
 
   <script>
@@ -148,9 +117,9 @@ const isOk = Astro.url.searchParams.get('ok') === '1';
     if (new URLSearchParams(window.location.search).get('ok') === '1') {
       clearCart();
     }
+
     const list = document.querySelector<HTMLElement>('[data-cart-list]');
     const empty = document.querySelector<HTMLElement>('[data-cart-empty]');
-    const jsonInput = document.querySelector<HTMLInputElement>('[data-cart-json]');
     const summaryInput = document.querySelector<HTMLInputElement>('[data-cart-summary]');
     const submitBtn = document.querySelector<HTMLButtonElement>('[data-submit-btn]');
 
@@ -169,7 +138,6 @@ const isOk = Astro.url.searchParams.get('ok') === '1';
       if (items.length === 0) {
         empty?.classList.remove('hidden');
         if (submitBtn) submitBtn.disabled = true;
-        if (jsonInput) jsonInput.value = '';
         if (summaryInput) summaryInput.value = '';
         return;
       }
@@ -177,37 +145,33 @@ const isOk = Astro.url.searchParams.get('ok') === '1';
       if (submitBtn) submitBtn.disabled = false;
 
       items.forEach((it) => {
-        const row = el('div', { class: 'flex gap-4 items-center bg-paper rounded-lg p-3 border border-line' });
-
-        const img = el('img', { class: 'w-16 h-20 object-cover rounded shrink-0 bg-line', attrs: { src: it.image, alt: '', loading: 'lazy' } });
+        const row = el('div', { class: 'flex gap-4 items-center', attrs: { style: 'background: var(--color-paper-warm); border: 1px solid var(--color-line); border-radius: 4px; padding: 12px; display: flex; gap: 16px; align-items: center' } });
+        const img = el('img', { attrs: { src: it.image, alt: '', loading: 'lazy', style: 'width: 64px; height: 80px; object-fit: cover; border-radius: 4px; flex-shrink: 0' } });
         row.appendChild(img);
 
-        const body = el('div', { class: 'flex-1 min-w-0' });
-        body.appendChild(el('div', { class: 'font-semibold', text: it.name }));
-        body.appendChild(el('div', { class: 'text-xs text-muted', text: `${it.flavor} · ${it.volume}` }));
+        const body = el('div', { attrs: { style: 'flex: 1; min-width: 0' } });
+        body.appendChild(el('div', { attrs: { style: 'font-weight: 600; font-family: var(--font-display)' }, text: it.name }));
+        body.appendChild(el('div', { attrs: { style: 'font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-muted)' }, text: `${it.flavor} · ${it.volume}` }));
 
-        const ctrl = el('div', { class: 'mt-2 inline-flex items-center border border-line rounded-full overflow-hidden text-sm' });
-        const dec = el('button', { class: 'w-7 h-7 hover:bg-paper-warm', text: '−', attrs: { type: 'button', 'aria-label': 'Mniej' } });
-        const qty = el('span', { class: 'w-8 text-center', text: String(it.qty) });
-        const inc = el('button', { class: 'w-7 h-7 hover:bg-paper-warm', text: '+', attrs: { type: 'button', 'aria-label': 'Więcej' } });
+        const ctrl = el('div', { class: 'qty', attrs: { style: 'margin-top: 10px' } });
+        const dec = el('button', { text: '−', attrs: { type: 'button', 'aria-label': 'Mniej' } });
+        const qty = el('span', { class: 'val', text: String(it.qty) });
+        const inc = el('button', { text: '+', attrs: { type: 'button', 'aria-label': 'Więcej' } });
         dec.addEventListener('click', () => updateQty(it.slug, it.qty - 1));
         inc.addEventListener('click', () => updateQty(it.slug, it.qty + 1));
         ctrl.append(dec, qty, inc);
         body.appendChild(ctrl);
         row.appendChild(body);
 
-        const rm = el('button', { class: 'text-xs text-muted hover:text-accent', text: 'usuń', attrs: { type: 'button' } });
+        const rm = el('button', { text: 'usuń', attrs: { type: 'button', style: 'background: transparent; border: 0; color: var(--color-muted); font-size: 12px' } });
         rm.addEventListener('click', () => removeItem(it.slug));
         row.appendChild(rm);
 
         list.appendChild(row);
       });
 
-      if (jsonInput) jsonInput.value = JSON.stringify(items, null, 2);
       if (summaryInput) {
-        summaryInput.value = items
-          .map((it) => `${it.qty}× ${it.name} (${it.flavor}, ${it.volume})`)
-          .join('\n');
+        summaryInput.value = items.map((it) => `${it.qty}× ${it.name} (${it.flavor}, ${it.volume})`).join('\n');
       }
     };
 

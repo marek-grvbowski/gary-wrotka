@@ -3,6 +3,11 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import InquiryDrawer from '../components/InquiryDrawer.astro';
+import { getEntry } from 'astro:content';
+
+const siteEntry = await getEntry('site', 'site');
+const accent = siteEntry?.data.accentColor ?? '#c33366';
+const accentDeep = siteEntry?.data.accentDeepColor ?? '#663366';
 
 type Props = {
   title?: string;
@@ -45,6 +50,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://gary-wrotka
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&family=Anton&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
+
+    <style set:html={`:root { --color-accent: ${accent}; --color-accent-deep: ${accentDeep}; }`}></style>
 
     <script is:inline>
       // Apply theme before paint to avoid flash

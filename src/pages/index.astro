@@ -21,14 +21,12 @@ const heroImages = [
   '/images/photos/fermento-nero-3.jpg',
 ];
 
-const heroTitle = 'Rzemieślnicze fermenty z Wrocławia.';
-const heroSub = 'Ręcznie, w małych partiach. Bez kompromisów. Od 2019 r.';
-const heroEyebrow = 'Kombucha · Sosy · Octy · Edycje 001–009';
+const heroTitle = data?.homeHero?.title ?? 'Rzemieślnicze fermenty z Wrocławia.';
+const heroSub = data?.homeHero?.subtitle ?? 'Ręcznie, w małych partiach. Bez kompromisów.';
+const heroEyebrow = data?.homeHero?.eyebrow ?? 'Kombucha · Sosy · Octy';
+const sections = data?.homeSections ?? { manifest: true, featured: true, process: true, blog: true, b2b: true };
 
-const manifestParagraphs = [
-  'Wszystko, co tu pijesz i czym się polewasz, powstało w naszym studio przy ul. Przykładowej 1. Każda butelka jest numerowana. Każdy słoik — datowany. Nasze SCOBY mają imiona.',
-  'Nie skalujemy się. Robimy edycje 50–300 butelek i, kiedy się skończą, robimy następne. Lub nie. Niektóre wariacje były zbyt dobre, żeby je powtarzać.',
-];
+const manifestParagraphs = (data?.manifestText ?? '').split('\n\n').filter(Boolean);
 
 const processSteps = [
   { n: '01', label: 'Surowiec', desc: 'Polska palarnia, lokalne warzywa, indyjskie przyprawy. Wybieramy świadomie.' },
@@ -96,6 +94,7 @@ const filters = [
     </div>
   </section>
 
+  {sections.manifest && (
   <!-- MANIFEST ──────────────────────────────────────────── -->
   <section class="container manifest-section" id="manifest">
     <div class="manifest-grid">
@@ -113,7 +112,9 @@ const filters = [
       </div>
     </div>
   </section>
+  )}
 
+  {sections.featured && (
   <!-- FEATURED ──────────────────────────────────────────── -->
   <section class="container featured-section">
     <div class="featured-head reveal">
@@ -149,7 +150,9 @@ const filters = [
       </a>
     </div>
   </section>
+  )}
 
+  {sections.process && (
   <!-- PROCESS TEASER ────────────────────────────────────── -->
   <section class="process-teaser">
     <div class="container">
@@ -168,7 +171,9 @@ const filters = [
       </div>
     </div>
   </section>
+  )}
 
+  {sections.blog && (
   <!-- BLOG TEASER ───────────────────────────────────────── -->
   <section class="container blog-section">
     <div class="blog-head reveal">
@@ -203,7 +208,9 @@ const filters = [
       })}
     </div>
   </section>
+  )}
 
+  {sections.b2b && (
   <!-- B2B CTA ───────────────────────────────────────────── -->
   <section class="b2b-section">
     <div class="container b2b-inner reveal">
@@ -222,6 +229,7 @@ const filters = [
       </div>
     </div>
   </section>
+  )}
 
 </Layout>
 

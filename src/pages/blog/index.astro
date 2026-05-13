@@ -1,44 +1,59 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import SectionHeading from '../../components/SectionHeading.astro';
-import BlogCard from '../../components/BlogCard.astro';
 
 const posts = (await getCollection('blog', (p) => !p.data.draft))
   .sort((a, b) => +b.data.pubDate - +a.data.pubDate);
+
+const fmt = (d: Date) => new Intl.DateTimeFormat('pl-PL', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
 ---
 <Layout
-  title="Blog — Gary Wrotka"
+  title="Dziennik — Gary Wrotka"
   description="Notatki o fermentacji, rzemiośle, fotografii i wszystkim co wokół naszych butelek."
 >
-  <section class="bg-paper pt-32 pb-16">
-    <div class="mx-auto max-w-[var(--container-content)] px-6">
-      <SectionHeading
-        eyebrow="Blog"
-        title="Z naszego warsztatu"
-        intro="Krótko, konkretnie, najczęściej ze zdjęciem. Piszemy o fermentacji, ale też o tym, jak fotografować jedzenie i czemu warto czekać."
-      />
+  <section class="container">
+    <div class="breadcrumb">
+      <a href="/">Start</a>
+      <span class="sep">/</span>
+      <span style="color: var(--color-ink)">Dziennik</span>
     </div>
+
+    <header class="reveal" style="padding-bottom: clamp(56px, 7vw, 96px); max-width: 880px">
+      <div class="eyebrow" style="margin-bottom: 18px">Dziennik</div>
+      <h1 class="display" style="font-size: clamp(48px, 6vw, 88px); margin: 0 0 24px; line-height: 1">
+        Z naszego warsztatu.
+      </h1>
+      <p style="font-size: 18px; line-height: 1.7; color: var(--color-ink-soft); margin: 0; max-width: 620px">
+        Krótko, konkretnie, najczęściej ze zdjęciem. Piszemy o fermentacji, o tym jak fotografować jedzenie i czemu warto czekać.
+      </p>
+    </header>
   </section>
 
-  <section class="bg-paper pb-24">
-    <div class="mx-auto max-w-[var(--container-content)] px-6">
-      {posts.length === 0 ? (
-        <p class="text-muted">Wkrótce pierwsze wpisy.</p>
-      ) : (
-        <div class="grid md:grid-cols-2 gap-12 reveal-stagger">
-          {posts.map((p) => (
-            <BlogCard
-              slug={p.id}
-              title={p.data.title}
-              description={p.data.description}
-              cover={p.data.cover}
-              pubDate={p.data.pubDate}
-              tags={p.data.tags}
-            />
-          ))}
-        </div>
-      )}
-    </div>
+  <section class="container" style="padding-bottom: var(--gap-section)">
+    {posts.length === 0 ? (
+      <p style="color: var(--color-muted)">Wkrótce pierwsze wpisy.</p>
+    ) : (
+      <div class="blog-grid reveal-stagger">
+        {posts.map((p) => (
+          <a href={`/blog/${p.id}`} class="blog-card">
+            {p.data.cover && (
+              <div class="blog-media">
+                <img src={p.data.cover} alt={p.data.title} loading="lazy" class="fade-img"/>
+              </div>
+            )}
+            <div class="blog-body">
+              <div class="blog-meta mono">
+                {p.data.tags[0] && <span>{p.data.tags[0]}</span>}
+                {p.data.tags[0] && <span class="bsep">·</span>}
+                <span>{fmt(p.data.pubDate)}</span>
+              </div>
+              <h3 class="blog-title">{p.data.title}</h3>
+              <p class="blog-excerpt">{p.data.description}</p>
+              <span class="prod-cta">Czytaj <span class="a">→</span></span>
+            </div>
+          </a>
+        ))}
+      </div>
+    )}
   </section>
 </Layout>
