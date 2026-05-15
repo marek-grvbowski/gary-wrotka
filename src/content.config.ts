@@ -128,6 +128,13 @@ const global = defineCollection({
       aboutHeading: 'O nas',
       contactHeading: 'Kontakt',
     }),
+    analytics: z.object({
+      ga4Id: z.string().optional(),
+      cookieBannerText: z.string().default('Używamy ciasteczek do analityki — pomaga nam to ulepszać stronę. Możesz odmówić.'),
+    }).default({
+      ga4Id: '',
+      cookieBannerText: 'Używamy ciasteczek do analityki — pomaga nam to ulepszać stronę. Możesz odmówić.',
+    }),
   }),
 });
 

@@ -17,4 +17,7 @@ footer:
   shopHeading: Sklep
   aboutHeading: O nas
   contactHeading: Kontakt
+analytics:
+  ga4Id: ""
+  cookieBannerText: "Używamy ciasteczek do analityki — pomaga nam to ulepszać stronę. Możesz odmówić."
 ---

@@ -344,6 +344,28 @@ collections:
               - { name: "instagram", label: "Instagram URL", widget: "string", required: false }
               - { name: "facebook", label: "Facebook URL", widget: "string", required: false }
 
+          # ─── ANALITYKA ───────────────────────────────────────
+          - name: "analytics"
+            label: "📊 Analityka (Google Analytics 4)"
+            widget: "object"
+            collapsed: true
+            hint: "Zostaw puste, żeby wyłączyć śledzenie."
+            fields:
+              - {
+                  name: "ga4Id",
+                  label: "GA4 Measurement ID (np. G-XXXXXXXXXX)",
+                  widget: "string",
+                  required: false,
+                  hint: "Znajdziesz w Google Analytics → Admin → Data Streams → Twój stream. Zaczyna się od 'G-'. Puste = brak śledzenia, brak banneru cookies."
+                }
+              - {
+                  name: "cookieBannerText",
+                  label: "Tekst banneru cookies",
+                  widget: "text",
+                  hint: "Pojawia się tylko gdy GA4 ID jest ustawione. Pokaże się na dole strony do czasu akceptacji.",
+                  default: "Używamy ciasteczek do analityki — pomaga nam to ulepszać stronę. Możesz odmówić."
+                }
+
           # ─── STOPKA ───────────────────────────────────────────
           - name: "footer"
             label: "🦶 Stopka strony"
