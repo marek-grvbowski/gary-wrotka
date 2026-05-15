@@ -29,6 +29,24 @@
         </p>
       </div>
     </div>
+
+    <!-- Floating link do importu CSV (widoczny po wczytaniu Sveltia) -->
+    <a
+      href="/admin/import.html"
+      id="csv-import-link"
+      style="
+        position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+        background: #1a1a1a; color: #fafaf7; text-decoration: none;
+        padding: 12px 18px; border-radius: 999px;
+        font-family: -apple-system, system-ui, sans-serif; font-size: 13px; font-weight: 600;
+        box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+        transition: transform .3s ease, background .3s ease;
+      "
+      onmouseover="this.style.transform='translateY(-2px)'; this.style.background='#c33366'"
+      onmouseout="this.style.transform=''; this.style.background='#1a1a1a'"
+    >
+      📥 Import CSV
+    </a>
     <script type="module" src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
   </body>
 </html>

@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Import produktów z CSV — Gary Wrotka</title>
+  <link rel="icon" href="/favicon.svg" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --ink: #1a1a1a;
+      --paper: #fafaf7;
+      --paper-warm: #f5f3ee;
+      --line: #e5e0d6;
+      --muted: #6b6b6b;
+      --accent: #c33366;
+      --ok: #2d7d4e;
+      --err: #b73a3a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    header {
+      background: var(--ink); color: var(--paper);
+      padding: 20px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    header h1 {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 18px; font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    header a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 13px;
+    }
+    header a:hover { color: var(--paper); }
+    main {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 32px;
+    }
+    h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 28px; font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 0 0 8px;
+    }
+    .intro {
+      color: var(--muted);
+      margin: 0 0 32px;
+      max-width: 720px;
+    }
+    .login, .step {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+    label {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    input[type="password"], input[type="text"] {
+      width: 100%; max-width: 360px;
+      padding: 12px 14px;
+      background: var(--paper-warm);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      font: inherit;
+      transition: border-color .2s;
+    }
+    input[type="password"]:focus, input[type="text"]:focus {
+      outline: none; border-color: var(--ink);
+    }
+    .dropzone {
+      border: 2px dashed var(--line);
+      border-radius: 6px;
+      padding: 48px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .3s, background .3s;
+    }
+    .dropzone:hover, .dropzone.dragover {
+      border-color: var(--accent);
+      background: var(--paper-warm);
+    }
+    .dropzone strong { color: var(--accent); }
+    .dropzone .file-icon {
+      display: block;
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+    .dropzone .hint {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px;
+      background: var(--ink); color: var(--paper);
+      border: 0; border-radius: 999px;
+      font: inherit; font-weight: 600; font-size: 14px;
+      cursor: pointer;
+      transition: background .25s;
+    }
+    .btn:hover { background: var(--accent); }
+    .btn:disabled { background: #999; cursor: not-allowed; }
+    .btn-ghost {
+      background: transparent;
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+    .btn-ghost:hover { border-color: var(--ink); background: var(--paper-warm); color: var(--ink); }
+    .table-wrap {
+      max-height: 480px;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      margin-top: 16px;
+    }
+    table {
+      width: 100%; border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      white-space: nowrap;
+      max-width: 280px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    th {
+      background: var(--paper-warm);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 500;
+      position: sticky; top: 0;
+    }
+    tr:hover td { background: var(--paper-warm); }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+    .badge-new { background: #e8f5ed; color: var(--ok); }
+    .badge-update { background: #fdf3e8; color: #a36b15; }
+    .badge-err { background: #fbe6e6; color: var(--err); }
+    .summary {
+      display: flex; gap: 24px;
+      padding: 16px 0;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .summary div {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .summary strong {
+      display: block;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 24px;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+    }
+    .actions {
+      display: flex; gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+    .status {
+      margin-top: 16px;
+      padding: 14px 18px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .status.ok { background: #e8f5ed; color: var(--ok); border: 1px solid #b8e0c4; }
+    .status.err { background: #fbe6e6; color: var(--err); border: 1px solid #ecc4c4; }
+    .status.loading { background: var(--paper-warm); color: var(--muted); }
+    .hidden { display: none !important; }
+    #fileInput { display: none; }
+    .spinner {
+      display: inline-block;
+      width: 12px; height: 12px;
+      border: 2px solid currentColor; border-right-color: transparent;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📥 Import produktów z CSV</h1>
+    <a href="/admin/">← Wróć do panelu</a>
+  </header>
+
+  <main>
+    <p class="intro">
+      Wgraj plik CSV z opisami produktów. Jeśli produkt już istnieje, podmieni
+      tylko pola które są w CSV (resztę — zdjęcia, specs, profil smaku — zachowa).
+      Nowe produkty zostaną utworzone z placeholder image.
+    </p>
+
+    <!-- KROK 1: hasło -->
+    <section class="login step" id="step-login">
+      <label for="password">Hasło importu</label>
+      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password"/>
+      <div style="margin-top: 12px; font-size: 12px; color: var(--muted)">
+        Hasło ustawione w Vercel jako <code>GW_IMPORT_PASSWORD</code>.
+      </div>
+      <div class="actions">
+        <button class="btn" id="btn-unlock">Odblokuj</button>
+      </div>
+      <div id="login-status"></div>
+    </section>
+
+    <!-- KROK 2: drop -->
+    <section class="step hidden" id="step-drop">
+      <label>Plik CSV</label>
+      <div class="dropzone" id="dropzone">
+        <span class="file-icon">📄</span>
+        <div><strong>Kliknij</strong> lub <strong>przeciągnij</strong> plik CSV tutaj</div>
+        <div class="hint">Pierwsza linia = nagłówek z polami. Wymagane: <code>name</code>.</div>
+      </div>
+      <input type="file" id="fileInput" accept=".csv,text/csv"/>
+      <div style="margin-top: 16px; font-size: 13px; color: var(--muted)">
+        💡 <a href="/admin/products-template.csv" download style="color: var(--accent)">Pobierz szablon CSV</a>
+        — wszystkie pola zostały wyjaśnione.
+      </div>
+    </section>
+
+    <!-- KROK 3: preview -->
+    <section class="step hidden" id="step-preview">
+      <div class="summary" id="summary"></div>
+      <div class="table-wrap">
+        <table id="preview-table"></table>
+      </div>
+      <div class="actions">
+        <button class="btn btn-ghost" id="btn-back">← Wybierz inny plik</button>
+        <button class="btn" id="btn-import">Zaimportuj wszystkie</button>
+      </div>
+      <div id="status"></div>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+  <script>
+    let authToken = null;
+    let parsedRows = [];
+
+    const $ = (id) => document.getElementById(id);
+
+    // ── STEP 1: login ──────────────────────────────────────
+    $('btn-unlock').addEventListener('click', async () => {
+      const password = $('password').value.trim();
+      const status = $('login-status');
+      status.className = 'status loading';
+      status.innerHTML = '<span class="spinner"></span> Weryfikacja...';
+
+      try {
+        const res = await fetch('/api/import-products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'auth', password })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          authToken = password; // używamy hasła jako tokena
+          $('step-login').classList.add('hidden');
+          $('step-drop').classList.remove('hidden');
+          status.innerHTML = '';
+        } else {
+          status.className = 'status err';
+          status.textContent = data.error || 'Niepoprawne hasło.';
+        }
+      } catch (err) {
+        status.className = 'status err';
+        status.textContent = 'Błąd połączenia: ' + err.message;
+      }
+    });
+    $('password').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') $('btn-unlock').click();
+    });
+
+    // ── STEP 2: drop / pick ────────────────────────────────
+    const dropzone = $('dropzone');
+    const fileInput = $('fileInput');
+
+    dropzone.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+      if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+    });
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length) handleFile(e.target.files[0]);
+    });
+
+    function handleFile(file) {
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        transformHeader: (h) => h.trim().toLowerCase().replace(/\s+/g, '_'),
+        complete: (results) => {
+          if (results.errors.length > 0) {
+            alert('Błędy w CSV:\n' + results.errors.map(e => e.message).join('\n'));
+            return;
+          }
+          parsedRows = results.data.filter((r) => r.name?.trim());
+          renderPreview();
+        }
+      });
+    }
+
+    function renderPreview() {
+      $('step-drop').classList.add('hidden');
+      $('step-preview').classList.remove('hidden');
+
+      const cols = Object.keys(parsedRows[0] || {});
+      const table = $('preview-table');
+      table.innerHTML = `
+        <thead><tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr></thead>
+        <tbody>
+          ${parsedRows.map(r => `
+            <tr>${cols.map(c => `<td>${(r[c] ?? '').toString().slice(0, 100)}</td>`).join('')}</tr>
+          `).join('')}
+        </tbody>
+      `;
+      $('summary').innerHTML = `
+        <div><strong>${parsedRows.length}</strong>produktów do zaimportowania</div>
+        <div><strong>${cols.length}</strong>kolumn w CSV</div>
+      `;
+    }
+
+    $('btn-back').addEventListener('click', () => {
+      $('step-preview').classList.add('hidden');
+      $('step-drop').classList.remove('hidden');
+      $('status').innerHTML = '';
+      fileInput.value = '';
+    });
+
+    // ── STEP 3: import ─────────────────────────────────────
+    $('btn-import').addEventListener('click', async () => {
+      const btn = $('btn-import');
+      const status = $('status');
+      btn.disabled = true;
+      status.className = 'status loading';
+      status.innerHTML = '<span class="spinner"></span> Importuję... To może potrwać do minuty.';
+
+      try {
+        const res = await fetch('/api/import-products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'import', password: authToken, rows: parsedRows })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          status.className = 'status ok';
+          status.innerHTML = `
+            ✓ Import zakończony.<br>
+            <strong>${data.created}</strong> nowych, <strong>${data.updated}</strong> zaktualizowanych, <strong>${data.skipped || 0}</strong> pominiętych.<br>
+            <small>Zmiany zostały commit'owane do GitHuba. Vercel rebuilduje teraz stronę — odśwież ją za ~30 sekund.</small>
+          `;
+        } else {
+          status.className = 'status err';
+          status.textContent = data.error || 'Nieznany błąd.';
+          btn.disabled = false;
+        }
+      } catch (err) {
+        status.className = 'status err';
+        status.textContent = 'Błąd: ' + err.message;
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
