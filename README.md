@@ -96,6 +96,64 @@ Mamy własny OAuth proxy w `api/auth.js` + `api/callback.js` (Vercel Serverless 
 
 > Cały kod proxy jest w repo (`api/auth.js`, `api/callback.js`) — nic płatnego ani trzeciego konta nie potrzeba.
 
+## Import produktów z CSV (masowy)
+
+Jeśli masz przygotowane opisy produktów w arkuszu (Excel, Google Sheets, Numbers), możesz je masowo zaimportować zamiast wpisywać po kolei w CMS.
+
+### 1. Wyeksportuj arkusz do CSV
+
+Plik musi mieć nagłówek (pierwszy wiersz) z polami:
+
+| Pole (kolumna CSV) | Wymagane? | Opis |
+| --- | --- | --- |
+| `slug` | ⚠️ jeśli puste, generuje się z `name` | Identyfikator URL, np. `fermento-nero` |
+| `name` | ✅ wymagane | Nazwa produktu |
+| `category` | nie | `kombucha`, `sos`, `ocet` |
+| `flavor` | nie | Krótki opis smaku |
+| `volume` | nie | np. `330 ml` |
+| `short_description` | nie | Krótki opis (na karcie katalogu) |
+| `description` | nie | Pełny opis (markdown — pojawia się pod sekcjami) |
+| `meta_title` | nie | SEO title (jeśli puste = automatyczny) |
+| `meta_description` | nie | SEO opis (jeśli puste = `short_description`) |
+| `available` | nie | `true` / `false` / `tak` / `nie` |
+| `featured` | nie | `true` = pokaż na home, `false` = nie |
+| `order` | nie | Liczba — mniejsza = wcześniej w katalogu |
+| `tag` | nie | Plakietka na karcie, np. `Edycja 001`, `Bestseller` |
+| `edition` | nie | Etykieta edycji wyświetlana w hero produktu |
+
+Szablon: `scripts/products-template.csv` — otwórz, dorzuć/zmodyfikuj wiersze, wyeksportuj.
+
+### 2. Uruchom import
+
+```bash
+npm run import:products ścieżka/do/pliku.csv
+```
+
+Skrypt:
+- **MERGE**: jeśli produkt już istnieje, podmienia TYLKO pola które są w CSV, **resztę zachowuje** (zdjęcia, specs, flavorProfile, story itp. nie zostaną zmazane).
+- **Nowe produkty**: tworzy plik `src/content/products/<slug>.md` z placeholder image.
+- Pokazuje per-product status: `✓ Zaktualizowano` / `+ Utworzono` / `⚠️ Pominięto`.
+
+### 3. Dorzuć zdjęcia i wgraj
+
+```bash
+# zdjęcia ręcznie do public/images/photos/
+git add -A
+git commit -m "Import produktów z CSV"
+git push
+```
+
+Vercel zbuduje stronę automatycznie (~30 s).
+
+### Przykład CSV (skrót)
+
+```csv
+slug,name,category,flavor,volume,short_description,meta_title,available
+test-kombucha,Test Kombucha,kombucha,"Jasmin, sencha",330 ml,Testowy opis,Test Kombucha — Gary Wrotka,true
+```
+
+---
+
 ## Jak dodać produkt ręcznie
 
 Stwórz plik `src/content/products/nazwa-produktu.md`:

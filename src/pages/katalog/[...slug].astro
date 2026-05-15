@@ -20,8 +20,9 @@ const catLabel = product.data.categoryLabel ?? { kombucha: 'Kombucha', sos: 'Sos
 const hasRichData = product.data.flavorProfile.length > 0;
 ---
 <Layout
-  title={`${product.data.name} — Gary Wrotka`}
-  description={product.data.shortDescription}
+  title={product.data.metaTitle ?? `${product.data.name} — Gary Wrotka`}
+  description={product.data.metaDescription ?? product.data.shortDescription}
+  ogImage={product.data.images[0]}
 >
   <section class="container">
     <div class="breadcrumb">

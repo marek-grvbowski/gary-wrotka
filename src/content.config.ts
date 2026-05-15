@@ -24,6 +24,8 @@ const products = defineCollection({
     flavor: z.string(),
     volume: z.string(),
     shortDescription: z.string(),
+    metaTitle: z.string().optional(),
+    metaDescription: z.string().optional(),
     ingredients: z.array(z.string()).default([]),
     images: z.array(z.string()).min(1),
     available: z.boolean().default(true),

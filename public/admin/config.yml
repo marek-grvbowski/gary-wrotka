@@ -60,6 +60,22 @@ collections:
       - { name: "volume", label: "Pojemność / waga", widget: "string", hint: "np. 330 ml, 500 g" }
       - { name: "shortDescription", label: "Krótki opis (do karty)", widget: "text" }
 
+      # ── SEO (opcjonalnie) ────────────────────────────────
+      - {
+          name: "metaTitle",
+          label: "SEO: meta title (opcjonalnie)",
+          widget: "string",
+          required: false,
+          hint: "Tytuł strony w wynikach Google. Puste = automatyczne (nazwa + Gary Wrotka). Max 60 znaków."
+        }
+      - {
+          name: "metaDescription",
+          label: "SEO: meta description (opcjonalnie)",
+          widget: "text",
+          required: false,
+          hint: "Opis w wynikach Google. Puste = automatyczne (krótki opis). 150-160 znaków optymalnie."
+        }
+
       # ── Status ────────────────────────────────────────────
       - { name: "available", label: "Dostępny", widget: "boolean", default: true }
       - { name: "featured", label: "Wyróżniony (pokazany na home)", widget: "boolean", default: false }

@@ -9,7 +9,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "import:products": "node scripts/import-products.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.4",
@@ -17,5 +18,9 @@
     "@tailwindcss/vite": "^4.3.0",
     "astro": "^6.3.1",
     "tailwindcss": "^4.3.0"
+  },
+  "devDependencies": {
+    "csv-parse": "^6.2.1",
+    "yaml": "^2.9.0"
   }
 }
